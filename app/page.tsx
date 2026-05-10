@@ -198,10 +198,6 @@ export default function HomePage() {
             <span className="font-mono-hbm text-[9px] font-medium uppercase tracking-[0.42em] text-gold/55 md:text-[10px]">
               House · Treasury · Protocol layer
             </span>
-            <p className="font-cormorant mt-2.5 max-w-xs text-[11px] font-light italic leading-relaxed text-cream/50 md:max-w-md md:text-xs md:tracking-[0.04em]">
-              We hold our assets as a house holds its workshop — with discretion,
-              lineage, and a refusal of the easy gesture.
-            </p>
             <motion.div
               aria-hidden
               initial={reduceMotion ? { scaleX: 1, opacity: 1 } : { scaleX: 0, opacity: 0 }}
@@ -231,23 +227,13 @@ export default function HomePage() {
             </span>
           </motion.div>
 
-          <motion.div variants={heroItem} className="mt-8 w-full max-w-xl md:mt-10 md:max-w-2xl">
-            <p className="font-cormorant text-xl font-light italic leading-snug text-cream/88 md:text-2xl md:leading-snug">
-              “Measure first — then the long, disciplined work of execution.”
-            </p>
-          </motion.div>
-
           <motion.div
             variants={heroItem}
             className="relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 md:mt-11 md:max-w-2xl md:py-10 lg:max-w-3xl"
           >
             <p className="text-pretty font-cormorant text-[1.02rem] font-light italic leading-[1.62] text-cream/[0.86] md:text-[1.12rem] md:leading-[1.68]">
-              A house is not judged by the noise of the salon — but by the evidence of the practice, repeated year after year. We hold our portfolios with the same
-              discipline a workshop brings to its tools: calm, precision, and suspicion
-              of anything that gleams but does not endure.
-            </p>
-            <p className="mt-4 font-mono-hbm text-[8px] uppercase leading-relaxed tracking-[0.24em] text-gold/38 md:mt-5 md:text-[9px]">
-              Lineage · Measure · Refusal of the easy gesture
+              We hold our assets as a house holds its workshop — with discretion,
+              lineage, and a refusal of the easy gesture.
             </p>
             <p className="text-pretty mt-6 font-cormorant text-[1.05rem] font-normal leading-[1.65] text-cream/82 md:mt-7 md:text-[1.2rem] md:leading-[1.7]">
               We steward capital and protocol stakes with the same restraint one finds
@@ -261,9 +247,6 @@ export default function HomePage() {
           <motion.div variants={heroItem} className="mt-9 md:mt-10">
             <p className="font-mono-hbm text-[9px] uppercase tracking-[0.38em] text-silver-dim/55 md:text-[10px]">
               Duration · Precision · Patrimony
-            </p>
-            <p className="font-cormorant mt-2.5 text-[12px] font-light italic text-silver-dim/45 md:text-[13px]">
-              Duration. Precision. What is built to outlast the cycle.
             </p>
           </motion.div>
 
