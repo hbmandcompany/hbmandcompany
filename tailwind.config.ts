@@ -18,26 +18,29 @@ const config: Config = {
         "charcoal-light": "#1C1916",
         velvet:  "#0C0008",
 
-        // Coach-inspired warm cognac replacing yellow/gold
-        gold:         "#C4944A",   // warm cognac — main accent
-        "gold-dim":   "#8B6832",   // dark cognac
-        "gold-pale":  "#DEBA8A",   // light caramel
-        amber:        "#A07840",   // mid cognac
-        caramel:      "#D4A97A",   // warm tan
-        "plaid-tan":  "#C4A882",   // Coach canvas tan
-        "plaid-burgundy": "#6B2737",
-        "plaid-green":    "#3D5C35",
+        // Luxury warm gray (accent — replaces gold)
+        gold:         "#B4AFAA",   // platinum greige
+        "gold-dim":   "#84807A",   // deep luxury gray
+        "gold-pale":  "#D8D4CE",   // pearl gray
+        amber:        "#96918B",   // mid cool gray
+        caramel:      "#C4BFBA",   // soft taupe-gray
+        "plaid-tan":  "#9E9A95",   // grid gray
+        "plaid-burgundy": "#B8B8B8", // plaid line (light gray)
+        "plaid-green":    "#7A7874", // secondary weave
 
-        // Warm taupe replacing cool silver
-        silver:        "#A89880",  // warm taupe
-        "silver-dim":  "#6B5E50",  // darker taupe
-        "silver-ghost":"#2A2420",  // near-black taupe
+        // Supporting neutrals
+        silver:        "#A3A098",  // cool silver
+        "silver-dim":  "#6B6864",  // muted silver
+        "silver-ghost":"#2A2928",  // charcoal
 
-        // Richer burgundy replacing garnet
-        garnet:        "#6B2737",  // deep burgundy
-        "garnet-dark": "#3D1520",  // very dark burgundy
-        "garnet-deep": "#200A10",  // near-black burgundy
-        crimson:       "#9B2D45",  // mid burgundy-red
+        // Light gray (replaces burgundy / garnet)
+        garnet:        "#CFCFCF",   // primary light gray
+        "garnet-dark": "#B0B0B0",
+        "garnet-deep": "#949494",
+        crimson:       "#E4E4E4",   // hover highlight
+
+        /** 80s VFD / LCD — bluish teal phosphor (not chartreuse) */
+        "digital-80s": "#22E8C8",
 
         // Warm cream
         cream:       "#F2EAD8",
@@ -74,17 +77,24 @@ const config: Config = {
 
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "hero-glow":       "radial-gradient(ellipse 120% 80% at 50% 110%, rgba(196,148,74,0.08) 0%, rgba(107,39,55,0.05) 35%, transparent 65%)",
-        "gold-shimmer":    "linear-gradient(135deg, transparent 40%, rgba(196,148,74,0.06) 50%, transparent 60%)",
+        "hero-glow":
+          "radial-gradient(ellipse 120% 80% at 50% 110%, rgba(180,175,170,0.09) 0%, rgba(200,200,200,0.06) 38%, transparent 65%)",
+        "gold-shimmer":
+          "linear-gradient(135deg, transparent 40%, rgba(180,175,170,0.07) 50%, transparent 60%)",
       },
 
       boxShadow: {
-        "gold-glow":   "0 0 40px rgba(196,148,74,0.12), 0 0 80px rgba(160,120,64,0.05)",
-        "gold-border": "0 0 0 1px rgba(196,148,74,0.2), 0 12px 48px rgba(0,0,0,0.85)",
-        "card-hover":  "0 0 0 1px rgba(196,148,74,0.28), 0 30px 80px rgba(0,0,0,0.92)",
-        "garnet-glow": "0 0 30px rgba(107,39,55,0.45), 0 8px 32px rgba(0,0,0,0.85)",
+        "gold-glow":
+          "0 0 40px rgba(180,175,170,0.14), 0 0 80px rgba(160,160,158,0.06)",
+        "gold-border":
+          "0 0 0 1px rgba(180,175,170,0.22), 0 12px 48px rgba(0,0,0,0.85)",
+        "card-hover":
+          "0 0 0 1px rgba(180,175,170,0.3), 0 30px 80px rgba(0,0,0,0.92)",
+        "garnet-glow":
+          "0 0 30px rgba(210,210,210,0.35), 0 8px 32px rgba(0,0,0,0.85)",
         "3d-card":     "0 20px 60px rgba(0,0,0,0.92), 0 0 0 1px rgba(255,255,255,0.025), inset 0 1px 0 rgba(255,255,255,0.04)",
-        "3d-hover":    "0 40px 100px rgba(0,0,0,0.97), 0 0 0 1px rgba(196,148,74,0.18), inset 0 1px 0 rgba(255,255,255,0.05)",
+        "3d-hover":
+          "0 40px 100px rgba(0,0,0,0.97), 0 0 0 1px rgba(180,175,170,0.2), inset 0 1px 0 rgba(255,255,255,0.05)",
         deep:          "0 40px 120px rgba(0,0,0,0.98), 0 8px 32px rgba(0,0,0,0.85)",
         glass:         "inset 0 1px 0 rgba(255,255,255,0.035), 0 12px 48px rgba(0,0,0,0.75)",
       },

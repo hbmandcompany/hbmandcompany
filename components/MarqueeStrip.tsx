@@ -21,7 +21,7 @@ export default function MarqueeStrip({ items, reverse = false, speed = "slow" }:
       >
         {doubled.map((item, i) => (
           <span key={i} className="flex items-center">
-            <span className="font-mono-hbm text-label-xs text-gold/50 uppercase tracking-[0.3em] px-8">
+            <span className="text-label-xs text-gold/50 uppercase tracking-[0.3em] px-8 font-normal">
               {item}
             </span>
             <span className="text-garnet/40 text-xs select-none">◆</span>

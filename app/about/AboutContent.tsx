@@ -46,7 +46,6 @@ const team = [
 export default function AboutPage() {
   return (
     <>
-      <div className="grain-overlay" aria-hidden="true" />
       <NavBar />
 
       {/* ——— HERO ——— */}
@@ -240,7 +239,7 @@ export default function AboutPage() {
                       src={member.image}
                       alt={member.name}
                       fill
-                      className="object-cover object-top grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-105"
+                      className="object-cover object-top transition-all duration-700 group-hover:scale-105"
                       unoptimized
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-void/80 via-transparent to-transparent" />
@@ -283,7 +282,7 @@ export default function AboutPage() {
           <SectionReveal delay={0.2}>
             <Link
               href="/contact"
-              className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-cream px-12 py-5 inline-block"
+              className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-void px-12 py-5 inline-block"
             >
               Begin Engagement
             </Link>

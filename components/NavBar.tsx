@@ -5,13 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
-import HbmLogo from "./HbmLogo";
 
 const navLinks = [
-  { label: "Protocol", href: "/work"    },
-  { label: "About",    href: "/about"   },
-  { label: "Network",  href: "/work"    },
-  { label: "Contact",  href: "/contact" },
+  { label: "Michelangelo", href: "/work"    },
+  { label: "Vanity",      href: "/about"   },
+  { label: "Kiss",        href: "/work"    },
 ];
 
 export default function NavBar() {
@@ -68,19 +66,20 @@ export default function NavBar() {
               : "h-20 md:h-24 px-6 md:px-12"
           )}
         >
-          {/* ── Logo ── */}
-          <Link href="/" className="flex items-center gap-3.5 group">
-            <HbmLogo
-              size={scrolled ? 34 : 40}
-              className="text-gold/70 group-hover:text-gold transition-all duration-400"
-            />
+          {/* ── Wordmark ── */}
+          <Link href="/" className="flex items-center group">
             <div className="flex flex-col leading-none">
-              <span className="font-cormorant font-light tracking-[0.3em] text-cream/80 uppercase group-hover:text-cream transition-colors duration-300"
-                style={{ fontSize: scrolled ? "14px" : "17px" }}>
-                HBM <span className="text-gold/70 group-hover:text-gold transition-colors duration-300">&</span> Company
-              </span>
-              <span className="font-mono-hbm text-[8px] text-silver-dim/40 uppercase tracking-[0.35em] mt-0.5 group-hover:text-silver-dim/60 transition-colors duration-300">
-                Private Holdings
+              <span
+                className="inline-flex items-baseline font-cormorant font-light uppercase text-cream/75 group-hover:text-cream/90 transition-colors duration-300"
+                style={{ fontSize: scrolled ? "15px" : "19px" }}
+              >
+                <span className="inline-flex items-baseline gap-x-0.5 md:gap-x-1">
+                  <span className="tracking-[0.22em]">HBM</span>
+                  <span className="shrink-0 tracking-tight text-gold/65 group-hover:text-gold transition-colors duration-300">
+                    &
+                  </span>
+                </span>
+                <span className="tracking-[0.22em] pl-1.5 md:pl-2">Company</span>
               </span>
             </div>
           </Link>
@@ -95,7 +94,7 @@ export default function NavBar() {
                   "font-mono-hbm text-[11px] uppercase tracking-[0.25em] transition-all duration-300 relative group",
                   pathname === link.href
                     ? "text-gold"
-                    : "text-silver-dim/60 hover:text-cream"
+                    : "text-silver-dim/65 hover:text-cream/85"
                 )}
               >
                 {link.label}
@@ -106,10 +105,10 @@ export default function NavBar() {
               </Link>
             ))}
             <Link
-              href="/contact"
-              className="garnet-btn font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-cream/90 px-5 py-2.5"
+              href="/shop"
+              className="garnet-btn font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void px-5 py-1.5"
             >
-              Engage
+              Shop
             </Link>
           </div>
 
@@ -152,11 +151,16 @@ export default function NavBar() {
             <div className="absolute inset-0 garnet-bloom-top pointer-events-none" />
             <div className="plaid-rule w-1/3 absolute top-0" />
 
-            {/* Logo in menu */}
-            <div className="absolute top-7 left-8 flex items-center gap-3 opacity-40">
-              <HbmLogo size={28} className="text-gold" />
-              <span className="font-cormorant text-sm font-light tracking-[0.3em] text-cream uppercase">
-                HBM & Company
+            {/* Wordmark in menu */}
+            <div className="absolute top-7 left-8 opacity-50">
+              <span
+                className="inline-flex items-baseline font-cormorant text-[15px] font-light uppercase tracking-normal text-silver-dim/70"
+              >
+                <span className="inline-flex items-baseline gap-x-0.5 md:gap-x-1">
+                  <span className="tracking-[0.2em]">HBM</span>
+                  <span className="shrink-0 tracking-tight text-gold/55">&</span>
+                </span>
+                <span className="tracking-[0.2em] pl-1.5 md:pl-2">Company</span>
               </span>
             </div>
 
@@ -171,7 +175,7 @@ export default function NavBar() {
                 >
                   <Link
                     href={link.href}
-                    className="font-cormorant text-display-md font-light text-cream/75 hover:text-gold transition-colors duration-300 italic"
+                    className="font-cormorant text-display-md font-light text-silver-dim/72 hover:text-gold transition-colors duration-300 italic"
                   >
                     {link.label}
                   </Link>
@@ -185,10 +189,10 @@ export default function NavBar() {
                 className="mt-4"
               >
                 <Link
-                  href="/contact"
-                  className="garnet-btn font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-cream/90 px-10 py-3.5 inline-block"
+                  href="/shop"
+                  className="garnet-btn font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-void px-8 py-2 inline-block"
                 >
-                  Engage
+                  Shop
                 </Link>
               </motion.div>
             </nav>

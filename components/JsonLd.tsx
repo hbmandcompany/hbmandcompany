@@ -19,7 +19,7 @@ export default function JsonLd() {
         foundingDate: "2024",
         foundingLocation: {
           "@type": "Place",
-          name: "Delaware, United States",
+          name: "Wyoming, United States",
         },
         areaServed: "Worldwide",
         knowsAbout: [
@@ -46,7 +46,7 @@ export default function JsonLd() {
         ],
         contactPoint: {
           "@type": "ContactPoint",
-          email: "hello@hbmandcompany.com",
+          email: "hbmandcompany@gmail.com",
           contactType: "General Inquiries",
           availableLanguage: "English",
         },

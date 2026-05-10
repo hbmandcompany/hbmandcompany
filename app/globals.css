@@ -20,32 +20,29 @@
   body {
     background-color: #020203;
     color: #F2EAD8;
-    /* Raleway as default body font — elegant, feminine */
     font-family: var(--font-raleway), sans-serif;
     font-weight: 300;
     overflow-x: hidden;
   }
 
   ::selection {
-    background-color: rgba(196,148,74,0.18);
-    color: #C4944A;
+    background-color: rgba(180,175,170,0.22);
+    color: #D8D4CE;
   }
 
   ::-webkit-scrollbar { width: 2px; }
   ::-webkit-scrollbar-track { background: #020203; }
   ::-webkit-scrollbar-thumb {
-    background: rgba(107,39,55,0.55);
+    background: rgba(180,180,180,0.45);
     border-radius: 99px;
   }
-  ::-webkit-scrollbar-thumb:hover { background: rgba(196,148,74,0.45); }
+  ::-webkit-scrollbar-thumb:hover { background: rgba(200,200,200,0.55); }
 }
 
 @layer utilities {
 
-  /* ── Typography ── */
   .font-cormorant { font-family: var(--font-cormorant), Georgia, serif; }
   .font-mono-hbm  {
-    /* Raleway replaces DM Mono — luxury, not digital */
     font-family: var(--font-raleway), sans-serif;
     font-weight: 300;
     letter-spacing: 0.08em;
@@ -55,32 +52,38 @@
     font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
   }
 
-  /* Coach-cognac gradient (replaces yellow-gold gradient) */
+  /* Homepage: NavBar still uses .font-cormorant / .font-mono-hbm — remap to DM Sans */
+  .home-robinhood .font-cormorant,
+  .home-robinhood .font-mono-hbm {
+    font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
+  }
+
+  /* Luxury gray headline gradient (replaces gold) */
   .text-gradient-gold {
-    background: linear-gradient(135deg, #8B6832 0%, #C4944A 40%, #DEBA8A 60%, #C4944A 80%, #8B6832 100%);
+    background: linear-gradient(135deg, #84807A 0%, #B4AFAA 35%, #D8D4CE 55%, #B4AFAA 80%, #96918B 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+  /* Light gray text gradient (replaces burgundy) */
   .text-gradient-garnet {
-    background: linear-gradient(135deg, #6B2737 0%, #9B2D45 50%, #6B2737 100%);
+    background: linear-gradient(135deg, #949494 0%, #D6D6D6 50%, #A8A8A8 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
   .text-gradient-silver {
-    background: linear-gradient(135deg, #3A3028 0%, #A89880 50%, #3A3028 100%);
+    background: linear-gradient(135deg, #3A3A38 0%, #A3A098 50%, #3A3A38 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  /* ── Glass Panels ── */
   .glass-panel {
     background: rgba(9,8,7,0.72);
     backdrop-filter: blur(24px) saturate(1.3);
     -webkit-backdrop-filter: blur(24px) saturate(1.3);
-    border: 1px solid rgba(196,148,74,0.08);
+    border: 1px solid rgba(180,175,170,0.1);
     border-radius: 1rem;
   }
   .glass-panel-dark {
@@ -91,40 +94,37 @@
     border-radius: 1.25rem;
   }
   .glass-panel-garnet {
-    background: rgba(10,3,5,0.82);
+    background: rgba(12,12,12,0.82);
     backdrop-filter: blur(24px);
     -webkit-backdrop-filter: blur(24px);
-    border: 1px solid rgba(107,39,55,0.2);
+    border: 1px solid rgba(200,200,200,0.18);
     border-radius: 1rem;
   }
 
-  /* ── Coach Plaid Accent ──
-     Used as texture on dividers, marquee, and card borders */
   .plaid-accent {
     background-image:
       repeating-linear-gradient(
         90deg,
-        rgba(196,168,130,0.18) 0px, rgba(196,168,130,0.18) 1px,
+        rgba(158,154,149,0.2) 0px, rgba(158,154,149,0.2) 1px,
         transparent 1px, transparent 18px
       ),
       repeating-linear-gradient(
         0deg,
-        rgba(196,168,130,0.18) 0px, rgba(196,168,130,0.18) 1px,
+        rgba(158,154,149,0.2) 0px, rgba(158,154,149,0.2) 1px,
         transparent 1px, transparent 18px
       ),
       repeating-linear-gradient(
         90deg,
-        rgba(107,39,55,0.22) 0px, rgba(107,39,55,0.22) 2px,
+        rgba(190,190,190,0.22) 0px, rgba(190,190,190,0.22) 2px,
         transparent 2px, transparent 54px
       ),
       repeating-linear-gradient(
         0deg,
-        rgba(107,39,55,0.22) 0px, rgba(107,39,55,0.22) 2px,
+        rgba(190,190,190,0.22) 0px, rgba(190,190,190,0.22) 2px,
         transparent 2px, transparent 54px
       );
   }
 
-  /* ── 3D Card ── */
   .card-3d {
     transform-style: preserve-3d;
     transition: transform 0.5s cubic-bezier(0.16,1,0.3,1),
@@ -141,12 +141,12 @@
     transform: translateY(-8px) rotateX(2deg) rotateY(-1deg);
     box-shadow:
       0 50px 120px rgba(0,0,0,0.97),
-      0 0 0 1px rgba(196,148,74,0.18),
-      0 0 80px rgba(196,148,74,0.04),
+      0 0 0 1px rgba(180,175,170,0.2),
+      0 0 80px rgba(180,175,170,0.06),
       inset 0 1px 0 rgba(255,255,255,0.05);
   }
 
-  /* ── Grain Overlay ── */
+  /* Full-viewport film grain — avoid sitewide; use .grain-overlay-hero inside a hero instead */
   .grain-overlay {
     position: fixed;
     top: -50%; left: -50%;
@@ -158,46 +158,58 @@
     background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
   }
 
-  /* ── Ambient Glows ── */
+  /* Hero-only grain: parent must be relative + overflow-hidden (e.g. hero background stack) */
+  .grain-overlay-hero {
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0.055;
+    animation: grain 8s steps(1) infinite;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+  }
+
   .city-glow {
     background: radial-gradient(
       ellipse 120% 50% at 50% 100%,
-      rgba(107,39,55,0.07) 0%,
-      rgba(196,148,74,0.04) 30%,
+      rgba(200,200,200,0.08) 0%,
+      rgba(180,175,170,0.05) 30%,
       transparent 65%
     );
   }
   .amber-bloom {
     background: radial-gradient(
       ellipse 70% 50% at 50% 90%,
-      rgba(160,120,64,0.08) 0%,
+      rgba(180,175,170,0.08) 0%,
       transparent 70%
     );
   }
   .purple-bloom {
     background: radial-gradient(
       ellipse 80% 60% at 50% 80%,
-      rgba(40,10,60,0.12) 0%,
+      rgba(45,45,48,0.14) 0%,
       transparent 70%
     );
   }
   .garnet-bloom-top {
     background: radial-gradient(
       ellipse 60% 40% at 30% 20%,
-      rgba(107,39,55,0.07) 0%,
+      rgba(200,200,200,0.09) 0%,
       transparent 70%
     );
   }
 
-  /* ── Dividers ── */
   .gold-rule {
     height: 1px;
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(196,148,74,0.25),
-      rgba(196,148,74,0.45),
-      rgba(196,148,74,0.25),
+      rgba(180,175,170,0.3),
+      rgba(200,200,200,0.5),
+      rgba(180,175,170,0.3),
       transparent
     );
   }
@@ -206,91 +218,90 @@
     background: linear-gradient(
       90deg,
       transparent,
-      rgba(107,39,55,0.35),
-      rgba(155,45,69,0.55),
-      rgba(107,39,55,0.35),
+      rgba(190,190,190,0.35),
+      rgba(220,220,220,0.45),
+      rgba(190,190,190,0.35),
       transparent
     );
   }
-  /* Plaid-style ruled divider */
   .plaid-rule {
     height: 3px;
     background:
       linear-gradient(
         90deg,
         transparent 0%,
-        rgba(196,148,74,0.3) 20%,
-        rgba(107,39,55,0.5) 40%,
-        rgba(61,92,53,0.3) 60%,
-        rgba(196,148,74,0.3) 80%,
+        rgba(180,175,170,0.32) 20%,
+        rgba(200,200,200,0.45) 40%,
+        rgba(120,120,120,0.28) 60%,
+        rgba(180,175,170,0.32) 80%,
         transparent 100%
       );
   }
 
-  /* ── Buttons ── */
+  /* Primary CTA: light gray (was burgundy) */
   .garnet-btn {
-    background: linear-gradient(135deg, #6B2737 0%, #3D1520 100%);
-    border: 1px solid rgba(107,39,55,0.65);
+    background: linear-gradient(135deg, #CFCFCF 0%, #ADADAD 100%);
+    border: 1px solid rgba(220,220,220,0.55);
     border-radius: 9999px;
     font-family: var(--font-raleway), sans-serif;
     font-weight: 400;
+    color: #1a1a1a;
     transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
-    box-shadow: 0 8px 32px rgba(107,39,55,0.22), inset 0 1px 0 rgba(255,255,255,0.05);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.35);
   }
   .garnet-btn:hover {
-    background: linear-gradient(135deg, #9B2D45 0%, #6B2737 100%);
-    box-shadow: 0 0 40px rgba(155,45,69,0.4), 0 12px 40px rgba(0,0,0,0.75);
+    background: linear-gradient(135deg, #E4E4E4 0%, #CFCFCF 100%);
+    box-shadow: 0 0 36px rgba(220,220,220,0.28), 0 12px 40px rgba(0,0,0,0.5);
     transform: translateY(-3px);
   }
 
   .gold-outline-btn {
     background: transparent;
-    border: 1px solid rgba(196,148,74,0.32);
-    color: #C4944A;
+    border: 1px solid rgba(180,175,170,0.4);
+    color: #D8D4CE;
     border-radius: 9999px;
     font-family: var(--font-raleway), sans-serif;
     font-weight: 400;
     transition: all 0.35s cubic-bezier(0.16,1,0.3,1);
   }
   .gold-outline-btn:hover {
-    background: rgba(196,148,74,0.06);
-    border-color: rgba(196,148,74,0.65);
-    box-shadow: 0 0 30px rgba(196,148,74,0.1), 0 8px 32px rgba(0,0,0,0.65);
+    background: rgba(180,175,170,0.08);
+    border-color: rgba(216,212,206,0.68);
+    box-shadow: 0 0 28px rgba(180,175,170,0.1), 0 8px 32px rgba(0,0,0,0.65);
     transform: translateY(-2px);
   }
 
-  /* ── Form Inputs ── */
+  /* Homepage (wrapped in .font-robinhood): match DM Sans UI */
+  .font-robinhood .garnet-btn,
+  .font-robinhood .gold-outline-btn {
+    font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
+  }
+
   .input-dark {
     background: rgba(9,8,7,0.6);
-    border: 1px solid rgba(196,148,74,0.12);
+    border: 1px solid rgba(180,175,170,0.14);
     border-radius: 0.75rem;
     color: #F2EAD8;
     font-family: var(--font-raleway), sans-serif;
-    font-weight: 300;
-    outline: none;
     transition: border-color 0.3s ease, box-shadow 0.3s ease;
     padding: 14px 16px;
   }
   .input-dark:focus {
-    border-color: rgba(196,148,74,0.45);
-    box-shadow: 0 0 0 3px rgba(196,148,74,0.05);
+    border-color: rgba(180,175,170,0.48);
+    box-shadow: 0 0 0 3px rgba(180,175,170,0.06);
   }
   .input-dark::placeholder {
-    color: #3A3028;
+    color: #4A4846;
     font-family: var(--font-raleway), sans-serif;
-    font-weight: 300;
-    font-size: 11px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
   }
 
-  /* ── Section backgrounds ── */
   .section-dark   { background-color: #020203; }
   .section-mid    { background-color: #050505; }
   .section-raised { background-color: #09090B; }
 }
 
-/* ── Keyframes ── */
 @keyframes grain {
   0%,100% { transform: translate(0,0);    }
   10%  { transform: translate(-2%,-3%);   }

@@ -35,7 +35,6 @@ export default function ContactPage() {
 
   return (
     <>
-      <div className="grain-overlay" aria-hidden="true" />
       <NavBar />
 
       {/* ——— HERO ——— */}
@@ -103,10 +102,10 @@ export default function ContactPage() {
                       General Inquiries
                     </span>
                     <a
-                      href="mailto:hello@hbmandcompany.com"
+                      href="mailto:hbmandcompany@gmail.com"
                       className="font-cormorant text-display-sm text-cream font-light hover:text-gold transition-colors duration-300"
                     >
-                      hello@hbmandcompany.com
+                      hbmandcompany@gmail.com
                     </a>
                   </div>
                 </SectionReveal>
@@ -150,7 +149,7 @@ export default function ContactPage() {
                     </span>
                     <div className="flex flex-col gap-3">
                       {[
-                        { city: "New York", region: "Primary" },
+                        { city: "Dallas", region: "Primary" },
                         { city: "London", region: "EMEA" },
                         { city: "Singapore", region: "APAC" },
                       ].map((office) => (
@@ -274,7 +273,7 @@ export default function ContactPage() {
 
                     <button
                       type="submit"
-                      className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-cream px-10 py-4 w-full md:w-auto text-center"
+                      className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-void px-10 py-4 w-full md:w-auto text-center"
                     >
                       Submit Inquiry
                     </button>

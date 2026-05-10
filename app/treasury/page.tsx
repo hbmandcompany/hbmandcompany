@@ -1,0 +1,28 @@
+import type { Metadata } from "next";
+import TreasuryContent from "./TreasuryContent";
+
+export const metadata: Metadata = {
+  title: "Treasury",
+  description:
+    "How HBM & Company runs consolidated digital asset treasury: staking, liquidity, governance alignment, and balance-sheet discipline across ETH, LSTs, and stable balances.",
+  alternates: {
+    canonical: "https://hbmandcompany.com/treasury",
+  },
+  openGraph: {
+    title: "Treasury — HBM & Company",
+    description:
+      "Consolidated on-chain treasury, yield discipline, and operational alignment with the protocols we hold.",
+    url: "https://hbmandcompany.com/treasury",
+    images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "HBM & Company — Treasury" }],
+  },
+  twitter: {
+    title: "Treasury — HBM & Company",
+    description:
+      "Digital asset treasury and balance-sheet discipline at HBM & Company.",
+    images: ["/og-image.png"],
+  },
+};
+
+export default function TreasuryPage() {
+  return <TreasuryContent />;
+}

@@ -131,7 +131,6 @@ export default function WorkPage() {
 
   return (
     <>
-      <div className="grain-overlay" aria-hidden="true" />
       <NavBar />
 
       {/* ——— HERO ——— */}
@@ -312,7 +311,7 @@ export default function WorkPage() {
           <SectionReveal delay={0.2}>
             <Link
               href="/contact"
-              className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-cream px-12 py-5 inline-block"
+              className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-void px-12 py-5 inline-block"
             >
               Begin Engagement
             </Link>

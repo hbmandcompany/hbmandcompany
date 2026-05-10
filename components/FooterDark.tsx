@@ -5,7 +5,7 @@ const footerColumns = [
   {
     heading: "Company",
     links: [
-      { label: "About the Firm", href: "/about" },
+      { label: "The Company", href: "/about" },
       { label: "Our Team", href: "/about#team" },
       { label: "Values & Thesis", href: "/about#values" },
       { label: "Careers", href: "/contact" },
@@ -81,11 +81,11 @@ const socials = [
     ),
   },
   {
-    label: "Telegram",
-    href: "https://t.me",
+    label: "Instagram",
+    href: "https://instagram.com",
     icon: (
       <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.537-.194 1.006.131.833.941z" />
+        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 11-2.881 0 1.44 1.44 0 012.881 0z" />
       </svg>
     ),
   },
@@ -134,7 +134,14 @@ const stats = [
   { value: "+8.7%", label: "vs. ETH (YoY)" },
 ];
 
-export default function FooterDark() {
+export default function FooterDark({
+  typography = "luxury",
+}: {
+  typography?: "luxury" | "robinhood";
+}) {
+  const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
+  const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
+
   return (
     <footer className="relative bg-void overflow-hidden">
       {/* Ambient atmosphere */}
@@ -156,30 +163,35 @@ export default function FooterDark() {
                 className="text-gold/60 group-hover:text-gold transition-all duration-400"
               />
               <div className="flex flex-col leading-none">
-                <span className="font-cormorant text-base font-light tracking-[0.3em] text-cream/70 uppercase group-hover:text-cream transition-colors duration-300">
-                  HBM <span className="text-gold/60 group-hover:text-gold transition-colors duration-300">&</span> Company
-                </span>
-                <span className="font-mono-hbm text-[8px] text-silver-dim/30 uppercase tracking-[0.35em] mt-0.5">
-                  Private Holdings
+                <span
+                  className={`${displayFont} inline-flex items-baseline text-lg font-light uppercase text-cream/70 group-hover:text-cream`}
+                >
+                  <span className="inline-flex items-baseline gap-x-0.5 md:gap-x-1">
+                    <span className="tracking-[0.22em] transition-colors duration-300">HBM</span>
+                    <span className="shrink-0 tracking-tight text-gold/60 group-hover:text-gold transition-colors duration-300">
+                      &
+                    </span>
+                  </span>
+                  <span className="tracking-[0.22em] pl-1.5 transition-colors duration-300 md:pl-2">Company</span>
                 </span>
               </div>
             </Link>
-            <p className="font-cormorant text-display-sm text-cream/40 font-light italic leading-tight max-w-sm">
+            <p className={`${displayFont} text-display-sm text-cream/60 font-light italic leading-tight max-w-sm`}>
               Built in the dark.<br />
               Deployed at scale.
             </p>
-            <p className="font-mono-hbm text-label-xs text-silver-dim/50 uppercase tracking-[0.15em] max-w-xs leading-relaxed">
+            <p className={`${uiFont} text-label-xs text-silver-dim/68 uppercase tracking-[0.15em] max-w-xs leading-relaxed`}>
               A private holding company operating at the intersection of
               decentralized finance and digital asset infrastructure.
             </p>
             <div className="flex flex-col gap-2 mt-2">
               <a
-                href="mailto:hello@hbmandcompany.com"
-                className="font-mono-hbm text-label-sm text-silver-dim hover:text-gold transition-colors duration-300 tracking-[0.05em]"
+                href="mailto:hbmandcompany@gmail.com"
+                className={`${uiFont} text-label-sm text-silver-dim hover:text-gold transition-colors duration-300 tracking-[0.05em]`}
               >
-                hello@hbmandcompany.com
+                hbmandcompany@gmail.com
               </a>
-              <p className="font-mono-hbm text-label-xs text-silver-dim/30 uppercase tracking-[0.15em]">
+              <p className={`${uiFont} text-label-xs text-silver-dim/30 uppercase tracking-[0.15em]`}>
                 Inquiries by introduction only
               </p>
             </div>
@@ -192,10 +204,10 @@ export default function FooterDark() {
                 key={s.label}
                 className="glass-panel-dark p-5 md:p-6"
               >
-                <div className="font-cormorant text-display-md text-gold font-bold leading-none mb-1">
+                <div className={`${displayFont} text-display-md text-gold font-bold leading-none mb-1`}>
                   {s.value}
                 </div>
-                    <div className="font-mono-hbm text-label-xs text-silver-dim/55 uppercase tracking-[0.14em] leading-snug">
+                    <div className={`${uiFont} text-label-xs text-silver-dim/58 uppercase tracking-[0.14em] leading-snug`}>
                       {s.label}
                     </div>
               </div>
@@ -207,7 +219,7 @@ export default function FooterDark() {
         <div className="py-16 md:py-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 border-b border-white/[0.04]">
           {footerColumns.map((col) => (
             <div key={col.heading} className="flex flex-col gap-4">
-              <h4 className="font-mono-hbm text-label-xs text-gold/70 uppercase tracking-[0.28em] pb-2 border-b border-gold/[0.08]">
+              <h4 className={`${uiFont} text-label-xs text-gold/70 uppercase tracking-[0.28em] pb-2 border-b border-gold/[0.08]`}>
                 {col.heading}
               </h4>
               <nav className="flex flex-col gap-2.5">
@@ -215,7 +227,7 @@ export default function FooterDark() {
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="font-mono-hbm text-label-xs text-silver-dim/60 hover:text-cream transition-colors duration-300 uppercase tracking-[0.12em] leading-relaxed group flex items-center gap-1.5"
+                    className={`${uiFont} text-label-xs text-silver-dim/30 hover:text-silver-dim transition-colors duration-300 uppercase tracking-[0.12em] leading-relaxed group flex items-center gap-1.5`}
                   >
                     <span className="w-0 h-px bg-garnet group-hover:w-3 transition-all duration-300 shrink-0" />
                     {link.label}
@@ -230,7 +242,7 @@ export default function FooterDark() {
         <div className="py-12 grid grid-cols-1 md:grid-cols-2 gap-10 border-b border-white/[0.04]">
           {/* Socials */}
           <div className="flex flex-col gap-4">
-            <h4 className="font-mono-hbm text-label-xs text-gold/70 uppercase tracking-[0.28em]">
+            <h4 className={`${uiFont} text-label-xs text-gold/70 uppercase tracking-[0.28em]`}>
               Connect
             </h4>
             <div className="flex flex-wrap gap-2">
@@ -241,10 +253,10 @@ export default function FooterDark() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={s.label}
-                  className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/[0.05] text-silver-dim/50 hover:text-gold hover:border-gold/30 transition-all duration-300 group"
+                  className="flex items-center gap-2 px-3 py-2 rounded-xl border border-white/[0.05] text-silver-dim/55 hover:text-gold hover:border-gold/28 transition-all duration-300 group"
                 >
                   {s.icon}
-                  <span className="font-mono-hbm text-label-xs uppercase tracking-[0.15em]">
+                  <span className={`${uiFont} text-label-xs uppercase tracking-[0.15em]`}>
                     {s.label}
                   </span>
                 </a>
@@ -254,22 +266,22 @@ export default function FooterDark() {
 
           {/* Offices */}
           <div className="flex flex-col gap-4">
-            <h4 className="font-mono-hbm text-label-xs text-gold/70 uppercase tracking-[0.28em]">
+            <h4 className={`${uiFont} text-label-xs text-gold/70 uppercase tracking-[0.28em]`}>
               Offices
             </h4>
             <div className="grid grid-cols-3 gap-3">
               {[
-                { city: "New York", region: "Primary HQ", detail: "Delaware Registered" },
-                { city: "London",   region: "EMEA",       detail: "UK Operations" },
-                { city: "Singapore",region: "APAC",       detail: "Asia-Pacific" },
+                { city: "Dallas", region: "Primary HQ", detail: "WYOMING REGISTERED" },
+                { city: "Berlin",   region: "Continental EU", detail: "EU OPERATIONS" },
+                { city: "Tokyo",    region: "APAC",          detail: "Asia-Pacific" },
               ].map((o) => (
                 <div
                   key={o.city}
                   className="glass-panel-dark px-4 py-3"
                 >
-                  <div className="font-cormorant text-body-md text-cream/70 font-light">{o.city}</div>
-                  <div className="font-mono-hbm text-label-xs text-gold/50 uppercase tracking-[0.15em] mt-0.5">{o.region}</div>
-                  <div className="font-mono-hbm text-[9px] text-silver-dim/30 uppercase tracking-[0.1em] mt-1">{o.detail}</div>
+                  <div className={`${displayFont} text-body-md text-cream/70 font-light`}>{o.city}</div>
+                  <div className={`${uiFont} text-label-xs text-gold/50 uppercase tracking-[0.15em] mt-0.5`}>{o.region}</div>
+                  <div className={`${uiFont} text-[9px] text-silver-dim/30 uppercase tracking-[0.1em] mt-1`}>{o.detail}</div>
                 </div>
               ))}
             </div>
@@ -278,10 +290,10 @@ export default function FooterDark() {
 
         {/* ─── Bottom bar ─── */}
         <div className="py-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="font-mono-hbm text-label-xs text-silver-dim/30 uppercase tracking-[0.2em]">
+          <p className={`${uiFont} text-label-xs text-silver-dim/30 uppercase tracking-[0.2em]`}>
             © {new Date().getFullYear()} HBM & Company. All rights reserved.
           </p>
-          <p className="font-mono-hbm text-label-xs text-silver-dim/20 uppercase tracking-[0.15em] text-center max-w-md">
+          <p className={`${uiFont} text-label-xs text-silver-dim/20 uppercase tracking-[0.15em] text-center max-w-md`}>
             Not financial advice. Digital assets involve substantial risk of loss.
             Nothing herein constitutes an offer to sell securities.
           </p>
@@ -294,7 +306,7 @@ export default function FooterDark() {
               <Link
                 key={l.label}
                 href={l.href}
-                className="font-mono-hbm text-label-xs text-silver-dim/30 hover:text-silver-dim transition-colors duration-300 uppercase tracking-[0.15em]"
+                className={`${uiFont} text-label-xs text-silver-dim/30 hover:text-silver-dim transition-colors duration-300 uppercase tracking-[0.15em]`}
               >
                 {l.label}
               </Link>
