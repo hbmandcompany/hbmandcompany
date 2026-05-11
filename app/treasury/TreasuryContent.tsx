@@ -158,6 +158,18 @@ export default function TreasuryContent() {
             Mandate · diligence · execution · surveillance — the same cadence as a bulge-bracket
             financing desk, applied to digital asset treasury and protocol-aligned capital.
           </p>
+
+          <div className="mt-8 flex max-w-xl flex-col gap-4 sm:mt-10 md:flex-row md:flex-wrap md:items-center">
+            <Link
+              href="/acquire-hbm"
+              className="garnet-btn inline-block px-9 py-3.5 text-center font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void transition-[box-shadow] duration-500 [box-shadow:0_12px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] hover:[box-shadow:0_18px_50px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.14),0_0_48px_rgba(180,175,170,0.07)]"
+            >
+              Acquire HBM
+            </Link>
+            <p className="font-mono-hbm text-[9px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/45 md:max-w-[14rem]">
+              Platform currency — participate on our rails or buy via the linked venue.
+            </p>
+          </div>
         </div>
 
         <div className="absolute bottom-8 right-10 z-10 hidden flex-col items-center gap-2 md:flex">

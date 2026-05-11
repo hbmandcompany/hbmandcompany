@@ -18,6 +18,7 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const lastScrollY               = useRef(0);
   const pathname                  = usePathname();
+  const isHome                    = pathname === "/";
 
   /* Smart scroll — hide on down, reveal on up */
   useEffect(() => {
@@ -84,7 +85,8 @@ export default function NavBar() {
             </div>
           </Link>
 
-          {/* ── Desktop nav ── */}
+          {/* ── Desktop nav (homepage only) ── */}
+          {isHome ? (
           <div className="hidden md:flex items-center gap-9">
             {navLinks.map((link) => (
               <Link
@@ -111,8 +113,10 @@ export default function NavBar() {
               Shop
             </Link>
           </div>
+          ) : null}
 
-          {/* ── Mobile hamburger ── */}
+          {/* ── Mobile hamburger (homepage only — menu matches desktop) ── */}
+          {isHome ? (
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="md:hidden flex flex-col gap-[5px] p-2 z-50"
@@ -134,12 +138,13 @@ export default function NavBar() {
               className="block w-5 h-px bg-cream/70"
             />
           </button>
+          ) : null}
         </div>
       </motion.nav>
 
-      {/* ── Mobile full-screen overlay menu ── */}
+      {/* ── Mobile full-screen overlay menu (homepage only) ── */}
       <AnimatePresence>
-        {menuOpen && (
+        {menuOpen && isHome && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

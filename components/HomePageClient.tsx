@@ -18,9 +18,11 @@ import PostCarrierEditorMockup from "@/components/PostCarrierEditorMockup";
 import HeroPlaneGif from "@/components/HeroPlaneGif";
 import {
   IconSessionRing,
-  IconFaderBank,
   IconCompStacks,
-  IconPrintMeter,
+  IconCollab,
+  IconTrade,
+  IconStaking,
+  IconRadio,
 } from "@/components/IllustrativeIcons";
 
 const whatWeBuildItems: {
@@ -479,8 +481,8 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         </div>
 
         <div className="relative z-10 mx-auto max-w-[1180px] px-6 md:px-12">
-          <div className="flex flex-col gap-10">
-            <header className="flex flex-col items-center gap-3">
+          <div className="flex flex-col">
+            <header className="mb-10 flex flex-col items-center gap-3">
               <div className="flex w-full max-w-md items-center justify-center gap-4">
                 <div className="h-px max-w-[4rem] flex-1 bg-garnet/40" />
                 <span className="shrink-0 text-label-xs uppercase tracking-[0.35em] text-garnet/60">
@@ -489,29 +491,30 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 <div className="h-px max-w-[4rem] flex-1 bg-garnet/40" />
               </div>
               <p className="font-mono-hbm text-[9px] uppercase tracking-[0.32em] text-silver-dim/35">
-                Session · Edit · Mix · Print
+                Session · Comp · Collab · Trade · Staking · Radio
               </p>
             </header>
 
-            <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-0">
+            <div className="mb-4 grid grid-cols-1 items-start gap-10 lg:mb-3 lg:grid-cols-12 lg:gap-x-12 lg:gap-y-0">
               <div className="flex flex-col space-y-6 text-center lg:col-span-7 lg:text-left">
                 <h2 className="text-2xl font-light leading-snug text-cream/80 md:text-3xl lg:text-[2.25rem]">
-                  When the loop grid goes quiet, what&apos;s left is the{" "}
+                  When the studio goes quiet, what&apos;s left is the{" "}
                   <span className="text-gradient-gold font-bold italic">take.</span>
                 </h2>
                 <p className="text-lg font-light leading-relaxed text-cream/70 md:text-xl">
-                  <span className="font-semibold text-cream/85">Consequence</span> is the room
-                  you build at two in the morning — metering you read by reflex, buses that breathe
-                  with the song, and a timeline that bends around feel instead of snapping it cold.
+                  <span className="font-semibold text-cream/85">Consequence</span> is the state you
+                  build at two in the morning — metering your reflex that moves with an arrangement,
+                  creating a timeline that bends around your unique session. Explore a
+                  Trade Lane where beats and samples move across a ledger.
                 </p>
                 <p className="mx-auto max-w-xl text-body-md leading-[1.85] text-silver-dim/75 lg:mx-0">
-                  One clock for tracking, comping, and stem architecture: latch a reel-style comp
-                  stack, print parallel grit without losing recall, and keep overdubs low-latency
-                  enough to chase a vocal before the bleed decays.
+                  One clock for acceleration, composition, and stem architecture: print original
+                  scores with acclaim. State-of-the-art protocols to drive your workflow and bleed the
+                  mundane. Buy or flip samples on a counter built for producers — clear listings, clean
+                  handoffs.
                 </p>
-                <p className="mx-auto max-w-xl text-[13px] italic leading-[1.8] text-silver-dim/68 lg:mx-0">
-                  For producers and engineers who care about what survives the car test, the club
-                  PA, and the morning-after listen — not just the screenshot.
+                <p className="mx-auto max-w-xl text-[13px] leading-[1.8] text-silver-dim/68 lg:mx-0">
+                  Browse a reel-style For You feed.
                 </p>
               </div>
 
@@ -519,8 +522,10 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 {[
                   { Icon: IconSessionRing, t: "Session", s: "Tracking ring · clock discipline" },
                   { Icon: IconCompStacks, t: "Comp", s: "Reel-style lanes · recall-safe" },
-                  { Icon: IconFaderBank, t: "Mix bus", s: "Faders · parallel grit" },
-                  { Icon: IconPrintMeter, t: "Print", s: "Stem-safe · final meter" },
+                  { Icon: IconCollab, t: "Collab", s: "Shared timeline · presence & merge-safe locks" },
+                  { Icon: IconTrade, t: "Trade", s: "Beat samples · buy, list & trade packs" },
+                  { Icon: IconStaking, t: "Staking", s: "Lock weight · yield & surface priority" },
+                  { Icon: IconRadio, t: "Radio", s: "Broadcast lane · airplay & rotation" },
                 ].map(({ Icon, t, s }) => (
                   <div
                     key={t}
@@ -540,13 +545,21 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
               </div>
             </div>
 
-            <div className="flex justify-center pt-2">
-              <Link
-                href="/contact"
-                className="garnet-btn inline-block px-14 py-5 text-label-xs uppercase tracking-[0.25em] text-void"
-              >
-                Get Consequence
-              </Link>
+            <div className="flex w-full justify-start">
+              <div className="flex flex-wrap items-center justify-start gap-2.5 sm:gap-3">
+                <Link
+                  href="/contact"
+                  className="inline-block rounded-full border border-white bg-[#0a0a0a] px-6 py-2.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-cream shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-cream/80 hover:bg-[#141414] md:px-8 md:py-3"
+                >
+                  For You
+                </Link>
+                <Link
+                  href="/contact"
+                  className="garnet-btn inline-block px-6 py-2.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void md:px-8 md:py-3"
+                >
+                  Get Consequence
+                </Link>
+              </div>
             </div>
           </div>
         </div>
@@ -605,26 +618,33 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 </SectionReveal>
                 <SectionReveal delay={0.1}>
                   <h2 className="mt-4 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
-                    We don&apos;t explain ourselves.{" "}
-                    <span className="text-gradient-gold font-bold italic">We deliver.</span>
+                    Generational Talent.{" "}
+                    <span className="text-gradient-gold font-bold italic">Post Presence</span>
                   </h2>
                 </SectionReveal>
               </div>
 
               <SectionReveal delay={0.15}>
-                <PostCarrierEditorMockup />
+                <div className="mx-auto w-full max-w-[320px] sm:max-w-[372px] md:max-w-[430px] lg:mx-0 lg:max-w-[min(100%,400px)] xl:max-w-[min(100%,450px)]">
+                  <PostCarrierEditorMockup />
+                </div>
               </SectionReveal>
             </div>
 
-            <div className="flex flex-col gap-6 lg:sticky lg:top-28">
+            <div className="flex flex-col gap-5 lg:sticky lg:top-28">
               <SectionReveal delay={0.12}>
-                <blockquote className="relative overflow-hidden rounded-2xl border border-gold/[0.12] bg-gradient-to-b from-obsidian/85 to-void/92 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] md:p-7">
+                <blockquote className="relative overflow-hidden rounded-2xl border border-gold/[0.12] bg-gradient-to-b from-obsidian/85 to-void/92 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] md:p-6">
                   <div
                     className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rounded-full bg-digital-80s/15 blur-2xl"
                     aria-hidden
                   />
-                  <p className="relative font-cormorant text-xl font-light italic leading-snug text-cream/72 md:text-2xl">
+                  <p className="relative font-cormorant text-lg font-light italic leading-snug text-cream/72 md:text-xl">
                     Permanence over trend — settlement-grade infrastructure, not a trend cycle.
+                  </p>
+                  <p className="relative mt-3 font-mono-hbm text-[10px] leading-relaxed tracking-[0.08em] text-silver-dim/58">
+                    Post Carrier is architected for outcomes that must survive churn: cryptographic proof,
+                    content addressing, and custody assumptions you can document in a data room — not
+                    feature velocity that resets every funding round.
                   </p>
                 </blockquote>
               </SectionReveal>
@@ -632,44 +652,59 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
               <SectionReveal delay={0.18}>
                 <div className="overflow-hidden rounded-2xl border border-white/[0.06] divide-y divide-white/[0.05]">
                   {[
-                    { t: "Immutable", d: "Every file is immutable." },
-                    { t: "Verifiable", d: "Every transmission is verifiable." },
-                    { t: "Anchored", d: "Filecoin — durable commitment, not disposable cloud." },
+                    {
+                      t: "Immutable",
+                      d: "Every file is immutable once committed.",
+                      detail:
+                        "Content IDs bind bytes to identity: the same payload always resolves to the same address; a change is a new object, never a silent overwrite. Your archive keeps a lineage the ledger can read.",
+                    },
+                    {
+                      t: "Verifiable",
+                      d: "Every transmission is verifiable.",
+                      detail:
+                        "Delivery paths ship with proofs counterparties can re-run — signatures, inclusion, and audit metadata — without trusting our control plane. Verification is portable; theater is not.",
+                    },
+                    {
+                      t: "Anchored",
+                      d: "Filecoin — durable commitment, not disposable cloud.",
+                      detail:
+                        "Storage deals encode economic obligation to the dataset. Replication and duration are tunable commitments on-chain, not a monthly line item on someone else's balance sheet you pray they renew.",
+                    },
                   ].map((row, idx) => (
                     <div
                       key={row.t}
-                      className="flex gap-4 bg-void/25 px-4 py-4 transition-colors duration-300 hover:bg-void/45 md:px-5 md:py-4"
+                      className="flex gap-3 bg-void/25 px-3.5 py-3 transition-colors duration-300 hover:bg-void/45 md:px-4 md:py-3.5"
                     >
-                      <span className="w-7 shrink-0 pt-0.5 font-mono-hbm text-[10px] tabular-nums text-digital-80s/90">
+                      <span className="w-6 shrink-0 pt-0.5 font-mono-hbm text-[9px] tabular-nums text-digital-80s/90">
                         {String(idx + 1).padStart(2, "0")}
                       </span>
                       <div>
-                        <p className="font-mono-hbm text-label-xs uppercase tracking-[0.2em] text-gold/50">
+                        <p className="font-mono-hbm text-[10px] uppercase tracking-[0.2em] text-gold/50">
                           {row.t}
                         </p>
-                        <p className="mt-1 text-[13px] leading-relaxed text-silver-dim/64">{row.d}</p>
+                        <p className="mt-0.5 text-[11px] font-medium leading-relaxed text-cream/62">
+                          {row.d}
+                        </p>
+                        <p className="mt-1.5 text-[10px] leading-relaxed text-silver-dim/60">{row.detail}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               </SectionReveal>
 
-              <SectionReveal delay={0.22}>
-                <div className="rounded-xl border border-digital-80s/20 bg-digital-80s/[0.04] px-5 py-4">
-                  <p className="text-body-md font-medium leading-relaxed text-silver/78">
-                    We are not a consumer app.{" "}
-                    <span className="text-cream/88">We are settlement infrastructure.</span>
+              <SectionReveal delay={0.24}>
+                <div className="space-y-2">
+                  <p className="font-mono-hbm text-[9px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/48">
+                    Routed lanes · archival programs · institutional onboarding — tell us the mandate; we
+                    map the proof surface.
                   </p>
+                  <Link
+                    href="/about"
+                    className="garnet-btn inline-block px-8 py-3.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void"
+                  >
+                    Special Delivery
+                  </Link>
                 </div>
-              </SectionReveal>
-
-              <SectionReveal delay={0.28}>
-                <Link
-                  href="/about"
-                  className="garnet-btn inline-block px-8 py-4 text-label-xs uppercase tracking-[0.2em] text-void"
-                >
-                  Special Delivery
-                </Link>
               </SectionReveal>
             </div>
           </div>

@@ -67,6 +67,30 @@ export function IconSessionRing({ className }: { className?: string }) {
   );
 }
 
+export function IconCollab({ className }: { className?: string }) {
+  return (
+    <svg {...svgProps(className)}>
+      <circle cx="20" cy="22" r="6.5" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="36" cy="22" r="6.5" stroke="currentColor" strokeWidth="1.2" />
+      <circle cx="28" cy="36" r="6.5" stroke="currentColor" strokeWidth="1.2" />
+      <path
+        d="M24.5 26.5l2.2 4M31.5 26.5l-2.2 4M25.5 33.5h5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.45"
+      />
+      <path
+        d="M28 14v4M26 16l2-2.5 2 2.5"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.55"
+      />
+    </svg>
+  );
+}
+
 export function IconFaderBank({ className }: { className?: string }) {
   return (
     <svg {...svgProps(className)}>
@@ -87,6 +111,74 @@ export function IconCompStacks({ className }: { className?: string }) {
       <path d="M10 28h28M10 34h32" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.5" />
       <rect x="14" y="16" width="28" height="24" rx="2" stroke="currentColor" strokeWidth="1.2" />
       <path d="M22 20v16M30 18v18M38 22v12" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
+export function IconTrade({ className }: { className?: string }) {
+  return (
+    <svg {...svgProps(className)}>
+      <path d="M10 40h36" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.3" />
+      {/* candle bodies + wicks */}
+      <path d="M15 32v10M13 35h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M25 26v14M23 30h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.85" />
+      <path d="M35 30v8M33 33h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      <path d="M45 34v6M43 36h4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" />
+      {/* price trend */}
+      <path
+        d="M12 34c6-4 10-8 18-6s12-10 22-14"
+        stroke="currentColor"
+        strokeWidth="1.35"
+        strokeLinecap="round"
+        opacity="0.45"
+        fill="none"
+      />
+      <path
+        d="M40 14h6M43 11v6"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinecap="round"
+        opacity="0.5"
+      />
+    </svg>
+  );
+}
+
+export function IconStaking({ className }: { className?: string }) {
+  return (
+    <svg {...svgProps(className)}>
+      <path d="M12 42h32" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.28" />
+      <rect x="14" y="33" width="28" height="7" rx="2" stroke="currentColor" strokeWidth="1.2" />
+      <rect x="17" y="25" width="22" height="7" rx="2" stroke="currentColor" strokeWidth="1.2" opacity="0.85" />
+      <rect x="20" y="17" width="16" height="7" rx="2" stroke="currentColor" strokeWidth="1.2" opacity="0.55" />
+      <path
+        d="M28 7l6 6.5H22L28 7z"
+        stroke="currentColor"
+        strokeWidth="1.2"
+        strokeLinejoin="round"
+        fill="none"
+        opacity="0.65"
+      />
+    </svg>
+  );
+}
+
+export function IconRadio({ className }: { className?: string }) {
+  return (
+    <svg {...svgProps(className)}>
+      <rect x="8" y="20" width="40" height="26" rx="3" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M28 20V14l-2-4h4l-2 4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round" opacity="0.55" fill="none" />
+      <circle cx="20" cy="33" r="7" stroke="currentColor" strokeWidth="1.2" />
+      <path d="M16.5 33h7M20 29.5v7" stroke="currentColor" strokeWidth="1.1" strokeLinecap="round" opacity="0.35" />
+      <path d="M32 28h12M32 33h10M32 38h14" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" opacity="0.42" />
+      <path
+        d="M40 12c4 2 6 6 6 10M36 14c3 1.5 4.5 5 4.5 8.5"
+        stroke="currentColor"
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        fill="none"
+        opacity="0.38"
+      />
     </svg>
   );
 }
