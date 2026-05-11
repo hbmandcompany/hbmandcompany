@@ -4,7 +4,7 @@ import TreasuryContent from "./TreasuryContent";
 export const metadata: Metadata = {
   title: "Treasury",
   description:
-    "How HBM & Company runs consolidated digital asset treasury: staking, liquidity, governance alignment, and balance-sheet discipline across ETH, LSTs, and stable balances.",
+    "Immersive walkthrough of HBM treasury: coverage and mandate, underwriting, book-building, execution, and surveillance — investment-banking discipline applied to digital asset balance sheets.",
   alternates: {
     canonical: "https://hbmandcompany.com/treasury",
   },

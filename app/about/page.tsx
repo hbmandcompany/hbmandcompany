@@ -4,7 +4,7 @@ import AboutContent from "./AboutContent";
 export const metadata: Metadata = {
   title: "The Company",
   description:
-    "HBM & Company is a private holding company founded on the conviction that the financial infrastructure of the next century will be built on open, programmable, decentralized protocols.",
+    "The Company — an immersive telling of HBM & Company: French-inspired house lore, lineage, values, and the people who hold the line between patrimony and protocol.",
   alternates: {
     canonical: "https://hbmandcompany.com/about",
   },

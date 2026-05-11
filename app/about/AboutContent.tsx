@@ -2,261 +2,346 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
-import GoldDivider from "@/components/GoldDivider";
 import SectionReveal from "@/components/SectionReveal";
-import AnimatedHeadline from "@/components/AnimatedHeadline";
+
+const marqueeFr = [
+  { fr: "Patrimoine", en: "Patrimony" },
+  { fr: "La maison", en: "The house" },
+  { fr: "Lignée", en: "Lineage" },
+  { fr: "Mesure", en: "Measure" },
+  { fr: "Serment", en: "Covenant" },
+  { fr: "Flambeau", en: "Torch" },
+  { fr: "Calme", en: "Restraint" },
+  { fr: "Durée", en: "Duration" },
+];
+
+const chapters = [
+  {
+    num: "I",
+    titleFr: "La maison",
+    titleEn: "The house at the edge of the century",
+    lead:
+      "Long before “crypto” became a dinner-table word, there was already a kind of French clarity we admired: the insistence that a maison is not a logo — it is a lineage of judgment, renewed each generation without spectacle.",
+    body:
+      "HBM & Company was imagined in that spirit. Not a fund that markets its quarter, but a private house that holds assets, builds software, and answers only to its own sense of duration. We borrowed the posture of the grandes maisons — discretion, craft, refusal of the merely fashionable — and applied it to programmable money.",
+    image:
+      "https://images.unsplash.com/photo-1431274172761-452ca91393e9?w=1600&q=88",
+    imageAlt: "Paris from the river at dusk",
+  },
+  {
+    num: "II",
+    titleFr: "Une lignée",
+    titleEn: "Lineage, not novelty",
+    lead:
+      "In Paris, one speaks of filiation: who taught whom, which atelier shaped which hand. We treat protocol architecture the same way — every deployment carries the imprint of those who came before it.",
+    body:
+      "Our founders were engineers who had read too many prospectuses and bankers who had written too many. They met in the uncanny valley between settlement finality and boardroom comfort — and decided the next century would be won by whoever could speak both languages without cynicism. That compact became the firm.",
+    image:
+      "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&q=88",
+    imageAlt: "Candlelit library corridor",
+  },
+  {
+    num: "III",
+    titleFr: "Patrimoine & protocole",
+    titleEn: "Patrimony meets protocol",
+    lead:
+      "Patrimoine is not nostalgia. It is the belief that what you hold should still mean something when the fashion has passed — whether that holding is limestone, parchment, or a cold key.",
+    body:
+      "We consolidate digital asset treasury and wholly-owned software the way a house consolidates its workshops: one ledger, one standard of care, one intolerance for shortcuts. The chain is our atelier; governance is our gilding; silence in the press is often our finest varnish.",
+    image:
+      "https://images.unsplash.com/photo-1521587760476-6c12a4b040da?w=1600&q=88",
+    imageAlt: "Rows of archival volumes",
+  },
+  {
+    num: "IV",
+    titleFr: "Le serment du calme",
+    titleEn: "The covenant of calm",
+    lead:
+      "There is a French virtue in restraint — not coldness, but the refusal to perform urgency for an audience. We do not chase headlines; we compound where others churn.",
+    body:
+      "Our counterparties are institutions and founders who think in generations as readily as in quarters. We engage selectively, prefer introductions, and keep our word as if it were engraved — because in open networks, reputation is the only metal that never tarnishes.",
+    image:
+      "https://images.unsplash.com/photo-1515542622106-78bda8ba0e5b?w=1600&q=88",
+    imageAlt: "Hands crafting with precision",
+  },
+  {
+    num: "V",
+    titleFr: "Où l'on écrit dans le métal",
+    titleEn: "Where one writes in metal",
+    lead:
+      "The old engravers said the line must survive the hammer. We say the same of code: it must survive adversaries, upgrades, and the boredom of maintenance.",
+    body:
+      "Today the house spans validator operations, protocol governance, and balance-sheet positions across fourteen networks and twelve jurisdictions — still private, still principal, still allergic to the easy gesture. The story continues in commits, not press releases.",
+    image:
+      "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=88",
+    imageAlt: "Modern architecture facade",
+  },
+];
 
 const values = [
   { code: "01", label: "Permanence", description: "We build for decades, not quarters." },
-  { code: "02", label: "Precision", description: "Every deployment is a deliberate act." },
-  { code: "03", label: "Privacy", description: "We don't perform. We produce." },
-  { code: "04", label: "Protocol", description: "Code is law. Infrastructure is legacy." },
+  { code: "02", label: "Précision", description: "Every deployment is a deliberate act." },
+  { code: "03", label: "Discrétion", description: "We do not perform. We produce." },
+  { code: "04", label: "Protocole", description: "Code is law. Infrastructure is legacy." },
 ];
 
 const team = [
   {
     name: "A. Harrington",
     role: "Managing Partner",
-    focus: "Protocol Architecture & Capital Allocation",
+    focus: "Protocol architecture & capital allocation",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
   },
   {
     name: "M. Blackwood",
     role: "Head of DeFi",
-    focus: "Liquidity Engineering & Treasury Design",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b47c?w=400&q=80",
+    focus: "Liquidity engineering & treasury design",
+    image:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=85&auto=format&fit=crop",
   },
   {
     name: "S. Okafor",
     role: "Chief Protocol Officer",
-    focus: "Consensus Mechanisms & Smart Contract Architecture",
+    focus: "Consensus & smart contract architecture",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
   },
   {
     name: "L. Veronique",
     role: "Head of Institutional",
-    focus: "Regulatory Strategy & Custody Infrastructure",
+    focus: "Regulatory strategy & custody infrastructure",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
   },
 ];
 
-export default function AboutPage() {
+export default function AboutContent() {
   return (
     <>
       <NavBar />
 
-      {/* ——— HERO ——— */}
-      <section className="relative min-h-[70vh] flex items-end pb-20 overflow-hidden">
-        <div className="absolute inset-0 z-0">
+      {/* ═══ HERO ═══ */}
+      <section className="relative flex min-h-screen flex-col justify-end pb-16 pt-28 md:pb-24">
+        <div className="absolute inset-0 z-0 min-h-[100dvh] overflow-hidden">
           <Image
-            src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1920&q=90"
-            alt="Architecture"
+            src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=90"
+            alt=""
             fill
-            className="object-cover object-center"
+            sizes="100vw"
+            className="object-cover object-center grayscale contrast-[1.08] brightness-[0.92]"
             priority
             unoptimized
           />
-          <div className="absolute inset-0 bg-gradient-to-b from-void/80 via-void/60 to-void" />
-          <div className="absolute inset-0 bg-gradient-to-r from-void/70 to-void/20" />
-          <div className="absolute inset-0 hero-glow" />
+          {/* Monochrome plate — reads as silver-gelatin over the graded photo */}
+          <div
+            className="pointer-events-none absolute inset-0 z-[1] bg-gradient-to-br from-white/[0.12] via-transparent to-black/35 mix-blend-soft-light"
+            aria-hidden
+          />
+          <div className="grain-overlay-hero" aria-hidden />
+          <div className="absolute inset-0 bg-gradient-to-b from-void/45 via-void/35 to-void/90" />
+          <div className="absolute inset-0 bg-gradient-to-r from-void/70 via-void/30 to-void/55" />
+          <div
+            className="absolute inset-0"
+            style={{
+              background:
+                "radial-gradient(ellipse 80% 65% at 20% 40%, rgba(34,232,200,0.06) 0%, transparent 55%)",
+            }}
+            aria-hidden
+          />
+          <div className="absolute inset-0 hero-glow opacity-70" aria-hidden />
         </div>
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 w-full">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            <span className="font-mono-hbm text-label-sm text-gold uppercase tracking-[0.3em] block mb-6">
-              — The Firm
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <div className="mb-6">
+            <span className="inline-block border border-gold/25 bg-void/45 px-3 py-1.5 font-mono-hbm text-[10px] uppercase tracking-[0.35em] text-gold/55 backdrop-blur-sm">
+              The Company — Lore & lineage
             </span>
-          </motion.div>
-          <h1 className="font-cormorant text-display-xl text-cream font-light leading-none mb-6 max-w-4xl">
-            <AnimatedHeadline text="About" delay={0.2} />
-            {" "}
-            <AnimatedHeadline
-              text="HBM & Company"
-              delay={0.5}
-              className="text-gradient-gold font-bold italic"
-            />
+          </div>
+
+          <h1 className="mb-6 leading-[0.9] tracking-tight">
+            <span className="block font-cormorant text-[clamp(3rem,10vw,8.5rem)] font-light text-cream/95">
+              HBM
+            </span>
+            <span className="block font-cormorant text-[clamp(3rem,10vw,8.5rem)] font-semibold italic text-gradient-gold">
+              &amp; Company
+            </span>
           </h1>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-            className="font-mono-hbm text-body-lg text-silver max-w-xl"
-          >
-            A private crypto holdings company. We invest, build, and operate
-            at the frontier of decentralized finance.
-          </motion.p>
+
+          <p className="max-w-md font-cormorant text-xl font-light italic leading-snug text-cream/55 md:text-2xl">
+            « Une maison ne se vend pas au bruit du siècle. Elle se transmet au silence du
+            métier. »
+          </p>
+          <p className="mt-4 max-w-sm font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.26em] text-silver-dim/45">
+            A house is not sold to the noise of the age — it is passed down through the silence of
+            craft. (Epigraph — the firm&apos;s private journal, MMXXI)
+          </p>
+        </div>
+
+        <div className="absolute bottom-8 right-10 z-10 hidden flex-col items-center gap-2 md:flex">
+          <span className="font-mono-hbm text-[9px] uppercase tracking-[0.3em] text-silver-dim/35">
+            Descendre
+          </span>
+          <div className="h-12 w-px bg-gradient-to-b from-gold/30 to-transparent" />
         </div>
       </section>
 
-      {/* ——— SPLIT ABOUT ——— */}
-      <section className="relative bg-midnight py-24 md:py-36">
-        <div className="absolute inset-0 city-glow pointer-events-none" />
-
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-start">
-            {/* Left: Editorial image */}
-            <SectionReveal direction="left" className="sticky top-24">
-              <div className="relative h-[500px] lg:h-[700px] overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1000&q=80"
-                  alt="Glass towers"
-                  fill
-                  className="object-cover object-center"
-                  unoptimized
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-abyss/60 via-transparent to-transparent" />
-                <div className="absolute inset-0 bg-gradient-to-r from-abyss/30 to-transparent" />
-
-                {/* Overlay stat */}
-                <div className="absolute bottom-8 left-8 right-8">
-                  <div className="glass-panel-dark p-6">
-                    <div className="font-cormorant text-display-md text-gold font-bold mb-1 tabular-nums">$4.08B</div>
-                    <div className="font-mono-hbm text-label-xs text-silver-dim/60 uppercase tracking-[0.15em] leading-relaxed">
-                      Consolidated treasury NAV
-                      <span className="block mt-1 normal-case tracking-[0.05em] text-silver-dim/40 text-[9px]">
-                        ETH, LST &amp; stables — mark-to-market
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </SectionReveal>
-
-            {/* Right: Long-form copy */}
-            <div className="flex flex-col gap-10">
-              <SectionReveal direction="right">
-                <div>
-                  <span className="font-mono-hbm text-label-sm text-gold uppercase tracking-[0.3em] block mb-6">
-                    — Our Story
+      {/* ═══ MARQUEE — FRENCH / ENGLISH ═══ */}
+      <div className="overflow-hidden border-y border-white/[0.04] bg-charcoal/35 py-3">
+        <div className="flex animate-marquee gap-0 whitespace-nowrap">
+          {Array(4)
+            .fill(0)
+            .map((_, i) => (
+              <span key={i} className="inline-flex items-center gap-10 px-10">
+                {marqueeFr.map((item) => (
+                  <span key={`${i}-${item.fr}`} className="inline-flex items-center gap-10">
+                    <span className="font-cormorant text-lg italic text-cream/50 md:text-xl">
+                      {item.fr}
+                    </span>
+                    <span className="font-mono-hbm text-[8px] uppercase tracking-[0.32em] text-silver-dim/35">
+                      {item.en}
+                    </span>
+                    <span className="inline-block h-3 w-px bg-gold/15" />
                   </span>
-                  <h2 className="font-cormorant text-display-md text-cream font-light leading-tight mb-6">
-                    Built for the architecture of what&apos;s{" "}
-                    <span className="text-gradient-gold italic font-bold">next.</span>
-                  </h2>
-                  <p className="font-mono-hbm text-body-md text-silver leading-relaxed mb-5">
-                    HBM & Company was founded on a single conviction: the financial
-                    infrastructure of the next century will be built on open, programmable,
-                    decentralized protocols — and the firms that own the critical layers of
-                    that stack will define institutional wealth for generations.
-                  </p>
-                  <p className="font-mono-hbm text-body-md text-silver-dim leading-relaxed mb-5">
-                    We began as a small group of protocol engineers and institutional
-                    finance veterans who saw the convergence happening before markets did.
-                    We deployed capital into the base layers — the consensus mechanisms,
-                    the bridge infrastructure, the custody primitives — when the rest of
-                    the industry was speculating on tokens.
-                  </p>
-                  <p className="font-mono-hbm text-body-md text-silver-dim leading-relaxed">
-                    Today, HBM & Company holds consolidated digital asset treasury and
-                    software positions with over $4.1 billion in notional exposure across
-                    fourteen blockchain networks, twelve regulatory jurisdictions, and three continents.
-                    We are not a fund. We are not an exchange. We are the infrastructure.
-                  </p>
-                </div>
-              </SectionReveal>
-
-              <GoldDivider />
-
-              <SectionReveal delay={0.1}>
-                <div>
-                  <h3 className="font-cormorant text-display-sm text-cream font-light mb-6">
-                    How We Operate
-                  </h3>
-                  <p className="font-mono-hbm text-body-md text-silver-dim leading-relaxed mb-5">
-                    We operate in three modes: as principal investors deploying proprietary
-                    capital, as protocol operators running validator nodes and governance
-                    infrastructure, and as strategic partners to founders building at the
-                    intersection of DeFi and institutional finance.
-                  </p>
-                  <p className="font-mono-hbm text-body-md text-silver-dim leading-relaxed">
-                    We do not take advisory fees or management carry on external assets.
-                    We participate in the protocols we believe in — as node operators,
-                    governance delegates, and long-term holders. Our incentives are
-                    perfectly aligned with the protocols we build.
-                  </p>
-                </div>
-              </SectionReveal>
-
-              <GoldDivider label="Core Values" />
-
-              {/* Values */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {values.map((v, i) => (
-                  <SectionReveal key={v.code} delay={i * 0.08}>
-                    <div className="glass-panel-dark p-5 group hover:border-gold/20 transition-all duration-400">
-                      <div className="flex items-center gap-3 mb-3">
-                        <span className="font-mono-hbm text-label-xs text-gold/50 uppercase tracking-[0.2em]">
-                          {v.code}
-                        </span>
-                        <div className="w-4 h-px bg-gold/30" />
-                        <span className="font-mono-hbm text-label-sm text-gold uppercase tracking-[0.2em]">
-                          {v.label}
-                        </span>
-                      </div>
-                      <p className="font-mono-hbm text-[13px] text-silver-dim leading-relaxed">
-                        {v.description}
-                      </p>
-                    </div>
-                  </SectionReveal>
                 ))}
-              </div>
+              </span>
+            ))}
+        </div>
+      </div>
+
+      {/* ═══ EDITORIAL OPENING ═══ */}
+      <section className="relative mx-auto max-w-[1440px] px-6 py-20 md:px-12 md:py-28">
+        <div className="pointer-events-none absolute inset-0 purple-bloom opacity-40" aria-hidden />
+        <SectionReveal>
+          <div className="relative min-h-[62vh] overflow-hidden rounded-2xl md:min-h-[70vh]">
+            <Image
+              src="https://images.unsplash.com/photo-1467269204594-9661b134dd2b?w=1800&q=88"
+              alt="Seine and city light"
+              fill
+              className="object-cover object-center"
+              unoptimized
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-void via-void/55 to-void/25" />
+            <div className="absolute inset-0 bg-gradient-to-r from-void/80 via-transparent to-transparent" />
+            <div className="absolute bottom-0 left-0 max-w-3xl p-8 md:p-16">
+              <span className="mb-6 inline-block font-mono-hbm text-[9px] uppercase tracking-[0.35em] text-gold/60">
+                Prologue
+              </span>
+              <h2 className="mb-6 font-cormorant text-[clamp(2.2rem,5vw,4rem)] font-light leading-[1.02] text-cream">
+                The tale of a firm
+                <br />
+                <span className="font-semibold italic text-gradient-gold">written in quiet.</span>
+              </h2>
+              <p className="max-w-lg font-mono-hbm text-[11px] uppercase leading-relaxed tracking-[0.18em] text-silver/50">
+                This is not a timeline of press releases. It is the interior map of how we think —
+                borrowed light from French craft culture, from banking rigor, and from the strange
+                beauty of open ledgers.
+              </p>
             </div>
           </div>
-        </div>
+        </SectionReveal>
       </section>
 
-      {/* ——— TEAM ——— */}
-      <section className="relative py-24 md:py-36 bg-obsidian">
-        <div className="absolute inset-0 amber-bloom pointer-events-none" />
+      {/* ═══ CHAPTERS — IMMERSIVE ═══ */}
+      {chapters.map((ch, i) => (
+        <section
+          key={ch.num}
+          className={`relative min-h-[90vh] overflow-hidden ${
+            i % 2 === 0 ? "section-mid" : "section-dark"
+          }`}
+        >
+          {i % 2 === 0 ? (
+            <div className="pointer-events-none absolute inset-0 city-glow opacity-28" aria-hidden />
+          ) : (
+            <div
+              className="pointer-events-none absolute inset-0 opacity-[0.1]"
+              style={{
+                backgroundImage:
+                  "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(255,255,255,0.02) 2px, rgba(255,255,255,0.02) 3px)",
+              }}
+              aria-hidden
+            />
+          )}
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
-          <div className="mb-16">
-            <SectionReveal>
-              <span className="font-mono-hbm text-label-sm text-gold uppercase tracking-[0.3em] block mb-4">
-                — The Team
-              </span>
-            </SectionReveal>
-            <SectionReveal delay={0.1}>
-              <h2 className="font-cormorant text-display-lg text-cream font-light">
-                The <span className="text-gradient-gold italic font-bold">People</span>
-              </h2>
-            </SectionReveal>
+          <div className="relative z-10 mx-auto grid min-h-[90vh] max-w-[1440px] grid-cols-1 items-center gap-12 px-6 py-20 md:grid-cols-2 md:gap-20 md:px-12 lg:gap-28">
+            <div className={i % 2 === 1 ? "md:order-2" : ""}>
+              <SectionReveal direction={i % 2 === 0 ? "left" : "right"}>
+                <div className="relative aspect-[4/5] max-h-[min(76vh,680px)] w-full overflow-hidden rounded-2xl">
+                  <Image
+                    src={ch.image}
+                    alt={ch.imageAlt}
+                    fill
+                    className="object-cover object-center"
+                    unoptimized
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-void/70 via-transparent to-void/15" />
+                  <div className="absolute left-6 top-6 font-cormorant text-[clamp(5rem,18vw,10rem)] font-light leading-none text-cream/[0.07]">
+                    {ch.num}
+                  </div>
+                  <div className="absolute bottom-8 left-8 right-8">
+                    <p className="font-cormorant text-2xl italic text-cream/40 md:text-3xl">
+                      {ch.titleFr}
+                    </p>
+                  </div>
+                </div>
+              </SectionReveal>
+            </div>
+
+            <div className={i % 2 === 1 ? "md:order-1" : ""}>
+              <SectionReveal delay={0.06}>
+                <span className="mb-3 block font-mono-hbm text-[9px] uppercase tracking-[0.4em] text-gold/45">
+                  Chapitre {ch.num}
+                </span>
+                <h2 className="mb-4 font-cormorant text-[clamp(1.85rem,3.2vw,2.65rem)] font-light leading-tight text-cream">
+                  {ch.titleEn}
+                </h2>
+                <p className="mb-6 font-cormorant text-lg font-light italic leading-relaxed text-cream/55 md:text-xl">
+                  {ch.lead}
+                </p>
+                <p className="font-mono-hbm text-[15px] leading-[1.8] text-silver-dim/85 md:text-[16px]">
+                  {ch.body}
+                </p>
+                <div className="mt-10 flex items-center gap-4">
+                  <div className="h-px flex-1 max-w-[120px] bg-gradient-to-r from-gold/45 to-transparent" />
+                  <span className="font-mono-hbm text-[8px] uppercase tracking-[0.35em] text-silver-dim/30">
+                    HBM &amp; Company — mémoire interne
+                  </span>
+                </div>
+              </SectionReveal>
+            </div>
           </div>
+        </section>
+      ))}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {team.map((member, i) => (
-              <SectionReveal key={member.name} delay={i * 0.1}>
-                <div className="group cursor-pointer">
-                  <div className="relative h-[320px] overflow-hidden mb-4">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover object-top transition-all duration-700 group-hover:scale-105"
-                      unoptimized
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-void/80 via-transparent to-transparent" />
-                    <div className="absolute inset-0 bg-obsidian/20 group-hover:bg-obsidian/0 transition-colors duration-500" />
-                    <div className="absolute bottom-0 left-0 right-0 h-px bg-gold/20 group-hover:bg-gold/60 transition-colors duration-500" />
+      {/* ═══ VALUES — SALON GRID ═══ */}
+      <section className="relative border-t border-white/[0.04] py-24 md:py-36">
+        <div className="pointer-events-none absolute inset-0 amber-bloom opacity-30" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <div className="mb-14 text-center">
+              <span className="mb-4 block font-mono-hbm text-[9px] uppercase tracking-[0.35em] text-gold/45">
+                Les quatre pierres
+              </span>
+              <h2 className="font-cormorant text-[clamp(2rem,4vw,3.25rem)] font-light text-cream">
+                The four stones of{" "}
+                <span className="italic font-semibold text-gradient-gold">the house.</span>
+              </h2>
+            </div>
+          </SectionReveal>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
+            {values.map((v, idx) => (
+              <SectionReveal key={v.code} delay={idx * 0.07}>
+                <div className="group h-full rounded-xl border border-white/[0.06] bg-void/25 p-7 transition-all duration-500 hover:border-gold/22 hover:bg-void/45">
+                  <div className="mb-4 flex items-center gap-3">
+                    <span className="font-mono-hbm text-[9px] uppercase tracking-[0.28em] text-gold/40">
+                      {v.code}
+                    </span>
+                    <div className="h-px w-6 bg-gold/25 transition-all duration-500 group-hover:w-10" />
+                    <span className="font-cormorant text-lg text-cream/85">{v.label}</span>
                   </div>
-                  <div>
-                    <h3 className="font-cormorant text-display-sm text-cream font-light group-hover:text-gold transition-colors duration-300">
-                      {member.name}
-                    </h3>
-                    <p className="font-mono-hbm text-label-xs text-gold uppercase tracking-[0.2em] mt-1 mb-2">
-                      {member.role}
-                    </p>
-                    <p className="font-mono-hbm text-[12px] text-silver-dim leading-relaxed">
-                      {member.focus}
-                    </p>
-                  </div>
+                  <p className="font-mono-hbm text-[11px] uppercase leading-relaxed tracking-[0.12em] text-silver-dim/50">
+                    {v.description}
+                  </p>
                 </div>
               </SectionReveal>
             ))}
@@ -264,34 +349,117 @@ export default function AboutPage() {
         </div>
       </section>
 
-      {/* ——— CTA ——— */}
-      <section className="relative py-24 md:py-32 bg-midnight">
-        <div className="absolute inset-0 city-glow pointer-events-none" />
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12 text-center">
+      {/* ═══ TEAM — SALON ═══ */}
+      <section className="section-dark relative py-24 md:py-36">
+        <div className="pointer-events-none absolute inset-0 city-glow opacity-35" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
+          <div className="mb-16 md:flex md:items-end md:justify-between">
+            <div>
+              <SectionReveal>
+                <span className="mb-4 block font-mono-hbm text-[9px] uppercase tracking-[0.35em] text-gold/50">
+                  Le cercle
+                </span>
+              </SectionReveal>
+              <SectionReveal delay={0.06}>
+                <h2 className="font-cormorant text-[clamp(2.2rem,4vw,3.5rem)] font-light text-cream">
+                  Those who keep{" "}
+                  <span className="italic font-semibold text-gradient-gold">the flame.</span>
+                </h2>
+              </SectionReveal>
+            </div>
+            <SectionReveal delay={0.12}>
+              <p className="mt-6 max-w-sm font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/45 md:mt-0">
+                Names you will not find on conference badges. Judgment you will find in every line
+                of code we ship and every position we hold.
+              </p>
+            </SectionReveal>
+          </div>
+
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            {team.map((member, i) => (
+              <SectionReveal key={member.name} delay={i * 0.08}>
+                <div className="group cursor-default">
+                  <div className="relative mb-5 aspect-[3/4] overflow-hidden rounded-xl">
+                    <Image
+                      src={member.image}
+                      alt={member.name}
+                      fill
+                      sizes="(max-width: 640px) 50vw, (max-width: 1024px) 40vw, 22vw"
+                      className="object-cover object-top transition-all duration-700 group-hover:scale-[1.03]"
+                      unoptimized
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-void/85 via-void/10 to-transparent" />
+                    <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-gold/30 via-gold/10 to-transparent" />
+                  </div>
+                  <h3 className="font-cormorant text-xl font-light text-cream/90 md:text-2xl">
+                    {member.name}
+                  </h3>
+                  <p className="mt-1 font-mono-hbm text-[9px] uppercase tracking-[0.22em] text-gold/55">
+                    {member.role}
+                  </p>
+                  <p className="mt-2 font-mono-hbm text-[12px] leading-relaxed text-silver-dim/65">
+                    {member.focus}
+                  </p>
+                </div>
+              </SectionReveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ CTA ═══ */}
+      <section className="relative py-24 md:py-32">
+        <div className="pointer-events-none absolute inset-0 purple-bloom opacity-25" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 text-center md:px-12">
           <SectionReveal>
-            <h2 className="font-cormorant text-display-lg text-cream font-light mb-6">
-              Ready to build at{" "}
-              <span className="text-gradient-gold italic font-bold">scale?</span>
+            <h2 className="mx-auto mb-6 max-w-3xl font-cormorant text-[clamp(2rem,4vw,3.25rem)] font-light leading-tight text-cream">
+              Si votre ouvrage mérite le silence
+              <br />
+              <span className="italic font-semibold text-gradient-gold">avant le bruit.</span>
             </h2>
           </SectionReveal>
-          <SectionReveal delay={0.1}>
-            <p className="font-mono-hbm text-body-md text-silver-dim mb-10 max-w-md mx-auto">
-              We engage selectively with founders and institutions operating at the frontier.
+          <SectionReveal delay={0.08}>
+            <p className="mx-auto mb-10 max-w-md font-mono-hbm text-[11px] uppercase leading-relaxed tracking-[0.18em] text-silver-dim/50">
+              If your work deserves quiet before noise — we listen to introductions, not pitches in
+              the feed.
             </p>
           </SectionReveal>
-          <SectionReveal delay={0.2}>
+          <SectionReveal delay={0.14}>
             <Link
               href="/contact"
-              className="garnet-btn font-mono-hbm text-label-sm uppercase tracking-[0.25em] text-void px-12 py-5 inline-block"
+              className="garnet-btn inline-block px-12 py-4 font-mono-hbm text-[10px] uppercase tracking-[0.24em] text-void"
             >
-              Begin Engagement
+              Begin engagement
             </Link>
           </SectionReveal>
         </div>
       </section>
 
-      <FooterDark />
+      {/* ═══ CLOSING FULL BLEED ═══ */}
+      <section className="relative h-[55vh] min-h-[360px] overflow-hidden md:h-[62vh]">
+        <Image
+          src="https://images.unsplash.com/photo-1487958449943-2429e8be8625?w=1920&q=85"
+          alt=""
+          fill
+          className="object-cover object-center"
+          unoptimized
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-void/50 via-void/20 to-void" />
+        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center">
+          <span className="mb-4 font-mono-hbm text-[9px] uppercase tracking-[0.42em] text-gold/50">
+            HBM &amp; Company
+          </span>
+          <p className="max-w-2xl font-cormorant text-[clamp(1.65rem,3.5vw,2.85rem)] font-light italic leading-[1.2] text-cream/82">
+            « On ne hérite pas la maison. On la surveille un jour de plus que le siècle ne
+            dure. »
+          </p>
+          <p className="mt-5 max-w-md font-mono-hbm text-[9px] uppercase tracking-[0.22em] text-silver-dim/40">
+            We do not inherit the house — we watch over it one day longer than the age endures.
+          </p>
+        </div>
+      </section>
+
+      <FooterDark typography="luxury" />
     </>
   );
 }
-

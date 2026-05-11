@@ -151,7 +151,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           />
 
         <h1 className="sr-only">
-          The Pursuit Of Excellence. HBM &amp; Company — a digital asset house;
+          The Pursuit Of Exception. HBM &amp; Company — a digital asset house;
           treasury, protocol layer, and institutional discretion.
         </h1>
 
@@ -174,7 +174,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             <span className="inline-flex max-w-full flex-nowrap items-baseline justify-center gap-x-[0.35em] lg:justify-center">
               <AnimatedHeadline text="The Pursuit" delay={0} nowrap />
               <AnimatedHeadline
-                text="Of Excellence"
+                text="Of Exception"
                 delay={0}
                 nowrap
                 className="text-gradient-gold font-semibold italic [filter:drop-shadow(0_6px_32px_rgba(0,0,0,0.55))]"
@@ -184,7 +184,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-visual mt-4 w-full max-w-[268px] sm:mt-5 sm:max-w-[304px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,340px)] xl:max-w-[min(100%,368px)] lg:justify-self-start"
+            className="hero-editorial-visual mt-4 w-full max-w-[240px] sm:mt-5 sm:max-w-[272px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,304px)] xl:max-w-[min(100%,328px)] lg:justify-self-start"
           >
             <div className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden">
               <HeroPlaneGif
@@ -192,7 +192,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 alt="Night sky and wing from an airplane window"
                 slowFactor={2.35}
                 className="absolute inset-0 z-0 h-full w-full rounded-2xl object-cover object-center"
-                sizes="(max-width: 640px) 268px, (max-width: 1024px) 304px, 368px"
+                sizes="(max-width: 640px) 240px, (max-width: 1024px) 272px, 328px"
               />
             </div>
           </motion.div>
@@ -202,15 +202,14 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             className="hero-editorial-prose relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
           >
             <p className="text-pretty font-cormorant text-[1.15rem] font-light italic leading-[1.62] text-cream/[0.5] md:text-[1.28rem] md:leading-[1.66] md:text-cream/[0.56]">
-              We hold our assets as a house holds its workshop — with discretion,
-              lineage, and a refusal of the easy gesture.
+              The token of our stewardship, as such, is a garden bed of strength — paralleled
+              with discretion, humility, and the unexcelled.
             </p>
             <p className="text-pretty mt-6 font-cormorant text-[1.18rem] font-normal leading-[1.65] text-silver/38 md:mt-7 md:text-[1.32rem] md:leading-[1.68] md:text-silver/44">
               We steward capital with the same restraint one finds
-              in the great&nbsp;houses: lineage over novelty, hand-finished judgment
-              over algorithmic noise, and an intolerance for the merely fashionable.
-              Compounding for counterparties who think in generations as readily as in
-              quarters.
+              in the great&nbsp;houses: lineage over novelty, hand-finished judgment,
+              and an intolerance for mere traveled roads. Compounding for counterparties
+              who believe in generations — readily.
             </p>
           </motion.div>
 
