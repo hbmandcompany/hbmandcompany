@@ -300,6 +300,63 @@
   .section-dark   { background-color: #020203; }
   .section-mid    { background-color: #050505; }
   .section-raised { background-color: #09090B; }
+
+  /* Hero editorial cluster (headline → CTAs only; kicker excluded in markup) */
+  .hero-editorial-headline {
+    font-size: clamp(1.58rem, 0.76rem + 2.85vw, 3.62rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    width: 100%;
+  }
+
+  .hero-editorial-visual-frame {
+    border-radius: 0.125rem;
+    box-shadow:
+      0 24px 60px rgba(0, 0, 0, 0.55),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  }
+
+  .hero-editorial-prose {
+    position: relative;
+    isolation: isolate;
+    padding-inline-start: 0;
+  }
+
+  @media (min-width: 1024px) {
+    .hero-editorial-prose {
+      padding-inline-start: 1.25rem;
+    }
+
+    .hero-editorial-prose::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.15em;
+      bottom: 0.15em;
+      width: 1px;
+      background: linear-gradient(
+        180deg,
+        transparent 0%,
+        rgba(180, 175, 170, 0.28) 18%,
+        rgba(242, 234, 216, 0.14) 50%,
+        rgba(180, 175, 170, 0.22) 82%,
+        transparent 100%
+      );
+      pointer-events: none;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .hero-editorial-pillars {
+      border-left: 2px solid rgba(180, 175, 170, 0.2);
+      padding-left: 1rem;
+    }
+  }
+
+  .hero-editorial-cta-cluster {
+    position: relative;
+  }
 }
 
 @keyframes grain {

@@ -1,5 +1,6 @@
 import Link from "next/link";
 import HbmLogo from "./HbmLogo";
+import VotingProtocolSignup from "./VotingProtocolSignup";
 
 const footerColumns = [
   {
@@ -127,13 +128,6 @@ const socials = [
   },
 ];
 
-const stats = [
-  { value: "$4.08B", label: "Consolidated treasury NAV" },
-  { value: "6.1%", label: "Blended yield (TTM)" },
-  { value: "$162.4M", label: "Software revenue (LTM)" },
-  { value: "+8.7%", label: "vs. ETH (YoY)" },
-];
-
 export default function FooterDark({
   typography = "luxury",
 }: {
@@ -153,10 +147,9 @@ export default function FooterDark({
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
 
-        {/* ─── Upper footer: brand + stats ─── */}
-        <div className="py-16 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-12 border-b border-white/[0.04]">
-          {/* Brand block */}
-          <div className="flex flex-col gap-6">
+        {/* ─── Upper footer: brand + voting protocol signup ─── */}
+        <div className="py-16 md:py-20 border-b border-white/[0.04] grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 lg:items-start">
+          <div className="flex flex-col gap-6 max-w-xl">
             <Link href="/" className="flex items-center gap-3.5 group w-fit">
               <HbmLogo
                 size={38}
@@ -197,21 +190,8 @@ export default function FooterDark({
             </div>
           </div>
 
-          {/* Stats grid */}
-          <div className="grid grid-cols-2 gap-4 content-start">
-            {stats.map((s) => (
-              <div
-                key={s.label}
-                className="glass-panel-dark p-5 md:p-6"
-              >
-                <div className={`${displayFont} text-display-md text-gold font-bold leading-none mb-1`}>
-                  {s.value}
-                </div>
-                    <div className={`${uiFont} text-label-xs text-silver-dim/58 uppercase tracking-[0.14em] leading-snug`}>
-                      {s.label}
-                    </div>
-              </div>
-            ))}
+          <div className="lg:justify-self-end w-full">
+            <VotingProtocolSignup typography={typography} />
           </div>
         </div>
 
@@ -272,7 +252,7 @@ export default function FooterDark({
             <div className="grid grid-cols-3 gap-3">
               {[
                 { city: "Dallas", region: "Primary HQ", detail: "WYOMING REGISTERED" },
-                { city: "Berlin",   region: "Continental EU", detail: "EU OPERATIONS" },
+                { city: "Bordeaux",   region: "Continental EU", detail: "EU OPERATIONS" },
                 { city: "Tokyo",    region: "APAC",          detail: "Asia-Pacific" },
               ].map((o) => (
                 <div
