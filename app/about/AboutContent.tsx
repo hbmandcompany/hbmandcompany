@@ -5,6 +5,7 @@ import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
 import SectionReveal from "@/components/SectionReveal";
+import { aboutTeam, aboutValues } from "@/lib/hbm-company-data";
 
 const marqueeFr = [
   { fr: "Patrimoine", en: "Patrimony" },
@@ -77,41 +78,6 @@ const chapters = [
     image:
       "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=1600&q=88",
     imageAlt: "Modern architecture facade",
-  },
-];
-
-const values = [
-  { code: "01", label: "Permanence", description: "We build for decades, not quarters." },
-  { code: "02", label: "Précision", description: "Every deployment is a deliberate act." },
-  { code: "03", label: "Discrétion", description: "We do not perform. We produce." },
-  { code: "04", label: "Protocole", description: "Code is law. Infrastructure is legacy." },
-];
-
-const team = [
-  {
-    name: "A. Harrington",
-    role: "Managing Partner",
-    focus: "Protocol architecture & capital allocation",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-  },
-  {
-    name: "M. Blackwood",
-    role: "Head of DeFi",
-    focus: "Liquidity engineering & treasury design",
-    image:
-      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=800&q=85&auto=format&fit=crop",
-  },
-  {
-    name: "S. Okafor",
-    role: "Chief Protocol Officer",
-    focus: "Consensus & smart contract architecture",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
-  },
-  {
-    name: "L. Veronique",
-    role: "Head of Institutional",
-    focus: "Regulatory strategy & custody infrastructure",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&q=80",
   },
 ];
 
@@ -329,7 +295,7 @@ export default function AboutContent() {
           </SectionReveal>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-5">
-            {values.map((v, idx) => (
+            {aboutValues.map((v, idx) => (
               <SectionReveal key={v.code} delay={idx * 0.07}>
                 <div className="group h-full rounded-xl border border-white/[0.06] bg-void/25 p-7 transition-all duration-500 hover:border-gold/22 hover:bg-void/45">
                   <div className="mb-4 flex items-center gap-3">
@@ -376,7 +342,7 @@ export default function AboutContent() {
           </div>
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
-            {team.map((member, i) => (
+            {aboutTeam.map((member, i) => (
               <SectionReveal key={member.name} delay={i * 0.08}>
                 <div className="group cursor-default">
                   <div className="relative mb-5 aspect-[3/4] overflow-hidden rounded-xl">

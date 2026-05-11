@@ -35,18 +35,18 @@ const whatWeBuildItems: {
 }[] = [
   {
     id: "01",
-    title: "LightRain",
+    title: "lightra.in",
     description:
-      "Algorithmic plate and grain generators that scatter early reflections like weather — from drizzle ambience to cloud-burst swells, without smearing transients.",
-    tag: "Diffusion & Air",
+      "Bloomberg Terminal-style iOS observability for Base (Coinbase L2). Real-time on-chain analytics, portfolio risk metrics, and a PIOL oracle bridging off-chain data — read-only by design. Pure information density, no decoration.",
+    tag: "On-chain intelligence",
     pixelVariant: "lightrain",
   },
   {
     id: "02",
     title: "Moneyba.gg",
     description:
-      "Non-custodial wallet: keys remain yours — device-bound signing, multi-chain support, and no third-party custody between you and settlement.",
-    tag: "Non-custodial wallet",
+      "Cross-chain portfolio tracker and wallet aggregator. One dashboard — all balances, all chains. Non-custodial, bold, and built for people who want one answer: how much do I have and where is it?",
+    tag: "Portfolio visibility",
     pixelVariant: "moneyba",
     externalHref: "https://moneyba.gg",
   },
@@ -60,27 +60,27 @@ const featuredWork: {
   pixelVariant: FeaturedWorkPixelVariant;
 }[] = [
   {
-    title: "Black Letter",
-    category: "Type & Notation",
+    title: "blackletter.cc",
+    category: "Document Execution",
     description:
-      "Fractured blackletter envelopes and stem-weight motion — press-heavy transients, controlled ink-bleed tails, and phrase-wide arcs that yield to bar-line discipline when you commit the take.",
-    stat: "Glyph-grade",
+      "Premium document signing and notarization with chain-of-custody integrity. Treats execution as a permanent act — not a casual click. Dark, typographic, and authoritative. DocuSign if it were designed by a constitutional archivist.",
+    stat: "On-chain notarized",
     pixelVariant: "black-letter",
   },
   {
-    title: "52PickUp",
-    category: "Sampler / Deck",
+    title: "52pickup.cc",
+    category: "DeFi Yield Discovery",
     description:
-      "Pull artifacts or stems, slice polyphony across 52 launch targets, and print MIDI that remembers velocity curves and round-robins — a crate-digger's instrument with studio recall.",
-    stat: "VST3 · AU",
+      "Gamified yield farming and staking discovery across protocols and chains. Opportunities surface as a sortable deck — by APY, risk, TVL, and chain. Playful interaction model, serious data. Casino meets trading floor.",
+    stat: "Multi-chain",
     pixelVariant: "pickup",
   },
   {
-    title: "ThreeWiseMen",
-    category: "Spatial Harmonics",
+    title: "threewisemen.cc",
+    category: "On-Chain Gifting",
     description:
-      "A three-voice imaging matrix for mid/side sculpting, room glue, and side-chain-aware width — designed for mixes that breathe in headphones and translate on mains.",
-    stat: "MPE-ready",
+      "Stellar Lumens (XLM) gifting with a persistent on-chain ledger. Send XLM for birthdays, holidays, milestones through a warm, intentional interface. Every gift is permanently recorded. Venmo meets a greeting card, settled on Stellar.",
+    stat: "Stellar / XLM",
     pixelVariant: "spatial",
   },
 ];
@@ -88,7 +88,7 @@ const featuredWork: {
 const heroEase = [0.16, 1, 0.3, 1] as const;
 
 export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlot: ReactNode }) {
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion() === true;
 
   const heroT = reduceMotion ? { duration: 0.2 } : { duration: 0.88, ease: heroEase };
 
@@ -102,10 +102,11 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
     },
   };
 
+  /* Keep opacity at 1 in "hidden" so a stuck variant never leaves the hero blank (hydration / FM edge cases). */
   const heroItem = {
     hidden: reduceMotion
-      ? { opacity: 0 }
-      : { opacity: 0, y: 36, filter: "blur(12px)" },
+      ? { opacity: 1, y: 0, filter: "blur(0px)" }
+      : { opacity: 1, y: 32, filter: "blur(10px)" },
     show: {
       opacity: 1,
       y: 0,
@@ -512,9 +513,6 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                   scores with acclaim. State-of-the-art protocols to drive your workflow and bleed the
                   mundane. Buy or flip samples on a counter built for producers — clear listings, clean
                   handoffs.
-                </p>
-                <p className="mx-auto max-w-xl text-[13px] leading-[1.8] text-silver-dim/68 lg:mx-0">
-                  Browse a reel-style For You feed.
                 </p>
               </div>
 

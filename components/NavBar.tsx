@@ -7,10 +7,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 
 const navLinks = [
-  { label: "Michelangelo", href: "/work"    },
-  { label: "Vanity",      href: "/about"   },
-  { label: "Kiss",        href: "/work"    },
-];
+  { label: "Michelangelo", href: "https://www.michelangelo.agency" },
+  { label: "Vanity", href: "https://vanity.company" },
+  { label: "Kiss", href: "https://www.kiss.photography" },
+] as const;
 
 export default function NavBar() {
   const [scrolled, setScrolled]   = useState(false);
@@ -91,22 +91,16 @@ export default function NavBar() {
           {isHome ? (
           <div className="hidden md:flex items-center gap-9">
             {navLinks.map((link) => (
-              <Link
+              <a
                 key={link.label}
                 href={link.href}
-                className={clsx(
-                  "font-mono-hbm text-[11px] uppercase tracking-[0.25em] transition-all duration-300 relative group",
-                  pathname === link.href
-                    ? "text-gold"
-                    : "text-silver-dim/65 hover:text-cream/85"
-                )}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group relative font-mono-hbm text-[11px] uppercase tracking-[0.25em] text-silver-dim/65 transition-all duration-300 hover:text-cream/85"
               >
                 {link.label}
-                <span className={clsx(
-                  "absolute -bottom-0.5 left-0 h-px bg-gold transition-all duration-300",
-                  pathname === link.href ? "w-full" : "w-0 group-hover:w-full"
-                )} />
-              </Link>
+                <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
+              </a>
             ))}
             <Link
               href="/shop"
@@ -181,12 +175,14 @@ export default function NavBar() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: 0.07 + i * 0.08, duration: 0.5, ease: [0.16,1,0.3,1] }}
                 >
-                  <Link
+                  <a
                     href={link.href}
-                    className="font-cormorant text-display-md font-light text-silver-dim/72 hover:text-gold transition-colors duration-300 italic"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-cormorant text-display-md font-light italic text-silver-dim/72 transition-colors duration-300 hover:text-gold"
                   >
                     {link.label}
-                  </Link>
+                  </a>
                 </motion.div>
               ))}
               <motion.div

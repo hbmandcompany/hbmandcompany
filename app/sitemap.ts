@@ -9,6 +9,11 @@ const routes: {
 }[] = [
   { path: "", changeFrequency: "weekly", priority: 1 },
   { path: "/about", changeFrequency: "monthly", priority: 0.9 },
+  { path: "/team", changeFrequency: "monthly", priority: 0.75 },
+  { path: "/values", changeFrequency: "monthly", priority: 0.75 },
+  { path: "/careers", changeFrequency: "monthly", priority: 0.65 },
+  { path: "/press-kit", changeFrequency: "monthly", priority: 0.55 },
+  { path: "/legal-entity", changeFrequency: "yearly", priority: 0.45 },
   { path: "/work", changeFrequency: "monthly", priority: 0.9 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.85 },
   { path: "/treasury", changeFrequency: "monthly", priority: 0.85 },

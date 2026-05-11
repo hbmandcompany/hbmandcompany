@@ -43,6 +43,7 @@ export default function JsonLd() {
           "https://twitter.com/hbmandcompany",
           "https://t.me/hbmandcompany",
           "https://linkedin.com/company/hbmandcompany",
+          "https://www.tiktok.com/@hbmandcompany",
         ],
         contactPoint: {
           "@type": "ContactPoint",
