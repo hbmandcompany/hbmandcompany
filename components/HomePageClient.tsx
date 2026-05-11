@@ -14,6 +14,7 @@ import type { ServiceCardPixelVariant } from "@/components/ServiceCardPixelArt";
 import FeaturedWorkPixelArt from "@/components/FeaturedWorkPixelArt";
 import type { FeaturedWorkPixelVariant } from "@/components/FeaturedWorkPixelArt";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
+import PostCarrierEditorMockup from "@/components/PostCarrierEditorMockup";
 import {
   IconSessionRing,
   IconFaderBank,
@@ -616,66 +617,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
               </div>
 
               <SectionReveal delay={0.15}>
-                <div className="relative overflow-hidden rounded-2xl border border-white/[0.07] bg-gradient-to-br from-obsidian/65 via-void/45 to-transparent p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.05),0_28px_90px_rgba(0,0,0,0.42)] backdrop-blur-[6px] md:p-8">
-                  <div
-                    className="pointer-events-none absolute inset-0 rounded-2xl opacity-[0.35]"
-                    style={{
-                      background:
-                        "linear-gradient(135deg, rgba(34,232,200,0.04) 0%, transparent 42%, rgba(180,175,170,0.03) 100%)",
-                    }}
-                    aria-hidden
-                  />
-                  <div
-                    className="absolute left-0 top-5 bottom-5 w-[2px] rounded-full bg-gradient-to-b from-digital-80s/55 via-gold/30 to-transparent"
-                    aria-hidden
-                  />
-                  <div className="relative pl-5 md:pl-7">
-                    <p className="font-mono-hbm text-[10px] uppercase tracking-[0.3em] text-digital-80s/85 mb-3">
-                      01 · Anchored delivery
-                    </p>
-                    <p className="text-body-md leading-relaxed text-silver/72">
-                      PostCarrier operates as a decentralized file storage and video communication
-                      infrastructure company. We build the foundational layer for persistent,
-                      encrypted content delivery — from individual postcards to institutional
-                      archive systems, all anchored to Filecoin.
-                    </p>
-                  </div>
-                </div>
-              </SectionReveal>
-
-              <SectionReveal delay={0.2}>
-                <div>
-                  <p className="font-mono-hbm text-[10px] uppercase tracking-[0.28em] text-gold/45 mb-3">
-                    Protocol surface
-                  </p>
-                  <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-                    {[
-                      { k: "Storage", s: "Content-addressed" },
-                      { k: "Video", s: "Real-time editing" },
-                      { k: "Transit", s: "Collaborative" },
-                      { k: "Custody", s: "Compliant rails" },
-                    ].map((cell) => (
-                      <div
-                        key={cell.k}
-                        className="rounded-xl border border-white/[0.06] bg-void/35 px-3 py-3 transition-[border-color,background-color] duration-300 hover:border-gold/18 hover:bg-void/55 md:px-4 md:py-3.5"
-                      >
-                        <p className="font-mono-hbm text-[10px] uppercase tracking-[0.2em] text-gold/50">
-                          {cell.k}
-                        </p>
-                        <p className="mt-1 text-[11px] leading-snug text-silver-dim/58">{cell.s}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </SectionReveal>
-
-              <SectionReveal delay={0.25}>
-                <p className="border-t border-white/[0.06] pt-8 text-body-md leading-relaxed text-silver-dim/68">
-                  Our platform spans content-addressed storage, real-time video editing,
-                  collaborative transmission, and regulatory-compliant custody across three
-                  continents. Every file is immutable. Every transmission is verifiable. Every
-                  architecture decision prioritizes permanence over trend.
-                </p>
+                <PostCarrierEditorMockup />
               </SectionReveal>
             </div>
 
