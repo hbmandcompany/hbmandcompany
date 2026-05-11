@@ -397,6 +397,58 @@
   }
 }
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   Desk-only utilities (prefixed to avoid collisions)
+   Additive only — do not modify existing utilities above.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+@layer utilities {
+  .desk-app {
+    font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
+  }
+
+  .desk-surface {
+    background: rgba(5, 5, 5, 0.92);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 1rem;
+  }
+
+  .desk-panel {
+    background: rgba(9, 9, 11, 0.82);
+    border: 1px solid rgba(255,255,255,0.04);
+    border-radius: 1rem;
+  }
+
+  .desk-divider {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255,255,255,0.04),
+      rgba(255,255,255,0.02),
+      rgba(255,255,255,0.04),
+      transparent
+    );
+  }
+
+  .desk-pill {
+    border-radius: 3px;
+    padding: 3px 10px;
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    line-height: 1.2;
+    font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
+  }
+
+  .desk-focus-ring {
+    outline: none;
+  }
+  .desk-focus-ring:focus-visible {
+    box-shadow: 0 0 0 3px rgba(180,175,170,0.10);
+  }
+}
+
 @keyframes grain {
   0%,100% { transform: translate(0,0);    }
   10%  { transform: translate(-2%,-3%);   }

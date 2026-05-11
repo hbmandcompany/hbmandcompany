@@ -48,6 +48,18 @@ const config: Config = {
 
         ice:          "#0A1530",
         "purple-deep":"#1A0035",
+
+        // Desk status colors (muted, desaturated)
+        "desk-green": "#4A7C59",
+        "desk-green-dim": "#2D4D38",
+        "desk-red": "#9B3B3B",
+        "desk-red-dim": "#5E2626",
+        "desk-amber": "#A68B3C",
+        "desk-amber-dim": "#6B5A28",
+        "desk-blue": "#4A6B8A",
+        "desk-blue-dim": "#2E4358",
+        "desk-purple": "#7A5C8A",
+        "desk-purple-dim": "#4A3755",
       },
 
       borderRadius: {
