@@ -123,12 +123,12 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
-            src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=90"
-            alt="City skyline at night"
+            src="/hero-plane-window.png"
+            alt="Night sky and wing through an airplane window"
             fill
-            className="object-cover object-center grayscale"
-          priority
-            unoptimized
+            className="object-cover object-center"
+            priority
+            sizes="100vw"
           />
           <div className="grain-overlay-hero" aria-hidden="true" />
           {/* Heavy dark overlay — keep the photo but make it moodier */}
@@ -186,16 +186,19 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             className="hero-editorial-visual mt-4 w-full max-w-[234px] sm:mt-5 sm:max-w-[268px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,300px)] xl:max-w-[min(100%,324px)] lg:justify-self-start"
           >
             <div
-              className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden"
+              className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden shadow-[0_24px_80px_rgba(0,0,0,0.55)] ring-1 ring-inset ring-white/[0.12]"
               role="img"
-              aria-label="Editorial image placeholder"
+              aria-label="Night transit — airplane window over the stars"
             >
-              <div
-                className="absolute inset-0 bg-gradient-to-br from-white/[0.07] via-transparent to-white/[0.04]"
-                aria-hidden
+              <Image
+                src="/hero-plane-window.png"
+                alt=""
+                fill
+                className="object-cover object-[56%_45%]"
+                sizes="(max-width: 640px) 234px, (max-width: 1024px) 268px, 324px"
               />
               <div
-                className="absolute inset-[1px] border border-dashed border-white/15 bg-void/30"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-void/25 via-transparent to-transparent"
                 aria-hidden
               />
             </div>
