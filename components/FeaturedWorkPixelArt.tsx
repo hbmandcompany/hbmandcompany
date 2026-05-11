@@ -148,7 +148,7 @@ function pixelDigits(
     const mask = DIGIT_MASKS[text[i]];
     if (!mask) continue;
     mask.forEach((row, r) => {
-      [...row].forEach((c, ci) => {
+      Array.from(row).forEach((c, ci) => {
         if (c === "#") {
           out.push(
             <rect
@@ -181,7 +181,7 @@ function pixelHeart(x: number, y: number, scale: number, fill: string, fillHi: s
   ];
   const out: ReactNode[] = [];
   mask.forEach((row, r) => {
-    [...row].forEach((c, ci) => {
+    Array.from(row).forEach((c, ci) => {
       if (c === "#") {
         out.push(
           <rect
@@ -209,7 +209,7 @@ function pixelSpade(x: number, y: number, scale: number, fill: string, key = "s"
     ".###.",
   ];
   return mask.flatMap((row, r) =>
-    [...row].flatMap((c, ci) =>
+    Array.from(row).flatMap((c, ci) =>
       c === "#"
         ? [
             <rect
@@ -235,7 +235,7 @@ function pixelDiamond(x: number, y: number, scale: number, fill: string, key = "
     "..#..",
   ];
   return mask.flatMap((row, r) =>
-    [...row].flatMap((c, ci) =>
+    Array.from(row).flatMap((c, ci) =>
       c === "#"
         ? [
             <rect
@@ -262,7 +262,7 @@ function pixelClub(x: number, y: number, scale: number, fill: string, key = "cl"
     ".###.",
   ];
   return mask.flatMap((row, r) =>
-    [...row].flatMap((c, ci) =>
+    Array.from(row).flatMap((c, ci) =>
       c === "#"
         ? [
             <rect
