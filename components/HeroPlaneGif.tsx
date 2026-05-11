@@ -45,8 +45,9 @@ export default function HeroPlaneGif({
 
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const surface: HTMLCanvasElement = canvas;
 
-    const ctx = get2dContext(canvas);
+    const ctx = get2dContext(surface);
     if (!ctx) return;
 
     const tempCanvas = document.createElement("canvas");
@@ -54,6 +55,10 @@ export default function HeroPlaneGif({
     const gifCanvas = document.createElement("canvas");
     const gifCtx = gifCanvas.getContext("2d", { alpha: true });
     if (!tempCtx || !gifCtx) return;
+
+    const renderCtx: CanvasRenderingContext2D = ctx;
+    const patchCtx: CanvasRenderingContext2D = tempCtx;
+    const composeCtx: CanvasRenderingContext2D = gifCtx;
 
     let cancelled = false;
     let rafId = 0;
@@ -71,15 +76,15 @@ export default function HeroPlaneGif({
     let dpr = 1;
 
     function syncDisplayBackingStore() {
-      const rect = canvas.getBoundingClientRect();
+      const rect = surface.getBoundingClientRect();
       const w = Math.max(1, rect.width);
       const h = Math.max(1, rect.height);
       const nextDpr = Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, MAX_DPR);
       const bw = Math.max(1, Math.round(w * nextDpr));
       const bh = Math.max(1, Math.round(h * nextDpr));
-      if (canvas.width !== bw || canvas.height !== bh || dpr !== nextDpr) {
-        canvas.width = bw;
-        canvas.height = bh;
+      if (surface.width !== bw || surface.height !== bh || dpr !== nextDpr) {
+        surface.width = bw;
+        surface.height = bh;
         dpr = nextDpr;
       }
       displayW = w;
@@ -88,12 +93,12 @@ export default function HeroPlaneGif({
 
     function blitToDisplay() {
       syncDisplayBackingStore();
-      ctx.setTransform(1, 0, 0, 1, 0, 0);
-      ctx.scale(dpr, dpr);
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = "high";
-      ctx.clearRect(0, 0, displayW, displayH);
-      ctx.drawImage(gifCanvas, 0, 0, gifW, gifH, 0, 0, displayW, displayH);
+      renderCtx.setTransform(1, 0, 0, 1, 0, 0);
+      renderCtx.scale(dpr, dpr);
+      renderCtx.imageSmoothingEnabled = true;
+      renderCtx.imageSmoothingQuality = "high";
+      renderCtx.clearRect(0, 0, displayW, displayH);
+      renderCtx.drawImage(gifCanvas, 0, 0, gifW, gifH, 0, 0, displayW, displayH);
     }
 
     function drawPatch(frame: ParsedFrame) {
@@ -105,11 +110,11 @@ export default function HeroPlaneGif({
       ) {
         tempCanvas.width = dims.width;
         tempCanvas.height = dims.height;
-        frameImageData = tempCtx.createImageData(dims.width, dims.height);
+        frameImageData = patchCtx.createImageData(dims.width, dims.height);
       }
       frameImageData.data.set(frame.patch);
-      tempCtx.putImageData(frameImageData, 0, 0);
-      gifCtx.drawImage(tempCanvas, dims.left, dims.top);
+      patchCtx.putImageData(frameImageData, 0, 0);
+      composeCtx.drawImage(tempCanvas, dims.left, dims.top);
     }
 
     function drawOneGifFrame() {
@@ -118,7 +123,7 @@ export default function HeroPlaneGif({
       const frame = loadedFrames[frameIndex];
 
       if (needsDisposal) {
-        gifCtx.clearRect(0, 0, gifCanvas.width, gifCanvas.height);
+        composeCtx.clearRect(0, 0, gifCanvas.width, gifCanvas.height);
         needsDisposal = false;
       }
 
@@ -166,7 +171,7 @@ export default function HeroPlaneGif({
             if (!cancelled && loadedFrames.length > 0) blitToDisplay();
           })
         : null;
-    ro?.observe(canvas);
+    ro?.observe(surface);
 
     fetch(src)
       .then((r) => r.arrayBuffer())
@@ -182,8 +187,8 @@ export default function HeroPlaneGif({
         gifCanvas.width = gifW;
         gifCanvas.height = gifH;
 
-        gifCtx.imageSmoothingEnabled = true;
-        gifCtx.imageSmoothingQuality = "high";
+        composeCtx.imageSmoothingEnabled = true;
+        composeCtx.imageSmoothingQuality = "high";
 
         frameIndex = 0;
         needsDisposal = false;
@@ -200,12 +205,12 @@ export default function HeroPlaneGif({
         img.onload = () => {
           if (cancelled) return;
           syncDisplayBackingStore();
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.scale(dpr, dpr);
-          ctx.imageSmoothingEnabled = true;
-          ctx.imageSmoothingQuality = "high";
-          ctx.clearRect(0, 0, displayW, displayH);
-          ctx.drawImage(img, 0, 0, displayW, displayH);
+          renderCtx.setTransform(1, 0, 0, 1, 0, 0);
+          renderCtx.scale(dpr, dpr);
+          renderCtx.imageSmoothingEnabled = true;
+          renderCtx.imageSmoothingQuality = "high";
+          renderCtx.clearRect(0, 0, displayW, displayH);
+          renderCtx.drawImage(img, 0, 0, displayW, displayH);
         };
       });
 
