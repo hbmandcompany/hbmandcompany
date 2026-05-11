@@ -121,7 +121,7 @@ export default function AboutContent() {
       <NavBar />
 
       {/* ═══ HERO ═══ */}
-      <section className="relative flex min-h-screen flex-col justify-end pb-16 pt-28 md:pb-24">
+      <section className="relative flex min-h-screen flex-col justify-end pb-16 pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-24">
         <div className="absolute inset-0 z-0 min-h-[100dvh] overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1502602898657-3e91760cbb34?w=1920&q=90"

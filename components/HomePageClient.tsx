@@ -121,7 +121,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
       {/* ═══════════════ HERO ═══════════════ */}
       <section
-        className="relative flex min-h-screen flex-col justify-start pt-24 pb-16 md:pt-28 md:pb-20 lg:pt-[6.25rem] lg:pb-24"
+        className="relative flex min-h-screen flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+6rem)] pb-16 md:pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-20 lg:pt-[calc(env(safe-area-inset-top,0px)+6.25rem)] lg:pb-24"
       >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">

@@ -134,7 +134,7 @@ export default function WorkPage() {
       <NavBar />
 
       {/* ——— HERO ——— */}
-      <section className="relative min-h-[60vh] flex items-end pb-20 overflow-hidden">
+      <section className="relative flex min-h-[60vh] items-end overflow-hidden pb-20 pt-[calc(env(safe-area-inset-top,0px)+5rem)]">
         <div className="absolute inset-0 z-0">
           <Image
             src="https://images.unsplash.com/photo-1639762681485-074b7f938ba0?w=1920&q=90"

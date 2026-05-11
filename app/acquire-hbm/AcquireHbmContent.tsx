@@ -11,7 +11,7 @@ export default function AcquireHbmContent() {
     <>
       <NavBar />
 
-      <section className="relative flex min-h-[85vh] flex-col justify-center overflow-hidden section-dark px-6 py-28 md:px-12 md:py-32">
+      <section className="relative flex min-h-[85vh] flex-col justify-center overflow-hidden section-dark px-6 pb-28 pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:px-12 md:pb-32 md:pt-[calc(env(safe-area-inset-top,0px)+8rem)]">
         <div className="pointer-events-none absolute inset-0 purple-bloom opacity-50" aria-hidden />
         <div className="pointer-events-none absolute inset-0 city-glow opacity-35" aria-hidden />
 

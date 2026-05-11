@@ -56,7 +56,9 @@ export default function NavBar() {
         transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
         className={clsx(
           "fixed top-0 left-0 right-0 z-50",
-          scrolled ? "pt-3 px-4 md:px-6" : "pt-0 px-0"
+          scrolled
+            ? "pt-[max(0.75rem,env(safe-area-inset-top,0px))] px-4 md:px-6"
+            : "pt-[env(safe-area-inset-top,0px)] px-0"
         )}
       >
         <div
@@ -119,7 +121,8 @@ export default function NavBar() {
           {isHome ? (
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="md:hidden flex flex-col gap-[5px] p-2 z-50"
+            type="button"
+            className="md:hidden flex min-h-[44px] min-w-[44px] flex-col items-center justify-center gap-[5px] p-2 z-50 touch-manipulation"
             aria-label="Toggle menu"
           >
             <motion.span
@@ -157,7 +160,7 @@ export default function NavBar() {
             <div className="plaid-rule w-1/3 absolute top-0" />
 
             {/* Wordmark in menu */}
-            <div className="absolute top-7 left-8 opacity-50">
+            <div className="absolute left-[max(2rem,env(safe-area-inset-left,0px))] top-[max(1.75rem,calc(env(safe-area-inset-top,0px)+0.5rem))] opacity-50">
               <span
                 className="inline-flex items-baseline font-cormorant text-[15px] font-light uppercase tracking-normal text-silver-dim/70"
               >
@@ -202,7 +205,7 @@ export default function NavBar() {
               </motion.div>
             </nav>
 
-            <div className="absolute bottom-8 flex flex-col items-center gap-2">
+            <div className="absolute bottom-[max(2rem,env(safe-area-inset-bottom,0px))] flex flex-col items-center gap-2">
               <div className="garnet-rule w-16" />
               <p className="font-mono-hbm text-[9px] text-silver-dim/35 uppercase tracking-[0.3em] mt-2">
                 HBM & Company — Est. 2024

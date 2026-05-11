@@ -137,7 +137,7 @@ export default function FooterDark({
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
 
   return (
-    <footer className="relative bg-void overflow-hidden">
+    <footer className="relative overflow-hidden bg-void pb-[env(safe-area-inset-bottom,0px)]">
       {/* Ambient atmosphere */}
       <div className="absolute inset-0 purple-bloom pointer-events-none opacity-60" />
       <div className="absolute inset-0 garnet-bloom-top pointer-events-none opacity-40" />

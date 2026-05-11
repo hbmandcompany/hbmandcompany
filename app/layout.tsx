@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans, Raleway } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import JsonLd from "@/components/JsonLd";
@@ -132,10 +132,27 @@ export const metadata: Metadata = {
   },
 
   manifest: "/site.webmanifest",
+  formatDetection: {
+    telephone: false,
+    email: false,
+    address: false,
+  },
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "HBM & Company",
+  },
   other: {
     "msapplication-TileColor": "#020203",
-    "theme-color": "#020203",
   },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#020203",
+  colorScheme: "dark",
 };
 
 export default function RootLayout({
@@ -145,7 +162,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang="en-US"
       className={`${cormorant.variable} ${raleway.variable} ${robinhoodSans.variable}`}
     >
       <head>
