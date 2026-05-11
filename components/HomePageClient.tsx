@@ -15,6 +15,7 @@ import FeaturedWorkPixelArt from "@/components/FeaturedWorkPixelArt";
 import type { FeaturedWorkPixelVariant } from "@/components/FeaturedWorkPixelArt";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import PostCarrierEditorMockup from "@/components/PostCarrierEditorMockup";
+import HeroPlaneGif from "@/components/HeroPlaneGif";
 import {
   IconSessionRing,
   IconFaderBank,
@@ -122,12 +123,12 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
       >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <Image
+        <Image
             src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=90"
             alt="City skyline at night"
             fill
             className="object-cover object-center grayscale"
-            priority
+          priority
             unoptimized
           />
           <div className="grain-overlay-hero" aria-hidden="true" />
@@ -183,28 +184,15 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-visual mt-4 w-full max-w-[234px] sm:mt-5 sm:max-w-[268px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,300px)] xl:max-w-[min(100%,324px)] lg:justify-self-start"
+            className="hero-editorial-visual mt-4 w-full max-w-[268px] sm:mt-5 sm:max-w-[304px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,340px)] xl:max-w-[min(100%,368px)] lg:justify-self-start"
           >
-            <div
-              className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden"
-              role="img"
-              aria-label="Night sky through an airplane window"
-            >
-              <Image
+            <div className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden">
+              <HeroPlaneGif
                 src="/plane.gif"
-                alt="Animated night sky and wing through an airplane window"
-                fill
-                className="object-cover object-center"
-                unoptimized
-                sizes="(max-width: 640px) 234px, (max-width: 1024px) 268px, 324px"
-              />
-              <div
-                className="pointer-events-none absolute inset-0 bg-gradient-to-br from-white/[0.07] via-transparent to-white/[0.04]"
-                aria-hidden
-              />
-              <div
-                className="pointer-events-none absolute inset-[1px] border border-dashed border-white/15"
-                aria-hidden
+                alt="Night sky and wing from an airplane window"
+                slowFactor={2.35}
+                className="absolute inset-0 z-0 h-full w-full rounded-2xl object-cover object-center"
+                sizes="(max-width: 640px) 268px, (max-width: 1024px) 304px, 368px"
               />
             </div>
           </motion.div>
