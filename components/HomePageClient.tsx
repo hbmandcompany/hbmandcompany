@@ -349,12 +349,10 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             </div>
             <SectionReveal delay={0.2}>
               <Link
-                href="https://moneyba.gg"
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/work"
                 className="gold-outline-btn text-label-xs uppercase tracking-[0.2em] px-6 py-3 inline-block"
               >
-                MoneyBagg
+                LightRain
               </Link>
             </SectionReveal>
           </div>
