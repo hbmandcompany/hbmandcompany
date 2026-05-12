@@ -9,13 +9,11 @@ import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
 import MarqueeStrip from "@/components/MarqueeStrip";
 import SectionReveal from "@/components/SectionReveal";
-import ServiceCardPixelArt from "@/components/ServiceCardPixelArt";
-import type { ServiceCardPixelVariant } from "@/components/ServiceCardPixelArt";
-import FeaturedWorkPixelArt from "@/components/FeaturedWorkPixelArt";
-import type { FeaturedWorkPixelVariant } from "@/components/FeaturedWorkPixelArt";
+import CardLinocutArt from "@/components/CardLinocutArt";
+import type { CardLinocutVariant } from "@/components/CardLinocutArt";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import PostCarrierEditorMockup from "@/components/PostCarrierEditorMockup";
-import HeroPlaneGif from "@/components/HeroPlaneGif";
+import HeroBrutalistIllustration from "@/components/HeroBrutalistIllustration";
 import {
   IconSessionRing,
   IconCompStacks,
@@ -30,12 +28,12 @@ const whatWeBuildItems: {
   title: string;
   description: string;
   tag: string;
-  pixelVariant: ServiceCardPixelVariant;
+  pixelVariant: CardLinocutVariant;
   externalHref?: string;
 }[] = [
   {
     id: "01",
-    title: "lightra.in",
+    title: "LightRain",
     description:
       "Bloomberg Terminal-style iOS observability for Base (Coinbase L2). Real-time on-chain analytics, portfolio risk metrics, and a PIOL oracle bridging off-chain data — read-only by design. Pure information density, no decoration.",
     tag: "On-chain intelligence",
@@ -43,7 +41,7 @@ const whatWeBuildItems: {
   },
   {
     id: "02",
-    title: "Moneyba.gg",
+    title: "MoneyBagg",
     description:
       "Cross-chain portfolio tracker and wallet aggregator. One dashboard — all balances, all chains. Non-custodial, bold, and built for people who want one answer: how much do I have and where is it?",
     tag: "Portfolio visibility",
@@ -57,10 +55,10 @@ const featuredWork: {
   category: string;
   description: string;
   stat: string;
-  pixelVariant: FeaturedWorkPixelVariant;
+  pixelVariant: CardLinocutVariant;
 }[] = [
   {
-    title: "blackletter.cc",
+    title: "BlackLetter",
     category: "Document Execution",
     description:
       "Premium document signing and notarization with chain-of-custody integrity. Treats execution as a permanent act — not a casual click. Dark, typographic, and authoritative. DocuSign if it were designed by a constitutional archivist.",
@@ -68,7 +66,7 @@ const featuredWork: {
     pixelVariant: "black-letter",
   },
   {
-    title: "52pickup.cc",
+    title: "52PickUp",
     category: "DeFi Yield Discovery",
     description:
       "Gamified yield farming and staking discovery across protocols and chains. Opportunities surface as a sortable deck — by APY, risk, TVL, and chain. Playful interaction model, serious data. Casino meets trading floor.",
@@ -76,7 +74,7 @@ const featuredWork: {
     pixelVariant: "pickup",
   },
   {
-    title: "threewisemen.cc",
+    title: "ThreeWiseMen",
     category: "On-Chain Gifting",
     description:
       "Stellar Lumens (XLM) gifting with a persistent on-chain ledger. Send XLM for birthdays, holidays, milestones through a warm, intentional interface. Every gift is permanently recorded. Venmo meets a greeting card, settled on Stellar.",
@@ -172,7 +170,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-headline font-cormorant font-light text-cream/[0.97] [text-shadow:0_4px_48px_rgba(0,0,0,0.75)] lg:col-span-12 lg:mt-0"
+            className="hero-editorial-quote-serif hero-editorial-headline font-cormorant font-light text-cream/[0.97] [text-shadow:0_4px_48px_rgba(0,0,0,0.75)] lg:col-span-12 lg:mt-0"
           >
             <span className="inline-flex max-w-full flex-nowrap items-baseline justify-center gap-x-[0.35em] lg:justify-center">
               <AnimatedHeadline text="The Pursuit" delay={0} nowrap />
@@ -180,7 +178,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 text="Of Exception"
                 delay={0}
                 nowrap
-                className="text-gradient-gold font-semibold italic [filter:drop-shadow(0_6px_32px_rgba(0,0,0,0.55))]"
+                className="font-semibold italic text-cream/[0.97] [filter:drop-shadow(0_6px_32px_rgba(0,0,0,0.55))]"
               />
             </span>
           </motion.div>
@@ -190,13 +188,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             className="hero-editorial-visual mt-4 w-full max-w-[240px] sm:mt-5 sm:max-w-[272px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,304px)] xl:max-w-[min(100%,328px)] lg:justify-self-start"
           >
             <div className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden">
-              <HeroPlaneGif
-                src="/plane.gif"
-                alt="Night sky and wing from an airplane window"
-                slowFactor={2.35}
-                className="absolute inset-0 z-0 h-full w-full rounded-2xl object-cover object-center"
-                sizes="(max-width: 640px) 240px, (max-width: 1024px) 272px, 328px"
-              />
+              <HeroBrutalistIllustration className="rounded-2xl" />
             </div>
           </motion.div>
 
@@ -204,15 +196,18 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             variants={heroItem}
             className="hero-editorial-prose relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
           >
-            <p className="text-pretty font-cormorant text-[1.15rem] font-light italic leading-[1.62] text-cream/[0.5] md:text-[1.28rem] md:leading-[1.66] md:text-cream/[0.56]">
-              The token of our stewardship, as such, is a garden bed of strength — paralleled
-              with discretion, humility, and the unexcelled.
+            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/72 antialiased md:text-[1.2rem] md:leading-[1.74] md:text-cream/75">
+              We work with organizations to deliver an integrated view of their
+              holdings—under defined scope, delivery milestones, and performance accountability to
+              leadership.
+              Governance, risk management, and financial reporting are structured so leadership has
+              consistent, decision-ready information across the enterprise.
             </p>
-            <p className="text-pretty mt-6 font-cormorant text-[1.18rem] font-normal leading-[1.65] text-silver/38 md:mt-7 md:text-[1.32rem] md:leading-[1.68] md:text-silver/44">
-              We steward capital with the same restraint one finds
-              in the great&nbsp;houses: lineage over novelty, hand-finished judgment,
-              and an intolerance for mere traveled roads. Compounding for counterparties
-              who believe in generations — readily.
+            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/72 antialiased md:mt-7 md:text-[1.2rem] md:leading-[1.74] md:text-cream/75">
+              We work with partners for whom credibility is as material as capital: discipline,
+              accuracy in books and records, and external communications that align
+              with facts and withstand review by boards, investors, and regulators. Our standard is
+              institutional rigor—executed with discretion and a long-term orientation.
             </p>
           </motion.div>
 
@@ -289,7 +284,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                   <span className="text-cream/65"> · Diffusion &amp; air</span>
                 </h2>
                 <p className="mt-3 font-mono-hbm text-[10px] uppercase tracking-[0.2em] text-silver-dim/50 max-w-lg leading-relaxed">
-                  Moneyba.gg — non-custodial wallet · self-custody rails
+                  MoneyBagg — non-custodial wallet · self-custody rails
                 </p>
               </SectionReveal>
             </div>
@@ -300,7 +295,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 rel="noopener noreferrer"
                 className="gold-outline-btn text-label-xs uppercase tracking-[0.2em] px-6 py-3 inline-block"
               >
-                Moneyba.gg
+                MoneyBagg
               </Link>
             </SectionReveal>
           </div>
@@ -315,7 +310,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                     className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"
                     aria-hidden
                   >
-                    <ServiceCardPixelArt variant={item.pixelVariant} />
+                    <CardLinocutArt variant={item.pixelVariant} />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-void/20" />
                   <div className="absolute inset-0 bg-gradient-to-r from-void/60 to-transparent" />
@@ -333,7 +328,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                     </p>
                     {item.externalHref && (
                       <p className="mt-4 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-digital-80s/75">
-                        Open moneyba.gg ↗
+                        Open {item.title} ↗
                       </p>
                     )}
                   </div>
@@ -402,7 +397,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             {featuredWork.map((work, i) => {
               return (
                 <SectionReveal
-                  key={work.title}
+                  key={work.pixelVariant}
                   className={clsx(
                     i === 0 &&
                       "md:col-span-7 md:row-span-2 md:row-start-1 md:col-start-1 md:min-h-[520px]",
@@ -422,7 +417,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                       className="absolute inset-0 transition-all duration-700 group-hover:scale-[1.05]"
                       aria-hidden
                     >
-                      <FeaturedWorkPixelArt variant={work.pixelVariant} />
+                      <CardLinocutArt variant={work.pixelVariant} />
                     </div>
                     <div className="absolute inset-0 bg-gradient-to-t from-void via-void/65 to-transparent" />
                     <div className="absolute inset-0 bg-gold/[0.02] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />

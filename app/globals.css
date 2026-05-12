@@ -60,6 +60,12 @@
     font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
   }
 
+  /* Hero only: headline + steward prose — use loaded Cormorant (not DM Sans remap) */
+  .home-robinhood .hero-editorial-quote-serif,
+  .home-robinhood .hero-editorial-quote-serif .font-cormorant {
+    font-family: var(--font-cormorant), Georgia, serif;
+  }
+
   /* Luxury gray headline gradient (replaces gold) */
   .text-gradient-gold {
     background: linear-gradient(135deg, #84807A 0%, #B4AFAA 35%, #D8D4CE 55%, #B4AFAA 80%, #96918B 100%);
@@ -306,10 +312,19 @@
   /* Hero editorial cluster (headline → CTAs only; kicker excluded in markup) */
   .hero-editorial-headline {
     font-size: clamp(1.58rem, 0.76rem + 2.85vw, 3.62rem);
-    line-height: 1.05;
+    line-height: 1.18;
     letter-spacing: -0.02em;
     text-wrap: balance;
     width: 100%;
+    overflow: visible;
+    padding-block: 0.04em 0.14em;
+  }
+
+  /* Gradient fill can clip descenders without extra line box room */
+  /* Per-word spans sit in tight line boxes; give descenders room */
+  .hero-editorial-headline span.inline-block {
+    overflow: visible;
+    padding-bottom: 0.04em;
   }
 
   .hero-editorial-visual-frame {
@@ -323,7 +338,7 @@
       inset 0 0 36px rgba(0, 0, 0, 0.42);
   }
 
-  /* Darken the plane slightly — reads as smoked glass */
+  /* Darken hero visual — keeps frame legibility on bright art */
   .hero-editorial-visual-frame::before {
     content: "";
     position: absolute;
@@ -331,7 +346,7 @@
     z-index: 1;
     pointer-events: none;
     border-radius: inherit;
-    background: rgba(0, 0, 0, 0.22);
+    background: rgba(2, 2, 6, 0.2);
     mix-blend-mode: multiply;
   }
 
@@ -359,6 +374,11 @@
     position: relative;
     isolation: isolate;
     padding-inline-start: 0;
+  }
+
+  /* Hero stewardship copy — Plus Jakarta via Tailwind font-luxury-sans */
+  .hero-editorial-luxury-prose {
+    font-feature-settings: "kern" 1, "liga" 1;
   }
 
   @media (min-width: 1024px) {
@@ -394,6 +414,43 @@
 
   .hero-editorial-cta-cluster {
     position: relative;
+  }
+
+  /* Hero linocut / woodblock illustration — warm paper + print tooth overlay */
+  .hero-brutalist-root {
+    background-color: #716963;
+  }
+
+  .hero-brutalist-canvas-wrap {
+    border-radius: inherit;
+  }
+
+  .hero-brutalist-canvas {
+    display: block;
+    border-radius: inherit;
+  }
+
+  .hero-brutalist-frame-grid.hero-linocut-veil,
+  .hero-linocut-veil {
+    pointer-events: none;
+    border-radius: inherit;
+    background-image:
+      radial-gradient(ellipse 95% 70% at 45% 35%, rgba(8, 7, 14, 0.2) 0%, transparent 55%),
+      repeating-linear-gradient(
+        92deg,
+        transparent 0,
+        transparent 2px,
+        rgba(16, 14, 22, 0.1) 2px,
+        rgba(16, 14, 22, 0.1) 3px
+      ),
+      repeating-linear-gradient(
+        0deg,
+        transparent,
+        transparent 5px,
+        rgba(217, 211, 225, 0.05) 5px,
+        rgba(217, 211, 225, 0.05) 6px
+      );
+    opacity: 0.48;
   }
 }
 

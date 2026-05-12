@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans, Raleway } from "next/font/google";
+import { Cormorant_Garamond, DM_Sans, Plus_Jakarta_Sans, Raleway } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
 import JsonLd from "@/components/JsonLd";
 import "./globals.css";
@@ -25,6 +25,14 @@ const robinhoodSans = DM_Sans({
   subsets: ["latin"],
   weight: ["400", "500", "600", "700"],
   variable: "--font-robinhood",
+  display: "swap",
+});
+
+/** Minimal luxury SaaS body — clean geometric sans for editorial blocks */
+const plusJakarta = Plus_Jakarta_Sans({
+  subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  variable: "--font-luxury-sans",
   display: "swap",
 });
 
@@ -163,7 +171,7 @@ export default function RootLayout({
   return (
     <html
       lang="en-US"
-      className={`${cormorant.variable} ${raleway.variable} ${robinhoodSans.variable}`}
+      className={`${cormorant.variable} ${raleway.variable} ${robinhoodSans.variable} ${plusJakarta.variable}`}
     >
       <head>
         <JsonLd />

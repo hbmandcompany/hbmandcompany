@@ -73,6 +73,7 @@ const config: Config = {
         raleway:   ["var(--font-raleway)", "Raleway", "sans-serif"],
         /* Robinhood app uses a custom face; DM Sans is the closest open equivalent for KPI / UI */
         robinhood: ["var(--font-robinhood)", "DM Sans", "system-ui", "sans-serif"],
+        "luxury-sans": ["var(--font-luxury-sans)", "system-ui", "sans-serif"],
       },
 
       fontSize: {

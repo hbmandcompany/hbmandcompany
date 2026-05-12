@@ -151,7 +151,7 @@ const jobs: Job[] = [
     location: "Remote — US",
     level: "Associate",
     description:
-      "Build across our consumer and institutional app suite — blackletter.cc, threewisemen.cc, 52pickup.cc, and moneyba.gg. You'll own full features from schema to deployed UI in a Next.js-first stack.",
+      "Build across our consumer and institutional app suite — BlackLetter, ThreeWiseMen, 52PickUp, and MoneyBagg. You'll own full features from schema to deployed UI in a Next.js-first stack.",
     responsibilities: [
       "Develop and maintain Next.js applications across the HBM product portfolio",
       "Integrate on-chain reads (wagmi, viem, ethers) and REST/GraphQL data sources",
@@ -173,7 +173,7 @@ const jobs: Job[] = [
     location: "Remote — US",
     level: "Associate",
     description:
-      "Work on lightra.in — our read-only iOS intelligence app built on Base. You'll shape a Bloomberg Terminal-style experience in SwiftUI, powered by Swift Charts, GraphQL, and WebSocket feeds from the PIOL oracle.",
+      "Work on LightRain — our read-only iOS intelligence app built on Base. You'll shape a Bloomberg Terminal-style experience in SwiftUI, powered by Swift Charts, GraphQL, and WebSocket feeds from the PIOL oracle.",
     responsibilities: [
       "Build and maintain SwiftUI views for real-time on-chain data display",
       "Implement Swift Charts visualizations for risk and analytics panels",
@@ -198,7 +198,7 @@ const jobs: Job[] = [
       "Own the data layer across our analytics infrastructure — Snowflake for risk/analytics pipelines and MongoDB for operational state. You'll feed the dashboards and oracles that make our apps authoritative.",
     responsibilities: [
       "Design and maintain ELT pipelines from on-chain and off-chain sources into Snowflake",
-      "Model risk and yield datasets consumed by lightra.in and 52pickup.cc",
+      "Model risk and yield datasets consumed by LightRain and 52PickUp",
       "Maintain MongoDB schemas for operational app state across the portfolio",
       "Partner with engineering to surface actionable metrics to product surfaces",
     ],
@@ -220,7 +220,7 @@ const jobs: Job[] = [
     description:
       "Design across a portfolio spanning institutional document signing, DeFi yield discovery, crypto gifting, and on-chain observability. Each product has a distinct tone — your job is to hold that identity while building rigorous, usable interfaces.",
     responsibilities: [
-      "Own end-to-end design for features across blackletter.cc, 52pickup.cc, and threewisemen.cc",
+      "Own end-to-end design for features across BlackLetter, 52PickUp, and ThreeWiseMen",
       "Produce high-fidelity Figma files and interactive prototypes for engineering handoff",
       "Define and maintain component libraries consistent with each product's visual language",
       "Run lightweight usability evaluations and translate findings into product decisions",
@@ -266,8 +266,8 @@ const jobs: Job[] = [
       "Produce the signal that informs treasury positions and protocol allocations. You'll track DeFi protocol mechanics, governance events, yield dynamics, and risk vectors across the chains where HBM operates.",
     responsibilities: [
       "Publish internal research briefs on protocol health, TVL trends, and governance outcomes",
-      "Model yield opportunities for 52pickup.cc's discovery surface",
-      "Monitor on-chain risk signals that feed the lightra.in analytics layer",
+      "Model yield opportunities for 52PickUp's discovery surface",
+      "Monitor on-chain risk signals that feed the LightRain analytics layer",
       "Maintain a living database of protocol risk ratings across our covered universe",
     ],
     requirements: [
@@ -308,7 +308,7 @@ const jobs: Job[] = [
     location: "Remote — US",
     level: "Associate",
     description:
-      "Help define what we build and why. You'll work across our app portfolio — from the utilitarian (moneyba.gg, lightra.in) to the ceremonial (threewisemen.cc, blackletter.cc) — ensuring each product solves a real problem with appropriate tone.",
+      "Help define what we build and why. You'll work across our app portfolio — from the utilitarian (MoneyBagg, LightRain) to the ceremonial (ThreeWiseMen, BlackLetter) — ensuring each product solves a real problem with appropriate tone.",
     responsibilities: [
       "Write detailed product specifications and acceptance criteria for engineering",
       "Conduct competitive landscape analysis for each product vertical",
