@@ -16,11 +16,11 @@ const PAPER_DEEP = "#7a736a";
 const CARVE_REVEAL = "#c4bdb4";
 const INK = "#080807";
 const INK_SOFT = "#12100e";
-const HERO_PAPER = "#61595f";
-const HERO_PAPER_DEEP = "#2e2a35";
-const HERO_CARVE_REVEAL = "#b2aaa4";
-const HERO_INK = "#101018";
-const HERO_INK_SOFT = "#181822";
+const HERO_PAPER = "#4e484d";
+const HERO_PAPER_DEEP = "#1d1a23";
+const HERO_CARVE_REVEAL = "#9f9793";
+const HERO_INK = "#040407";
+const HERO_INK_SOFT = "#0b0b10";
 
 /** Deterministic 0–1; variantKey shifts the field per card/instance */
 function r01(i: number, variantOffset = 0) {
@@ -488,7 +488,7 @@ export function paintLinocut(
   ctx.fillStyle =
     composition === "default"
       ? isHeroDefault
-        ? "rgba(4, 4, 8, 0.26)"
+        ? "rgba(4, 4, 8, 0.4)"
         : "rgba(12, 9, 8, 0.24)"
       : "rgba(10, 7, 9, 0.12)";
   ctx.fillRect(0, 0, w, h);
