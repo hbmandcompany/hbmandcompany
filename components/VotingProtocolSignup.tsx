@@ -1,12 +1,35 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState, type FormEvent, type ReactNode } from "react";
 
 type Typography = "luxury" | "robinhood";
 
-export default function VotingProtocolSignup({ typography }: { typography: Typography }) {
+const defaultSuccess = "You are on the list. Protocol updates will follow by email.";
+
+export default function VotingProtocolSignup({
+  typography,
+  instanceId = "footer",
+  eyebrow,
+  heading,
+  description,
+  descriptionClassName,
+  submitLabel,
+  successMessage,
+}: {
+  typography: Typography;
+  instanceId?: string;
+  eyebrow?: string;
+  heading?: ReactNode;
+  description?: ReactNode;
+  /** Overrides default all-caps label styling for the note (e.g. thesis prose). */
+  descriptionClassName?: string;
+  submitLabel?: string;
+  successMessage?: string;
+}) {
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
+  const headingId = `${instanceId}-voting-protocol-heading`;
+  const emailId = `${instanceId}-voting-email`;
 
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -32,7 +55,7 @@ export default function VotingProtocolSignup({ typography }: { typography: Typog
       }
 
       setStatus("success");
-      setMessage("You are on the list. Protocol updates will follow by email.");
+      setMessage(successMessage ?? defaultSuccess);
       setEmail("");
     } catch {
       setStatus("error");
@@ -40,39 +63,59 @@ export default function VotingProtocolSignup({ typography }: { typography: Typog
     }
   }
 
+  const eyebrowText = eyebrow ?? "Voting protocol";
+  const headingNode =
+    heading ??
+    (
+      <>
+        Join the <span className="font-semibold italic">governance quorum</span>
+      </>
+    );
+  const descriptionNode =
+    description ??
+    (
+      <>
+        Request access to on-chain voting cadence. By submitting, you agree we may contact you about the voting
+        protocol and related governance. See our{" "}
+        <a href="/privacy" className="text-gold/50 hover:text-gold/70 transition-colors">
+          Privacy policy
+        </a>
+        .
+      </>
+    );
+  const buttonLabel = submitLabel ?? "Request access";
+
+  const descClass =
+    descriptionClassName ??
+    `${uiFont} mt-3 text-[11px] uppercase tracking-[0.14em] leading-relaxed text-silver-dim/55`;
+
   return (
     <aside
-      className="relative w-full max-w-md rounded-2xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 md:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)]"
-      aria-labelledby="voting-protocol-heading"
+      className="relative w-full min-w-0 max-w-md rounded-2xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 md:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)]"
+      aria-labelledby={headingId}
     >
-      <div
-        className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-gold/35 to-transparent"
-        aria-hidden
-      />
       <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gold/[0.04] blur-3xl" aria-hidden />
 
       <div className="relative">
-        <p className={`${uiFont} text-label-xs text-gold/65 uppercase tracking-[0.32em]`}>
-          Voting protocol
-        </p>
+        <p className={`${uiFont} text-label-xs text-gold/65 uppercase tracking-[0.32em]`}>{eyebrowText}</p>
         <h3
-          id="voting-protocol-heading"
+          id={headingId}
           className={`${displayFont} mt-3 text-xl font-light leading-snug text-cream/88 md:text-2xl`}
         >
-          Join the <span className="text-gradient-gold font-semibold italic">governance quorum</span>
+          {headingNode}
         </h3>
-        <p className={`${uiFont} mt-3 text-[11px] uppercase tracking-[0.14em] leading-relaxed text-silver-dim/55`}>
-          Request access to delegate notifications, proposal cycles, and on-chain voting cadence.
+        <p className={descClass} role="note">
+          {descriptionNode}
         </p>
 
         <form onSubmit={onSubmit} className="mt-7 space-y-4">
           <div className="space-y-2">
-            <label htmlFor="voting-email" className={`${uiFont} sr-only`}>
+            <label htmlFor={emailId} className={`${uiFont} sr-only`}>
               Email address
             </label>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-stretch">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
               <input
-                id="voting-email"
+                id={emailId}
                 name="email"
                 type="email"
                 autoComplete="email"
@@ -86,20 +129,12 @@ export default function VotingProtocolSignup({ typography }: { typography: Typog
               <button
                 type="submit"
                 disabled={status === "loading"}
-                className={`garnet-btn ${uiFont} min-h-[48px] shrink-0 px-6 py-3 text-label-xs uppercase tracking-[0.22em] text-void transition-[opacity,transform] duration-300 hover:opacity-95 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-45 sm:px-8`}
+                className={`gold-outline-btn ${uiFont} inline-block shrink-0 whitespace-nowrap bg-black px-4 py-1.5 text-[10px] uppercase tracking-[0.18em] text-cream shadow-[0_0_36px_rgba(0,0,0,0.4)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void disabled:pointer-events-none disabled:opacity-45 sm:px-5 sm:py-2 sm:text-label-xs sm:tracking-[0.22em]`}
               >
-                {status === "loading" ? "Sending…" : "Request access"}
+                {status === "loading" ? "Sending…" : buttonLabel}
               </button>
             </div>
           </div>
-
-          <p
-            className={`${uiFont} text-[10px] uppercase tracking-[0.12em] text-silver-dim/38 leading-relaxed`}
-            role="note"
-          >
-            By submitting, you agree we may contact you about the voting protocol and related governance.
-            See our <a href="/privacy" className="text-gold/50 hover:text-gold/70 transition-colors">Privacy</a> policy.
-          </p>
 
           {(status === "success" || status === "error") && message && (
             <p

@@ -7,6 +7,7 @@ import clsx from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
 import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
+import FooterBrandVotingGrid from "@/components/FooterBrandVotingGrid";
 import MarqueeStrip from "@/components/MarqueeStrip";
 import SectionReveal from "@/components/SectionReveal";
 import CardLinocutArt from "@/components/CardLinocutArt";
@@ -44,11 +45,66 @@ const whatWeBuildItems: {
     title: "MoneyBagg",
     description:
       "Cross-chain portfolio tracker and wallet aggregator. One dashboard — all balances, all chains. Non-custodial, bold, and built for people who want one answer: how much do I have and where is it?",
-    tag: "Portfolio visibility",
+    tag: "Multi-Chain Balance",
     pixelVariant: "moneyba",
     externalHref: "https://moneyba.gg",
   },
 ];
+
+type WhatWeBuildItem = (typeof whatWeBuildItems)[number];
+
+const whatWeBuildOutlineCta =
+  "gold-outline-btn inline-block px-4 py-1.5 text-label-xs uppercase tracking-[0.2em] sm:px-5 sm:py-2";
+
+function WhatWeBuildInstrumentCard({ item }: { item: WhatWeBuildItem }) {
+  const shell = clsx(
+    "card-3d group relative w-full min-h-[420px] overflow-hidden cursor-pointer bg-obsidian",
+    "md:mx-auto md:max-w-4xl md:min-h-[min(72vh,640px)] lg:min-h-[min(76vh,700px)]",
+  );
+  const inner = (
+    <>
+      <div
+        className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"
+        aria-hidden
+      >
+        <CardLinocutArt variant={item.pixelVariant} />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-void/20" />
+      <div className="absolute inset-0 bg-gradient-to-r from-void/60 to-transparent" />
+      <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
+        <div className="mb-4 flex items-center gap-3">
+          <span className="text-label-xs uppercase tracking-[0.25em] text-garnet/60">{item.id}</span>
+          <div className="h-px w-6 bg-garnet/30" />
+          <span className="text-label-xs uppercase tracking-[0.2em] text-gold/60">{item.tag}</span>
+        </div>
+        <h3 className="mb-3 text-xl font-normal leading-tight text-cream/80 transition-colors duration-500 group-hover:text-gold md:text-2xl">
+          {item.title}
+        </h3>
+        <p className="text-body-md leading-relaxed text-silver-dim/78">{item.description}</p>
+        {item.externalHref ? (
+          <span className={clsx(whatWeBuildOutlineCta, "mt-4 w-fit")}>
+            Open {item.title} ↗
+          </span>
+        ) : null}
+      </div>
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-garnet/40 to-transparent transition-all duration-500 group-hover:via-gold/50" />
+    </>
+  );
+
+  if (item.externalHref) {
+    return (
+      <a
+        href={item.externalHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={`${shell} block`}
+      >
+        {inner}
+      </a>
+    );
+  }
+  return <div className={shell}>{inner}</div>;
+}
 
 const featuredWork: {
   title: string;
@@ -323,95 +379,74 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
       {/* ═══════════════ MARQUEE ═══════════════ */}
       {cryptoMarqueeSlot}
 
-      {/* ═══════════════ SERVICES BENTO ═══════════════ */}
-      <section className="relative py-28 md:py-40 section-mid overflow-hidden">
-        <div className="absolute inset-0 purple-bloom pointer-events-none" />
-        <div className="absolute inset-0 city-glow pointer-events-none opacity-35" />
+      {/* ═══════════════ WHAT WE BUILD — full-page band per product ═══════════════ */}
+      {whatWeBuildItems.map((item, sectionIndex) => (
+        <section
+          key={item.id}
+          className={clsx(
+            "relative flex min-h-[100dvh] flex-col justify-center overflow-hidden section-mid py-24 md:py-32",
+            sectionIndex > 0 && "border-t border-white/[0.06]",
+          )}
+        >
+          <div className="pointer-events-none absolute inset-0 purple-bloom" />
+          <div className="pointer-events-none absolute inset-0 city-glow opacity-35" />
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
-          {/* Header */}
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-            <div>
-              <SectionReveal>
-                <span className="text-label-xs text-garnet/70 uppercase tracking-[0.35em]">
-                  — What We Build
-                </span>
-              </SectionReveal>
-              <SectionReveal delay={0.1}>
-                <h2 className="text-2xl md:text-3xl text-cream/80 font-light mt-3 leading-tight">
-                  <span className="text-gradient-gold font-bold italic">LightRain</span>
-                  <span className="text-cream/65"> · Diffusion &amp; air</span>
-                </h2>
-                <p className="mt-3 font-mono-hbm text-[10px] uppercase tracking-[0.2em] text-silver-dim/50 max-w-lg leading-relaxed">
-                  MoneyBagg — non-custodial wallet · self-custody rails
-                </p>
-              </SectionReveal>
-            </div>
-            <SectionReveal delay={0.2}>
-              <Link
-                href="/work"
-                className="gold-outline-btn text-label-xs uppercase tracking-[0.2em] px-6 py-3 inline-block"
-              >
-                LightRain
-              </Link>
-            </SectionReveal>
-          </div>
-
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-            {whatWeBuildItems.map((item, i) => {
-              const shell =
-                "card-3d group relative min-h-[420px] md:min-h-[480px] overflow-hidden cursor-pointer bg-obsidian";
-              const inner = (
-                <>
-                  <div
-                    className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"
-                    aria-hidden
-                  >
-                    <CardLinocutArt variant={item.pixelVariant} />
-                  </div>
-                  <div className="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-void/20" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-void/60 to-transparent" />
-                  <div className="absolute inset-0 p-8 md:p-10 flex flex-col justify-end">
-                    <div className="flex items-center gap-3 mb-4">
-                      <span className="text-label-xs text-garnet/60 tracking-[0.25em] uppercase">{item.id}</span>
-                      <div className="w-6 h-px bg-garnet/30" />
-                      <span className="text-label-xs text-gold/60 uppercase tracking-[0.2em]">{item.tag}</span>
-                    </div>
-                    <h3 className="text-xl md:text-2xl text-cream/80 font-normal mb-3 group-hover:text-gold transition-colors duration-500 leading-tight">
-                      {item.title}
-                    </h3>
-                    <p className="text-body-md text-silver-dim/78 leading-relaxed">
-                      {item.description}
-                    </p>
-                    {item.externalHref && (
-                      <p className="mt-4 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-digital-80s/75">
-                        Open {item.title} ↗
+          <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+            <div className="mb-10 flex flex-col justify-between gap-6 md:mb-14 md:flex-row md:items-end">
+              <div>
+                <SectionReveal>
+                  <span className="text-label-xs uppercase tracking-[0.35em] text-garnet/70">
+                    — What We Build
+                  </span>
+                </SectionReveal>
+                <SectionReveal delay={0.1}>
+                  {item.pixelVariant === "lightrain" ? (
+                    <>
+                      <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
+                        <span className="font-bold italic">LightRain</span>
+                        <span className="text-cream/65"> · Credit / Debit</span>
+                      </h2>
+                      <p className="mt-3 max-w-lg font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/50">
+                        MoneyBagg — non-custodial wallet · self-custody rails
                       </p>
-                    )}
-                  </div>
-                  <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-garnet/40 to-transparent group-hover:via-gold/50 transition-all duration-500" />
-                </>
-              );
-              return (
-                <SectionReveal key={item.id} delay={0.08 + i * 0.06}>
-                  {item.externalHref ? (
-                    <a
-                      href={item.externalHref}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className={`${shell} block`}
-                    >
-                      {inner}
-                    </a>
+                    </>
                   ) : (
-                    <div className={shell}>{inner}</div>
+                    <>
+                      <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
+                        <span className="font-bold italic">MoneyBagg</span>
+                        <span className="text-cream/65"> · Multi-Chain Balance</span>
+                      </h2>
+                      <p className="mt-3 max-w-lg font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/50">
+                        Non-custodial wallet · self-custody rails
+                      </p>
+                    </>
                   )}
                 </SectionReveal>
-              );
-            })}
+              </div>
+              <SectionReveal delay={0.2}>
+                {item.pixelVariant === "lightrain" ? (
+                  <Link href="/work" className={whatWeBuildOutlineCta}>
+                    LightRain
+                  </Link>
+                ) : (
+                  <Link
+                    href="https://moneyba.gg"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className={whatWeBuildOutlineCta}
+                  >
+                    MoneyBagg
+                  </Link>
+                )}
+              </SectionReveal>
+            </div>
+
+            <SectionReveal delay={0.08}>
+              <WhatWeBuildInstrumentCard item={item} />
+            </SectionReveal>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
 
       {/* ═══════════════ CHAINS MARQUEE ═══════════════ */}
       <MarqueeStrip
@@ -444,11 +479,8 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 </SectionReveal>
               </div>
               <SectionReveal delay={0.2}>
-                <Link
-                  href="/work"
-                  className="gold-outline-btn inline-block px-6 py-3 text-label-xs uppercase tracking-[0.2em]"
-                >
-                  View all instruments
+                <Link href="/work" className={whatWeBuildOutlineCta}>
+                  Documentation
                 </Link>
               </SectionReveal>
             </div>
@@ -542,13 +574,13 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
               <div className="flex flex-wrap items-center justify-start gap-2.5 sm:gap-3">
                 <Link
                   href="/contact"
-                  className="inline-block rounded-full border border-white bg-[#0a0a0a] px-6 py-2.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-cream shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-cream/80 hover:bg-[#141414] md:px-8 md:py-3"
+                  className="inline-block rounded-full border border-white bg-[#0a0a0a] px-4 py-1.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-cream shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-cream/80 hover:bg-[#141414] sm:px-5 sm:py-2"
                 >
                   For You
                 </Link>
                 <Link
                   href="/contact"
-                  className="garnet-btn inline-block px-6 py-2.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void md:px-8 md:py-3"
+                  className="garnet-btn inline-block px-4 py-1.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void sm:px-5 sm:py-2"
                 >
                   Get Consequence
                 </Link>
@@ -693,7 +725,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                   </p>
                   <Link
                     href="/about"
-                    className="garnet-btn inline-block px-8 py-3.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void"
+                    className="garnet-btn inline-block px-4 py-1.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void sm:px-5 sm:py-2"
                   >
                     Special Delivery
                   </Link>
@@ -704,7 +736,39 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         </div>
       </section>
 
-      <FooterDark typography="robinhood" />
+      {/* ═══════════════ House thesis — after Post Carrier ═══════════════ */}
+      <section className="relative overflow-x-hidden bg-void" aria-label="House thesis">
+        <div
+          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          style={{
+            backgroundImage: `
+              linear-gradient(rgba(180,175,170,0.065) 1px, transparent 1px),
+              linear-gradient(90deg, rgba(180,175,170,0.05) 1px, transparent 1px)
+            `,
+            backgroundSize: "44px 44px",
+            maskImage: "radial-gradient(ellipse 78% 58% at 50% 42%, black 14%, transparent 70%)",
+            WebkitMaskImage: "radial-gradient(ellipse 78% 58% at 50% 42%, black 14%, transparent 70%)",
+          }}
+          aria-hidden
+        />
+        <div className="pointer-events-none absolute inset-0 purple-bloom opacity-50" aria-hidden />
+        <div className="pointer-events-none absolute inset-0 garnet-bloom-top opacity-35" aria-hidden />
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_20%_35%,rgba(180,175,170,0.07)_0%,transparent_55%)]"
+          aria-hidden
+        />
+        <div className="gold-rule w-full" />
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <FooterBrandVotingGrid
+            typography="robinhood"
+            instanceId="home-thesis"
+            brandSide="left"
+            band="thesis"
+          />
+        </div>
+      </section>
+
+      <FooterDark typography="robinhood" showUpperBrandVoting={false} />
     </div>
     </>
   );

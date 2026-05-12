@@ -1,6 +1,5 @@
 import Link from "next/link";
-import HbmLogo from "./HbmLogo";
-import VotingProtocolSignup from "./VotingProtocolSignup";
+import FooterBrandVotingGrid from "./FooterBrandVotingGrid";
 
 const footerColumns = [
   {
@@ -139,8 +138,10 @@ const socials = [
 
 export default function FooterDark({
   typography = "luxury",
+  showUpperBrandVoting = true,
 }: {
   typography?: "luxury" | "robinhood";
+  showUpperBrandVoting?: boolean;
 }) {
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
@@ -151,61 +152,19 @@ export default function FooterDark({
       <div className="absolute inset-0 purple-bloom pointer-events-none opacity-60" />
       <div className="absolute inset-0 garnet-bloom-top pointer-events-none opacity-40" />
 
-      {/* Top gold rule */}
-      <div className="gold-rule w-full" />
+      {/* Top gold rule — skip when homepage thesis band sits directly above (already has gold-rule + band border) */}
+      {showUpperBrandVoting ? <div className="gold-rule w-full" /> : <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" aria-hidden />}
 
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
 
-        {/* ─── Upper footer: brand + voting protocol signup ─── */}
-        <div className="py-16 md:py-20 border-b border-white/[0.04] grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 lg:items-start">
-          <div className="flex flex-col gap-6 max-w-xl">
-            <Link href="/" className="flex items-center gap-3.5 group w-fit">
-              <HbmLogo
-                size={38}
-                className="text-gold/60 group-hover:text-gold transition-all duration-400"
-              />
-              <div className="flex flex-col leading-none">
-                <span
-                  className={`${displayFont} inline-flex items-baseline text-lg font-light uppercase text-cream/70 group-hover:text-cream`}
-                >
-                  <span className="inline-flex items-baseline gap-x-0.5 md:gap-x-1">
-                    <span className="tracking-[0.22em] transition-colors duration-300">HBM</span>
-                    <span className="shrink-0 tracking-tight text-gold/60 group-hover:text-gold transition-colors duration-300">
-                      &
-                    </span>
-                  </span>
-                  <span className="tracking-[0.22em] pl-1.5 transition-colors duration-300 md:pl-2">Company</span>
-                </span>
-              </div>
-            </Link>
-            <p className={`${displayFont} text-display-sm text-cream/60 font-light italic leading-tight max-w-sm`}>
-              Built in the dark.<br />
-              Deployed at scale.
-            </p>
-            <p className={`${uiFont} text-label-xs text-silver-dim/68 uppercase tracking-[0.15em] max-w-xs leading-relaxed`}>
-              A private holding company operating at the intersection of
-              decentralized finance and digital asset infrastructure.
-            </p>
-            <div className="flex flex-col gap-2 mt-2">
-              <a
-                href="mailto:hbmandcompany@gmail.com"
-                className={`${uiFont} text-label-sm text-silver-dim hover:text-gold transition-colors duration-300 tracking-[0.05em]`}
-              >
-                hbmandcompany@gmail.com
-              </a>
-              <p className={`${uiFont} text-label-xs text-silver-dim/30 uppercase tracking-[0.15em]`}>
-                Inquiries by introduction only
-              </p>
-            </div>
-          </div>
-
-          <div className="lg:justify-self-end w-full">
-            <VotingProtocolSignup typography={typography} />
-          </div>
-        </div>
+        {showUpperBrandVoting ? (
+          <FooterBrandVotingGrid typography={typography} instanceId="footer" />
+        ) : null}
 
         {/* ─── Main link grid ─── */}
-        <div className="py-16 md:py-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 border-b border-white/[0.04]">
+        <div
+          className={`py-16 md:py-20 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-10 border-b border-white/[0.04]${showUpperBrandVoting ? "" : " pt-2 md:pt-4"}`}
+        >
           {footerColumns.map((col) => (
             <div key={col.heading} className="flex flex-col gap-4">
               <h4 className={`${uiFont} text-label-xs text-gold/70 uppercase tracking-[0.28em] pb-2 border-b border-gold/[0.08]`}>
