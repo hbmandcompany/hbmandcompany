@@ -129,31 +129,6 @@ function gougeStroke(
   ctx.globalAlpha = 1;
 }
 
-/** Irregular disk — reads like a carved coin / link. */
-function fillCarvedDisk(
-  ctx: CanvasRenderingContext2D,
-  cx: number,
-  cy: number,
-  r: number,
-  seed: number,
-  fill: string,
-  v: number,
-) {
-  const n = 11;
-  ctx.fillStyle = fill;
-  ctx.beginPath();
-  for (let k = 0; k <= n; k++) {
-    const t = (k / n) * Math.PI * 2;
-    const rr = r * (0.9 + r01(seed + k * 2, v) * 0.14);
-    const x = cx + Math.cos(t) * rr;
-    const y = cy + Math.sin(t) * rr;
-    if (k === 0) ctx.moveTo(x, y);
-    else ctx.lineTo(x, y);
-  }
-  ctx.closePath();
-  ctx.fill();
-}
-
 function fillRoundedRect(
   ctx: CanvasRenderingContext2D,
   x: number,

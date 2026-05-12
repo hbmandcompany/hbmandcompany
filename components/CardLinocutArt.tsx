@@ -67,7 +67,7 @@ export default function CardLinocutArt({ variant, className }: Props) {
     const ro = new ResizeObserver(() => paint());
     ro.observe(canvas);
     return () => ro.disconnect();
-  }, [variant]);
+  }, [variant, vk, composition]);
 
   return (
     <div
