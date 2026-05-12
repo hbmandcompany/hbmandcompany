@@ -83,6 +83,65 @@ const featuredWork: {
   },
 ];
 
+type FeaturedWorkItem = (typeof featuredWork)[number];
+
+/** One full-width Suite band per instrument: 52PickUp, then ThreeWiseMen — one card each. */
+const SUITE_SECTION_ORDER = ["pickup", "spatial"] as const satisfies readonly CardLinocutVariant[];
+
+const suiteSections: FeaturedWorkItem[] = SUITE_SECTION_ORDER.map((pv) => {
+  const item = featuredWork.find((w) => w.pixelVariant === pv);
+  if (!item) throw new Error(`Missing featured work for variant: ${pv}`);
+  return item;
+});
+
+function FeaturedSuiteInstrumentCard({ work }: { work: FeaturedWorkItem }) {
+  return (
+    <div
+      className={clsx(
+        "card-3d group relative h-full w-full min-h-[380px] overflow-hidden cursor-pointer bg-obsidian",
+        "md:mx-auto md:min-h-[520px] md:max-w-4xl",
+      )}
+    >
+      <div className="absolute inset-0 transition-all duration-700 group-hover:scale-[1.05]" aria-hidden>
+        <CardLinocutArt variant={work.pixelVariant} />
+      </div>
+      <div className="absolute inset-0 bg-gradient-to-t from-void via-void/65 to-transparent" />
+      <div className="absolute inset-0 bg-gold/[0.02] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-7">
+        <div className="flex justify-between items-start gap-6">
+          <span className="glass-panel-dark text-label-xs text-gold/70 uppercase tracking-[0.18em] px-3 py-1.5">
+            {work.category}
+          </span>
+          <span
+            className={clsx(
+              "shrink-0 text-lg font-semibold tabular-nums md:text-xl",
+              work.stat.includes("$")
+                ? "text-digital-80s [text-shadow:0_0_14px_rgba(34,232,200,0.42),0_0_32px_rgba(34,232,200,0.18)]"
+                : "text-gold/80",
+            )}
+          >
+            {work.stat}
+          </span>
+        </div>
+        <div>
+          <h3 className="mb-3 text-lg font-normal leading-tight text-cream/80 transition-colors duration-400 group-hover:text-gold md:text-xl">
+            {work.title}
+          </h3>
+          <p className="translate-y-2 text-[12px] leading-relaxed text-silver/72 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 transform">
+            {work.description}
+          </p>
+          <div className="mt-4 flex items-center gap-2 opacity-0 transition-all delay-75 duration-500 group-hover:opacity-100">
+            <span className="text-label-xs uppercase tracking-[0.2em] text-gold/80">Open details</span>
+            <div className="h-px w-5 bg-gold/60" />
+          </div>
+        </div>
+      </div>
+      <div className="absolute inset-x-0 top-0 h-px bg-garnet/15 transition-all duration-500 group-hover:bg-gold/35" />
+    </div>
+  );
+}
+
 const heroEase = [0.16, 1, 0.3, 1] as const;
 
 export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlot: ReactNode }) {
@@ -362,105 +421,48 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         reverse speed="slow"
       />
 
-      {/* ═══════════════ FEATURED WORK ═══════════════ */}
-      <section className="relative py-28 md:py-40 section-raised overflow-hidden">
-        <div className="absolute inset-0 amber-bloom pointer-events-none opacity-35" />
-        <div className="absolute inset-0 garnet-bloom-top pointer-events-none" />
+      {/* ═══════════════ FEATURED WORK (Suite — 52PickUp, then ThreeWiseMen, one card per band) ═══════════════ */}
+      {suiteSections.map((work, sectionIndex) => (
+        <section
+          key={work.pixelVariant}
+          className={clsx(
+            "relative overflow-hidden py-28 md:py-40 section-raised",
+            sectionIndex > 0 && "border-t border-white/[0.06]",
+          )}
+        >
+          <div className="absolute inset-0 amber-bloom pointer-events-none opacity-35" />
+          <div className="absolute inset-0 garnet-bloom-top pointer-events-none" />
 
-        <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
-            <div>
-              <SectionReveal>
-                <span className="text-label-xs text-garnet/70 uppercase tracking-[0.35em]">
-                  — The Suite
-                </span>
-              </SectionReveal>
-              <SectionReveal delay={0.1}>
-                <h2 className="text-2xl md:text-3xl text-cream/80 font-light mt-3 leading-tight">
-                  Tuned for{" "}
-                  <span className="text-gradient-gold font-bold italic">the session</span>
-                </h2>
+          <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
+            <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+              <div>
+                <SectionReveal>
+                  <span className="text-label-xs text-garnet/70 uppercase tracking-[0.35em]">— The Suite</span>
+                </SectionReveal>
+                <SectionReveal delay={0.1}>
+                  <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
+                    Tuned for <span className="text-gradient-gold font-bold italic">the session</span>
+                  </h2>
+                </SectionReveal>
+              </div>
+              <SectionReveal delay={0.2}>
+                <Link
+                  href="/work"
+                  className="gold-outline-btn inline-block px-6 py-3 text-label-xs uppercase tracking-[0.2em]"
+                >
+                  View all instruments
+                </Link>
               </SectionReveal>
             </div>
-            <SectionReveal delay={0.2}>
-              <Link href="/work"
-                className="gold-outline-btn text-label-xs uppercase tracking-[0.2em] px-6 py-3 inline-block">
-                View all instruments
-              </Link>
-            </SectionReveal>
-          </div>
 
-          <div
-            className="grid grid-cols-1 md:grid-cols-12 md:grid-rows-2 gap-3 [grid-auto-flow:dense]"
-            style={{ gridAutoRows: "minmax(0, auto)" }}
-          >
-            {featuredWork.map((work, i) => {
-              return (
-                <SectionReveal
-                  key={work.pixelVariant}
-                  className={clsx(
-                    i === 0 &&
-                      "md:col-span-7 md:row-span-2 md:row-start-1 md:col-start-1 md:min-h-[520px]",
-                    i === 1 &&
-                      "md:col-span-5 md:row-start-1 md:col-start-8 md:min-h-[254px]",
-                    i === 2 &&
-                      "md:col-span-5 md:row-start-2 md:col-start-8 md:min-h-[254px]"
-                  )}
-                >
-                  <div
-                    className={clsx(
-                      "card-3d group relative h-full min-h-[380px] overflow-hidden cursor-pointer bg-obsidian",
-                      i === 0 ? "md:min-h-[520px]" : "md:min-h-[254px]"
-                    )}
-                  >
-                    <div
-                      className="absolute inset-0 transition-all duration-700 group-hover:scale-[1.05]"
-                      aria-hidden
-                    >
-                      <CardLinocutArt variant={work.pixelVariant} />
-                    </div>
-                    <div className="absolute inset-0 bg-gradient-to-t from-void via-void/65 to-transparent" />
-                    <div className="absolute inset-0 bg-gold/[0.02] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
-
-                    <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-7">
-                      <div className="flex justify-between items-start gap-6">
-                        <span className="glass-panel-dark text-label-xs text-gold/70 uppercase tracking-[0.18em] px-3 py-1.5">
-                          {work.category}
-                        </span>
-                        <span
-                          className={clsx(
-                            "shrink-0 text-lg font-semibold tabular-nums md:text-xl",
-                            work.stat.includes("$")
-                              ? "text-digital-80s [text-shadow:0_0_14px_rgba(34,232,200,0.42),0_0_32px_rgba(34,232,200,0.18)]"
-                              : "text-gold/80"
-                          )}
-                        >
-                          {work.stat}
-                        </span>
-                      </div>
-                      <div>
-                        <h3 className="mb-3 text-lg font-normal leading-tight text-cream/80 transition-colors duration-400 group-hover:text-gold md:text-xl">
-                          {work.title}
-                        </h3>
-                        <p className="translate-y-2 text-[12px] leading-relaxed text-silver/72 opacity-0 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100 transform">
-                          {work.description}
-                        </p>
-                        <div className="mt-4 flex items-center gap-2 opacity-0 transition-all delay-75 duration-500 group-hover:opacity-100">
-                          <span className="text-label-xs uppercase tracking-[0.2em] text-gold/80">
-                            Open details
-                          </span>
-                          <div className="h-px w-5 bg-gold/60" />
-                        </div>
-                      </div>
-                    </div>
-                    <div className="absolute inset-x-0 top-0 h-px bg-garnet/15 transition-all duration-500 group-hover:bg-gold/35" />
-                  </div>
-                </SectionReveal>
-              );
-            })}
+            <div className="grid grid-cols-1 gap-3">
+              <SectionReveal delay={0.08}>
+                <FeaturedSuiteInstrumentCard work={work} />
+              </SectionReveal>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ))}
 
       {/* ═══════════════ Consequence (music) — mid band ═══════════════ */}
       <section className="relative overflow-hidden py-28 md:py-40 section-mid">
