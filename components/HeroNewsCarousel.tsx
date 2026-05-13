@@ -79,14 +79,14 @@ function WireCrawl({
 
   if (reduceMotion) {
     return (
-      <p className="line-clamp-2 font-mono-hbm text-[10px] font-light leading-relaxed tracking-[0.04em] text-silver-dim/65">
+      <p className="line-clamp-2 font-mono-hbm text-[9px] font-light leading-snug tracking-[0.04em] text-silver-dim/65 md:text-[10px]">
         {text}
       </p>
     );
   }
 
   return (
-    <div className="relative flex h-7 w-full items-center overflow-hidden rounded-sm border border-white/[0.06] bg-black/30">
+    <div className="relative flex h-6 w-full items-center overflow-hidden rounded-sm border border-white/[0.06] bg-black/30">
       <div
         className="pointer-events-none absolute inset-y-0 left-0 z-10 w-6 bg-gradient-to-r from-obsidian to-transparent"
         aria-hidden
@@ -103,11 +103,11 @@ function WireCrawl({
           animationPlayState: paused ? "paused" : "running",
         }}
       >
-        <span className="whitespace-nowrap px-3 font-mono-hbm text-[10px] font-light tracking-[0.05em] text-silver-dim/72 md:text-[11px]">
+        <span className="whitespace-nowrap px-2 font-mono-hbm text-[9px] font-light tracking-[0.05em] text-silver-dim/72 md:px-2.5 md:text-[10px]">
           {text}
         </span>
         <span
-          className="whitespace-nowrap px-3 font-mono-hbm text-[10px] font-light tracking-[0.05em] text-silver-dim/72 md:text-[11px]"
+          className="whitespace-nowrap px-2 font-mono-hbm text-[9px] font-light tracking-[0.05em] text-silver-dim/72 md:px-2.5 md:text-[10px]"
           aria-hidden
         >
           {text}
@@ -209,27 +209,18 @@ export default function HeroNewsCarousel() {
   const totalMsNow = holdMsForUi + marqueeDurationSec(item.dek) * 1000;
   const secondsLeft = Math.max(0, Math.ceil((totalMsNow * (1 - progress)) / 1000));
 
-  /** sm+: collapse height until hover/focus so no empty band; mobile stays open. */
-  const chromeRevealGrid = clsx(
-    "grid transition-[grid-template-rows] duration-300 ease-out",
-    "grid-rows-[1fr]",
-    "sm:grid-rows-[0fr] sm:group-hover:grid-rows-[1fr] sm:group-focus-within:grid-rows-[1fr]",
-  );
-
-  const chromeRevealInner = clsx(
-    "min-h-0 overflow-hidden",
-  );
-
-  const chromeRevealContent = clsx(
-    "transition-[opacity] duration-300 ease-out",
-    "opacity-100",
-    "sm:pointer-events-none sm:opacity-0",
-    "sm:group-hover:pointer-events-auto sm:group-hover:opacity-100",
-    "sm:group-focus-within:pointer-events-auto sm:group-focus-within:opacity-100",
+  /** sm+: reserve a fixed-height footer slot + overlay controls so hover does not grow the card (no hero reflow). */
+  const chromeDock = clsx(
+    "transition-opacity duration-300 ease-out",
+    "max-sm:relative max-sm:opacity-100",
+    "sm:absolute sm:inset-x-0 sm:bottom-0 sm:z-10 sm:pt-0",
+    "sm:opacity-0 sm:pointer-events-none",
+    "sm:group-hover:opacity-100 sm:group-hover:pointer-events-auto",
+    "sm:group-focus-within:opacity-100 sm:group-focus-within:pointer-events-auto",
   );
 
   /** Live + crawl always visible; timer / nav stay hover-revealed on sm+ */
-  const wireFeedSurface = "mt-1.5 shrink-0 border-t border-white/[0.06] pt-2";
+  const wireFeedSurface = "mt-0.5 shrink-0 border-t border-white/[0.06] pt-1";
 
   return (
     <div
@@ -279,7 +270,7 @@ export default function HeroNewsCarousel() {
       </div>
 
       <div className={wireFeedSurface}>
-        <div className="mb-0 flex items-center gap-2 px-2 sm:px-2.5 sm:group-hover:mb-2 sm:group-focus-within:mb-2">
+        <div className="mb-0 flex items-center gap-1.5 px-2 sm:px-2">
           <span className="shrink-0 font-mono-hbm text-[7px] font-semibold uppercase tracking-[0.16em] text-digital-80s">
             Live
           </span>
@@ -289,10 +280,9 @@ export default function HeroNewsCarousel() {
         </div>
       </div>
 
-      <div className={chromeRevealGrid}>
-        <div className={chromeRevealInner}>
-          <div className={chromeRevealContent}>
-            <div className="mb-2 flex items-center gap-2 px-2 sm:px-2.5" aria-hidden={reduceMotion}>
+      <div className="relative max-sm:min-h-0 shrink-0 sm:min-h-[3.625rem]">
+        <div className={chromeDock}>
+          <div className="mb-0 flex items-center gap-1.5 px-2 sm:px-2" aria-hidden={reduceMotion}>
               <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/[0.08]" aria-hidden>
                 <div
                   className="h-full rounded-full bg-gold/50"
@@ -312,14 +302,14 @@ export default function HeroNewsCarousel() {
                   e.stopPropagation();
                   toggleManualPause();
                 }}
-                className="font-mono-hbm shrink-0 rounded px-1.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.22em] text-white/88 transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/40 max-sm:min-h-[44px] max-sm:min-w-[44px] max-sm:px-3 max-sm:py-2 max-sm:text-[9px]"
+                className="font-mono-hbm shrink-0 rounded px-1.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.2em] text-white/88 transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/40 max-sm:min-h-[44px] max-sm:min-w-[44px] max-sm:px-3 max-sm:py-2 max-sm:text-[9px] sm:py-0.5"
               >
                 {manualPaused ? "Play" : "Pause"}
               </button>
             </div>
 
-            <div className="flex items-center justify-between gap-2 px-2 sm:px-2.5">
-              <div className="flex flex-wrap gap-1.5" aria-label="Story position">
+            <div className="flex items-center justify-between gap-1.5 px-2 pb-0.5 sm:gap-2 sm:px-2 sm:pb-0">
+              <div className="flex flex-wrap gap-1" aria-label="Story position">
                 {SLIDES.map((s, idx) => (
                   <button
                     key={s.id}
@@ -341,7 +331,7 @@ export default function HeroNewsCarousel() {
               <div className="flex shrink-0 items-center gap-0 text-silver-dim/28">
                 <button
                   type="button"
-                  className="font-mono-hbm min-h-[44px] min-w-[44px] px-0.5 py-2 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center"
+                  className="font-mono-hbm max-sm:min-h-[44px] max-sm:min-w-[44px] px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center max-sm:py-2 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
                   aria-label="Previous story"
                   onClick={() => go(-1)}
                 >
@@ -349,7 +339,7 @@ export default function HeroNewsCarousel() {
                 </button>
                 <button
                   type="button"
-                  className="font-mono-hbm min-h-[44px] min-w-[44px] px-0.5 py-2 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center"
+                  className="font-mono-hbm max-sm:min-h-[44px] max-sm:min-w-[44px] px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center max-sm:py-2 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
                   aria-label="Next story"
                   onClick={() => go(1)}
                 >
@@ -358,7 +348,6 @@ export default function HeroNewsCarousel() {
               </div>
             </div>
           </div>
-        </div>
       </div>
     </div>
   );
