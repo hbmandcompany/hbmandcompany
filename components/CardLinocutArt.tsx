@@ -34,9 +34,11 @@ export type CardLinocutVariant = keyof typeof VARIANT_KEYS;
 type Props = {
   variant: string;
   className?: string;
+  /** When set, the dashed placeholder label is hidden until the parent `.group` is hovered or focused. */
+  hidePlaceholderUntilHover?: boolean;
 };
 
-export default function CardLinocutArt({ variant, className }: Props) {
+export default function CardLinocutArt({ variant, className, hidePlaceholderUntilHover }: Props) {
   const vk = VARIANT_KEYS[variant] ?? 19;
   const composition = COMPOSITION_BY_VARIANT[variant] ?? "default";
   const placeholderLabel = PLACEHOLDER_LABEL_BY_VARIANT[variant];
@@ -78,7 +80,13 @@ export default function CardLinocutArt({ variant, className }: Props) {
       aria-hidden
     >
       {placeholderLabel ? (
-        <div className="absolute inset-0 grid place-items-center bg-gradient-to-br from-[#121826] via-[#1b2235] to-[#20142a]">
+        <div
+          className={clsx(
+            "absolute inset-0 grid place-items-center bg-gradient-to-br from-[#121826] via-[#1b2235] to-[#20142a]",
+            hidePlaceholderUntilHover &&
+              "transition-opacity duration-300 max-md:opacity-100 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 md:group-active:opacity-100",
+          )}
+        >
           <div className="rounded-md border border-dashed border-gold/35 bg-black/20 px-4 py-2 text-center">
             <p className="font-mono-hbm text-[10px] uppercase tracking-[0.16em] text-gold/80">{placeholderLabel}</p>
           </div>

@@ -1,65 +1,20 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
+import Link from "next/link";
 import clsx from "clsx";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import {
+  NEWSROOM_BRIEFINGS,
+  BRIEFING_UPDATED_AT,
+  getBriefingUpdatedLabel,
+} from "@/lib/newsroomBriefings";
 
-const SLIDES = [
-  {
-    id: "1",
-    desk: "On-chain",
-    headline: "Base L2 reserve flows hold above stress thresholds as institutional participation widens.",
-    dek: "Read-only desk telemetry shows sustained custody-aligned activity without velocity spikes in retail channels.",
-  },
-  {
-    id: "2",
-    desk: "Archival",
-    headline: "Filecoin deal renewals lengthen median proof duration as mandates prioritize durable commitment.",
-    dek: "Programs that bind economics to the dataset—not a monthly cloud line—continue to draw treasury attention.",
-  },
-  {
-    id: "3",
-    desk: "Rails",
-    headline: "Stellar gifting volume steadies after on-chain ledger rails expand for milestone programs.",
-    dek: "Counterparties cite verifiable delivery and disclosure-friendly receipts as the hinge for adoption.",
-  },
-  {
-    id: "4",
-    desk: "Governance",
-    headline: "Major L1 quorums maintain participation through cadence shift as delegation rules tighten.",
-    dek: "The house tracks voting surfaces where outcomes remain legible to boards after the headline cycle fades.",
-  },
-] as const;
+const SLIDES = NEWSROOM_BRIEFINGS;
 
 const WIRE_HOLD_MS = 4000;
-
-/** ISO calendar date (YYYY-MM-DD). Bump when this briefing or desk stories change. */
-const HOUSE_DESK_BRIEFING_UPDATED_AT = "2026-05-12";
-
-function formatBriefingDateLongLocal(iso: string): string {
-  const [y, m, d] = iso.split("-").map(Number);
-  if (!y || !m || !d) return iso;
-  return new Date(y, m - 1, d).toLocaleDateString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  });
-}
-
-/** Today / Yesterday / long date — uses the viewer's local calendar. */
-function getBriefingUpdatedLabel(iso: string): string {
-  const [y, m, d] = iso.split("-").map(Number);
-  if (!y || !m || !d) return formatBriefingDateLongLocal(iso);
-  const updatedStart = new Date(y, m - 1, d);
-  const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const yesterdayStart = new Date(todayStart);
-  yesterdayStart.setDate(yesterdayStart.getDate() - 1);
-  const u = new Date(updatedStart.getFullYear(), updatedStart.getMonth(), updatedStart.getDate()).getTime();
-  if (u === todayStart.getTime()) return "Today";
-  if (u === yesterdayStart.getTime()) return "Yesterday";
-  return formatBriefingDateLongLocal(iso);
-}
+/** Extra pause before the Live marquee runs on first paint (keeps progress + crawl in sync). */
+const WIRE_INITIAL_DELAY_MS = 2000;
 
 /** One full marquee loop duration (seconds); must match WireCrawl. */
 function marqueeDurationSec(text: string): number {
@@ -122,6 +77,8 @@ export default function HeroNewsCarousel() {
   const [progress, setProgress] = useState(0);
   const [manualPaused, setManualPaused] = useState(false);
   const [wireHold, setWireHold] = useState(false);
+  /** Bumps when the current slide restarts (same index) so wire hold + crawl remount. */
+  const [crawlNonce, setCrawlNonce] = useState(0);
   const reduceMotion = useReducedMotion() ?? false;
   const n = SLIDES.length;
 
@@ -144,7 +101,7 @@ export default function HeroNewsCarousel() {
   const wireMarqueePaused = manualPaused || wireHold;
 
   const computeTotalMs = useCallback(() => {
-    const hold = visitKeyRef.current === 0 ? 0 : WIRE_HOLD_MS;
+    const hold = visitKeyRef.current === 0 ? WIRE_INITIAL_DELAY_MS : WIRE_HOLD_MS;
     return hold + marqueeDurationSec(SLIDES[indexRef.current].dek) * 1000;
   }, []);
 
@@ -159,11 +116,11 @@ export default function HeroNewsCarousel() {
   }, [index]);
 
   useEffect(() => {
-    if (visitKeyRef.current === 0) return;
+    const delay = visitKeyRef.current === 0 ? WIRE_INITIAL_DELAY_MS : WIRE_HOLD_MS;
     setWireHold(true);
-    const t = window.setTimeout(() => setWireHold(false), WIRE_HOLD_MS);
+    const t = window.setTimeout(() => setWireHold(false), delay);
     return () => window.clearTimeout(t);
-  }, [index]);
+  }, [index, crawlNonce]);
 
   useEffect(() => {
     if (reduceMotion) return;
@@ -205,7 +162,19 @@ export default function HeroNewsCarousel() {
     [n],
   );
 
-  const holdMsForUi = visitKeyRef.current === 0 ? 0 : WIRE_HOLD_MS;
+  /** ‹ first restarts the current story if it has started; at the beginning of the timeline, goes to the previous story. */
+  const goBackOrRestart = useCallback(() => {
+    if (progressRef.current >= 0.005) {
+      setCrawlNonce((k) => k + 1);
+      slideStartRef.current = performance.now();
+      progressRef.current = 0;
+      setProgress(0);
+      return;
+    }
+    go(-1);
+  }, [go]);
+
+  const holdMsForUi = visitKeyRef.current === 0 ? WIRE_INITIAL_DELAY_MS : WIRE_HOLD_MS;
   const totalMsNow = holdMsForUi + marqueeDurationSec(item.dek) * 1000;
   const secondsLeft = Math.max(0, Math.ceil((totalMsNow * (1 - progress)) / 1000));
 
@@ -228,21 +197,28 @@ export default function HeroNewsCarousel() {
         "group relative z-10 flex min-h-0 w-full flex-col rounded-lg outline-none transition-[box-shadow] duration-300",
         "max-sm:flex-1 max-sm:min-h-0",
         "sm:h-auto sm:flex-none",
-        "sm:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08)] sm:focus-within:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
+        "sm:focus-within:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
       )}
       role="region"
       aria-roledescription="carousel"
-      aria-label="House desk briefings"
-      tabIndex={-1}
+      aria-label="News room briefings"
     >
+      <Link
+        href={`/newsroom?story=${item.id}`}
+        className={clsx(
+          "flex min-h-0 flex-1 flex-col rounded-lg outline-none transition-[opacity,box-shadow] duration-300",
+          "focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
+        )}
+        aria-label={`Open this briefing in the news room: ${item.headline}`}
+      >
       <div className="shrink-0 border-b-2 border-gold/25 pb-2">
         <div className="flex items-start justify-between gap-3">
           <p className="min-w-0 font-mono-hbm text-[9px] font-medium uppercase tracking-[0.34em] text-gold/55">
-            House desk
+            News room
           </p>
           <p className="shrink-0 text-right font-mono-hbm text-[8px] font-normal uppercase tracking-[0.22em] text-silver-dim/38">
-            <time dateTime={HOUSE_DESK_BRIEFING_UPDATED_AT}>
-              Updated {getBriefingUpdatedLabel(HOUSE_DESK_BRIEFING_UPDATED_AT)}
+            <time dateTime={BRIEFING_UPDATED_AT}>
+              Updated {getBriefingUpdatedLabel(BRIEFING_UPDATED_AT)}
             </time>
           </p>
         </div>
@@ -275,10 +251,16 @@ export default function HeroNewsCarousel() {
             Live
           </span>
           <div className="min-w-0 flex-1">
-            <WireCrawl text={item.dek} paused={wireMarqueePaused} reduceMotion={reduceMotion} />
+            <WireCrawl
+              key={`${item.id}-${crawlNonce}`}
+              text={item.dek}
+              paused={wireMarqueePaused}
+              reduceMotion={reduceMotion}
+            />
           </div>
         </div>
       </div>
+      </Link>
 
       <div className="relative max-sm:min-h-0 shrink-0 sm:min-h-[3.625rem]">
         <div className={chromeDock}>
@@ -341,8 +323,11 @@ export default function HeroNewsCarousel() {
                 <button
                   type="button"
                   className="font-mono-hbm max-sm:flex max-sm:min-h-[36px] max-sm:min-w-[36px] max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:py-1.5 px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
-                  aria-label="Previous story"
-                  onClick={() => go(-1)}
+                  aria-label="Restart this story from the beginning, or go to the previous story if it has not started yet"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    goBackOrRestart();
+                  }}
                 >
                   ‹
                 </button>

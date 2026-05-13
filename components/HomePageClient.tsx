@@ -68,11 +68,11 @@ function WhatWeBuildInstrumentCard({ item }: { item: WhatWeBuildItem }) {
         className="absolute inset-0 transition-transform duration-700 group-hover:scale-[1.04]"
         aria-hidden
       >
-        <CardLinocutArt variant={item.pixelVariant} />
+        <CardLinocutArt variant={item.pixelVariant} hidePlaceholderUntilHover />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-void via-void/80 to-void/20" />
       <div className="absolute inset-0 bg-gradient-to-r from-void/60 to-transparent" />
-      <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10">
+      <div className="absolute inset-0 flex flex-col justify-end p-8 md:p-10 transition-opacity duration-300 max-md:opacity-100 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 md:group-active:opacity-100">
         <div className="mb-4 flex items-center gap-3">
           <span className="text-label-xs uppercase tracking-[0.25em] text-garnet/60">{item.id}</span>
           <div className="h-px w-6 bg-garnet/30" />
@@ -98,13 +98,26 @@ function WhatWeBuildInstrumentCard({ item }: { item: WhatWeBuildItem }) {
         href={item.externalHref}
         target="_blank"
         rel="noopener noreferrer"
-        className={clsx(shell, "block h-full min-h-0")}
+        className={clsx(
+          shell,
+          "block h-full min-h-0 outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
+        )}
       >
         {inner}
       </a>
     );
   }
-  return <div className={clsx(shell, "min-h-0")}>{inner}</div>;
+  return (
+    <div
+      className={clsx(
+        shell,
+        "min-h-0 outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
+      )}
+      tabIndex={0}
+    >
+      {inner}
+    </div>
+  );
 }
 
 const featuredWork: {
@@ -155,17 +168,18 @@ function FeaturedSuiteInstrumentCard({ work }: { work: FeaturedWorkItem }) {
   return (
     <div
       className={clsx(
-        "card-3d group relative h-full w-full min-h-[min(48vh,380px)] overflow-hidden cursor-pointer bg-obsidian",
+        "card-3d group relative h-full w-full min-h-[min(48vh,380px)] overflow-hidden cursor-pointer bg-obsidian outline-none focus-visible:ring-2 focus-visible:ring-gold/30 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
         "lg:min-h-[min(58vh,520px)]",
       )}
+      tabIndex={0}
     >
       <div className="absolute inset-0 transition-all duration-700 group-hover:scale-[1.05]" aria-hidden>
-        <CardLinocutArt variant={work.pixelVariant} />
+        <CardLinocutArt variant={work.pixelVariant} hidePlaceholderUntilHover />
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-void via-void/65 to-transparent" />
       <div className="absolute inset-0 bg-gold/[0.02] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
 
-      <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-7">
+      <div className="absolute inset-0 flex flex-col justify-between p-6 md:p-7 transition-opacity duration-300 max-md:opacity-100 md:opacity-0 md:group-hover:opacity-100 md:group-focus-within:opacity-100 md:group-active:opacity-100">
         <div className="flex justify-between items-start gap-6">
           <span className="glass-panel-dark text-label-xs text-gold/70 uppercase tracking-[0.18em] px-3 py-1.5">
             {work.category}
@@ -312,14 +326,14 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             variants={heroItem}
             className="hero-editorial-prose relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
           >
-            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[0.97rem] font-light leading-[1.62] tracking-[-0.015em] text-cream/38 antialiased md:text-[1.06rem] md:leading-[1.66] md:text-cream/42">
+            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.02rem] font-light leading-[1.64] tracking-[-0.015em] text-cream/38 antialiased md:text-[1.1rem] md:leading-[1.68] md:text-cream/42">
               We work with organizations to deliver an integrated view of their
               holdings—under defined scope, delivery milestones, and performance accountability to
               leadership.
               Governance, risk management, and financial reporting are structured so leadership has
               consistent, decision-ready information across the enterprise.
             </p>
-            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[0.97rem] font-light leading-[1.62] tracking-[-0.015em] text-cream/56 antialiased md:mt-7 md:text-[1.06rem] md:leading-[1.66] md:text-cream/60">
+            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.02rem] font-light leading-[1.64] tracking-[-0.015em] text-cream/56 antialiased md:mt-7 md:text-[1.1rem] md:leading-[1.68] md:text-cream/60">
               Partners who treat credibility as co-equal with capital expect discipline—accuracy in
               books and records, and external communications that align with facts and withstand
               review by boards, investors, and regulators. Our standard is institutional
