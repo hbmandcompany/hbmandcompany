@@ -212,13 +212,13 @@
 
   .gold-rule {
     height: 1px;
+    /* Uniform weight — no bright center spike */
     background: linear-gradient(
       90deg,
-      transparent,
-      rgba(180,175,170,0.3),
-      rgba(200,200,200,0.5),
-      rgba(180,175,170,0.3),
-      transparent
+      transparent 0%,
+      rgba(180, 175, 170, 0.11) 14%,
+      rgba(180, 175, 170, 0.11) 86%,
+      transparent 100%
     );
   }
   .garnet-rule {

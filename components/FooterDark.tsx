@@ -158,7 +158,7 @@ export default function FooterDark({
       <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
 
         {showUpperBrandVoting ? (
-          <FooterBrandVotingGrid typography={typography} instanceId="footer" />
+          <FooterBrandVotingGrid typography={typography} instanceId="footer" brandSide="left" />
         ) : null}
 
         {/* ─── Main link grid ─── */}

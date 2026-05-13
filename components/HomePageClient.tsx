@@ -374,16 +374,21 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         >
           <div className="w-px h-14 bg-gradient-to-b from-garnet/50 to-transparent animate-glow-pulse" />
         </div>
+
+        {/* Blend hero image into the next void band (no hard rule line) */}
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-28 bg-gradient-to-b from-transparent via-void/75 to-void sm:h-32 md:h-40"
+          aria-hidden
+        />
       </section>
 
       {/* ═══════════════ Request access — below hero ═══════════════ */}
       <section className="relative overflow-x-hidden bg-void" aria-label="Request access to the voting protocol">
-        <div className="gold-rule w-full" />
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 py-12 md:px-12 md:py-14">
           <FooterBrandVotingGrid
             typography="robinhood"
             instanceId="home-below-hero"
-            brandSide="right"
+            brandSide="left"
             band="default"
             defaultEditorialAlignEnd={false}
             showLogo={false}
@@ -749,6 +754,11 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             </div>
           </div>
         </div>
+
+        <div
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-[2] h-24 bg-gradient-to-b from-transparent via-void/80 to-void md:h-32"
+          aria-hidden
+        />
       </section>
 
       {/* ═══════════════ House thesis — after Post Carrier ═══════════════ */}
@@ -772,7 +782,6 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_20%_35%,rgba(180,175,170,0.07)_0%,transparent_55%)]"
           aria-hidden
         />
-        <div className="gold-rule w-full" />
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <FooterBrandVotingGrid
             typography="robinhood"

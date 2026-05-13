@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback, type FormEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import clsx from "clsx";
 
 type Typography = "luxury" | "robinhood";
 
@@ -17,6 +18,8 @@ export default function VotingProtocolSignup({
   descriptionClassName,
   submitLabel,
   successMessage,
+  embedded = false,
+  fullDiscretion = false,
 }: {
   typography: Typography;
   instanceId?: string;
@@ -27,6 +30,10 @@ export default function VotingProtocolSignup({
   descriptionClassName?: string;
   submitLabel?: string;
   successMessage?: string;
+  /** When true, omit card chrome (used inside a shared parent card with editorial). */
+  embedded?: boolean;
+  /** When true, render the “Full Discretion” line below the description (default-band layout). */
+  fullDiscretion?: boolean;
 }) {
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
@@ -130,7 +137,9 @@ export default function VotingProtocolSignup({
   const buttonLabel = submitLabel ?? "Request access";
 
   const defaultNoteTypography = `${uiFont} text-[11px] uppercase tracking-[0.13em] leading-relaxed text-silver-dim/55 md:text-[12.5px]`;
-  const descClass = descriptionClassName ?? `${defaultNoteTypography} mt-2.5`;
+  const embeddedNoteTypography = `${uiFont} text-[11px] uppercase tracking-[0.13em] leading-relaxed text-silver-dim/48 md:text-[12.5px]`;
+  const descClass =
+    descriptionClassName ?? `${embedded ? embeddedNoteTypography : defaultNoteTypography} mt-2.5`;
 
   const inputSurfaceClass = `${uiFont} min-h-[46px] w-full rounded-lg border border-white/[0.10] bg-void/70 px-4 text-left text-[13px] tracking-[0.06em] text-cream/90 outline-none transition-[border-color,box-shadow] duration-300 focus-visible:border-gold/35 focus-visible:ring-1 focus-visible:ring-gold/25 md:min-h-[50px] md:rounded-xl md:px-[1.125rem] md:text-[14px]`;
 
@@ -251,45 +260,89 @@ export default function VotingProtocolSignup({
     setMessage("");
   };
 
+  const outerClass = embedded
+    ? "relative w-full min-w-0"
+    : "relative w-full min-w-0 max-w-lg rounded-xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)] md:p-8";
+
+  const innerBlock = (
+    <>
+      {!embedded ? (
+        <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-gold/[0.04] blur-3xl md:h-40 md:w-40" aria-hidden />
+      ) : null}
+
+      <div className="relative">
+        <p
+          className={clsx(
+            uiFont,
+            "text-[11px] uppercase tracking-[0.26em] md:text-[12px] md:tracking-[0.3em]",
+            embedded ? "text-gold/48" : "text-gold/65",
+          )}
+        >
+          {eyebrowText}
+        </p>
+        <h3
+          id={headingId}
+          className={clsx(
+            displayFont,
+            "mt-2.5 text-xl font-light leading-snug md:mt-3 md:text-2xl",
+            embedded ? "text-cream/72" : "text-cream/88",
+          )}
+        >
+          {headingNode}
+        </h3>
+        <p
+          className={clsx(descClass, embedded && !descriptionClassName && "[&_a]:text-gold/40 [&_a]:hover:text-gold/55")}
+          role="note"
+        >
+          {descriptionNode}
+        </p>
+
+        {fullDiscretion ? (
+          <p
+            className={clsx(
+              uiFont,
+              "mt-3 border-t pt-3 text-[11px] uppercase tracking-[0.2em] md:pt-3.5 md:text-[11.5px]",
+              embedded ? "border-white/[0.05] text-silver-dim/34" : "border-white/[0.07] text-silver-dim/42",
+            )}
+          >
+            Full Discretion
+          </p>
+        ) : null}
+
+        <div className="mt-6 md:mt-7">
+          <button
+            id={triggerId}
+            type="button"
+            aria-haspopup="dialog"
+            aria-controls={dialogId}
+            aria-expanded={modalOpen}
+            onClick={openModal}
+            className={clsx(
+              inputSurfaceClass,
+              "flex cursor-pointer items-center hover:border-white/[0.14] md:hover:border-white/[0.12]",
+              embedded ? "text-silver-dim/28" : "text-silver-dim/35",
+            )}
+          >
+            <span>Request Access</span>
+          </button>
+        </div>
+      </div>
+    </>
+  );
+
   return (
     <>
       {modal}
 
-      <aside
-        className="relative w-full min-w-0 max-w-lg rounded-xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)] md:p-8"
-        aria-labelledby={headingId}
-      >
-        <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-gold/[0.04] blur-3xl md:h-40 md:w-40" aria-hidden />
-
-        <div className="relative">
-          <p className={`${uiFont} text-[11px] text-gold/65 uppercase tracking-[0.26em] md:text-[12px] md:tracking-[0.3em]`}>
-            {eyebrowText}
-          </p>
-          <h3
-            id={headingId}
-            className={`${displayFont} mt-2.5 text-xl font-light leading-snug text-cream/88 md:mt-3 md:text-2xl`}
-          >
-            {headingNode}
-          </h3>
-          <p className={descClass} role="note">
-            {descriptionNode}
-          </p>
-
-          <div className="mt-6 md:mt-7">
-            <button
-              id={triggerId}
-              type="button"
-              aria-haspopup="dialog"
-              aria-controls={dialogId}
-              aria-expanded={modalOpen}
-              onClick={openModal}
-              className={`${inputSurfaceClass} flex cursor-pointer items-center text-silver-dim/35 hover:border-white/[0.14] md:hover:border-white/[0.12]`}
-            >
-              <span>Request Access</span>
-            </button>
-          </div>
+      {embedded ? (
+        <div className={outerClass} aria-labelledby={headingId}>
+          {innerBlock}
         </div>
-      </aside>
+      ) : (
+        <aside className={outerClass} aria-labelledby={headingId}>
+          {innerBlock}
+        </aside>
+      )}
     </>
   );
 }
