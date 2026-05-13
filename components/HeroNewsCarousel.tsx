@@ -309,7 +309,7 @@ export default function HeroNewsCarousel() {
             </div>
 
             <div className="flex items-center justify-between gap-1.5 px-2 pb-0.5 sm:gap-2 sm:px-2 sm:pb-0">
-              <div className="flex flex-wrap gap-1" aria-label="Story position">
+              <div className="flex flex-wrap gap-1 max-sm:gap-0.5" aria-label="Story position">
                 {SLIDES.map((s, idx) => (
                   <button
                     key={s.id}
@@ -318,20 +318,29 @@ export default function HeroNewsCarousel() {
                     aria-current={idx === index ? true : undefined}
                     onClick={() => setIndex(idx)}
                     className={clsx(
-                      "box-border min-h-[7px] rounded-full ring-1 ring-inset transition-[width,background-color,ring-color] duration-300",
-                      "hover:bg-white/16 hover:ring-white/28 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45",
-                      "max-sm:inline-flex max-sm:min-h-[44px] max-sm:min-w-[36px] max-sm:items-center max-sm:justify-center max-sm:px-1",
-                      idx === index
-                        ? "w-5 bg-white/[0.28] ring-white/[0.38] max-sm:min-w-[44px]"
-                        : "w-1.5 bg-white/[0.08] ring-white/[0.16]",
+                      "inline-flex shrink-0 items-center justify-center rounded-full border-0 bg-transparent",
+                      "p-0 transition-[opacity] duration-300",
+                      "hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45",
+                      "max-sm:min-h-[34px] max-sm:min-w-[26px] max-sm:px-1 max-sm:py-2",
                     )}
-                  />
+                  >
+                    <span
+                      aria-hidden
+                      className={clsx(
+                        "block rounded-full ring-1 ring-inset transition-[width,background-color,ring-color] duration-300",
+                        "hover:bg-white/16 hover:ring-white/28",
+                        idx === index
+                          ? "h-[7px] w-5 bg-white/[0.28] ring-white/[0.38] max-sm:h-2 max-sm:w-7"
+                          : "h-[7px] w-1.5 bg-white/[0.08] ring-white/[0.16] max-sm:h-1.5 max-sm:w-1.5",
+                      )}
+                    />
+                  </button>
                 ))}
               </div>
               <div className="flex shrink-0 items-center gap-0 text-silver-dim/28">
                 <button
                   type="button"
-                  className="font-mono-hbm max-sm:min-h-[44px] max-sm:min-w-[44px] px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center max-sm:py-2 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
+                  className="font-mono-hbm max-sm:flex max-sm:min-h-[36px] max-sm:min-w-[36px] max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:py-1.5 px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
                   aria-label="Previous story"
                   onClick={() => go(-1)}
                 >
@@ -339,7 +348,7 @@ export default function HeroNewsCarousel() {
                 </button>
                 <button
                   type="button"
-                  className="font-mono-hbm max-sm:min-h-[44px] max-sm:min-w-[44px] px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center max-sm:py-2 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
+                  className="font-mono-hbm max-sm:flex max-sm:min-h-[36px] max-sm:min-w-[36px] max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:py-1.5 px-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 sm:min-h-[30px] sm:min-w-[30px] sm:py-1"
                   aria-label="Next story"
                   onClick={() => go(1)}
                 >
