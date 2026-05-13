@@ -303,7 +303,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             className="hero-editorial-visual mt-4 w-full max-w-[240px] sm:mt-5 sm:max-w-[272px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,304px)] xl:max-w-[min(100%,328px)] lg:justify-self-start"
           >
             <div className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden">
-              <HeroBrutalistIllustration className="rounded-2xl opacity-90" />
+              <HeroBrutalistIllustration className="rounded-2xl opacity-45" />
             </div>
           </motion.div>
 
