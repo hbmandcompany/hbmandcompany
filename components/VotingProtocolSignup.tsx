@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback, type FormEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
+import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import clsx from "clsx";
 
@@ -32,7 +33,7 @@ export default function VotingProtocolSignup({
   successMessage?: string;
   /** When true, omit card chrome (used inside a shared parent card with editorial). */
   embedded?: boolean;
-  /** When true, render the “Full Discretion” line below the description (default-band layout). */
+  /** When true, render the whitepaper link row below the description (default-band layout). */
   fullDiscretion?: boolean;
 }) {
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
@@ -43,7 +44,7 @@ export default function VotingProtocolSignup({
   const dialogId = `${instanceId}-voting-dialog`;
   const emailModalId = `${instanceId}-voting-email-modal`;
 
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion() === true;
   const [mounted, setMounted] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [email, setEmail] = useState("");
@@ -303,15 +304,26 @@ export default function VotingProtocolSignup({
         </p>
 
         {fullDiscretion ? (
-          <p
+          <div
             className={clsx(
               uiFont,
-              "mt-3 border-t pt-3 text-[11px] uppercase tracking-[0.2em] md:pt-3.5 md:text-[11.5px]",
-              embedded ? "border-white/[0.05] text-silver-dim/34" : "border-white/[0.07] text-silver-dim/42",
+              "mt-3 flex flex-col gap-3 border-t pt-3 sm:flex-row sm:items-center sm:justify-start md:pt-3.5",
+              embedded ? "border-white/[0.05]" : "border-white/[0.07]",
             )}
           >
-            Full Discretion
-          </p>
+            <Link
+              href="/documentation"
+              className={clsx(
+                "shrink-0 text-[11px] uppercase tracking-[0.2em] underline-offset-4 transition-colors hover:underline md:text-[11.5px]",
+                embedded
+                  ? "text-silver-dim/34 hover:text-gold/55"
+                  : "text-silver-dim/42 hover:text-gold/60",
+                "rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
+              )}
+            >
+              Whitepaper
+            </Link>
+          </div>
         ) : null}
 
         <div className="mt-6 md:mt-7">

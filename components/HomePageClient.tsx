@@ -289,7 +289,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           variants={heroContainer}
           initial="hidden"
           animate="show"
-          className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center gap-0 pl-[max(1.25rem,env(safe-area-inset-left,0px))] pr-[max(1.25rem,env(safe-area-inset-right,0px))] text-center md:px-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10 lg:gap-y-7 lg:px-12 lg:text-left xl:gap-x-14 xl:gap-y-9"
+          className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center gap-0 pl-[max(1.25rem,env(safe-area-inset-left,0px))] pr-[max(1.25rem,env(safe-area-inset-right,0px))] text-center md:px-12 md:translate-x-6 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10 lg:gap-y-7 lg:px-12 lg:text-left lg:translate-x-12 xl:translate-x-16 xl:gap-x-14 xl:gap-y-9"
         >
           <motion.div variants={heroItem} className="mb-4 flex w-full flex-col items-center md:mb-5 lg:col-span-12 lg:mb-0">
             <span className="font-mono-hbm text-[9px] font-medium uppercase tracking-[0.42em] text-gold/55 md:text-[10px]">
@@ -323,21 +323,25 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-prose relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
+            className="hero-editorial-prose hero-editorial-quote-serif relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
           >
-            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.02rem] font-light leading-[1.64] tracking-[-0.015em] text-cream/38 antialiased md:text-[1.1rem] md:leading-[1.68] md:text-cream/42">
-              We work with organizations to deliver an integrated view of their
-              holdings—under defined scope, delivery milestones, and performance accountability to
-              leadership.
-              Governance, risk management, and financial reporting are structured so leadership has
-              consistent, decision-ready information across the enterprise.
+            <p className="hero-editorial-luxury-prose max-w-[35ch] text-pretty text-[1.18rem] font-light leading-[1.38] tracking-[-0.017em] text-cream/52 antialiased md:text-[1.34rem] md:leading-[1.42] md:text-cream/56">
+              <span className="float-left mr-3 mt-1 text-[3.45rem] font-semibold leading-[0.78] tracking-[-0.05em] text-gold/66 md:text-[4.125rem]">
+                H
+              </span>
+              olding our firm to rigorous standards of performance and precision - with respect to
+              great expectations and stewardship on behalf of our clients.
             </p>
-            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.02rem] font-light leading-[1.64] tracking-[-0.015em] text-cream/56 antialiased md:mt-7 md:text-[1.1rem] md:leading-[1.68] md:text-cream/60">
-              Partners who treat credibility as co-equal with capital expect discipline—accuracy in
-              books and records, and external communications that align with facts and withstand
-              review by boards, investors, and regulators. Our standard is institutional
-              rigor—executed with discretion and a long-term orientation.
+            <p className="hero-editorial-luxury-prose mt-6 max-w-[42ch] text-pretty border-t border-white/[0.07] pt-5 text-[1.02rem] font-light leading-[1.58] tracking-[-0.01em] text-cream/62 antialiased md:mt-7 md:max-w-[48ch] md:pt-6 md:text-[1.1rem] md:leading-[1.62] md:text-cream/66">
+              Our Legacy is built into the results and precedents of our craft—the outcomes we defend and the record that
+              preserves them across mandates. Integrated governance holds that posture in place with
+              an unyielding architecture of protocol, principle, and procedure.
             </p>
+            <div className="mt-6 inline-block rounded-md bg-white/[0.06] px-2 pb-px pt-0 md:mt-7">
+              <span className="font-mono-hbm text-[8px] uppercase leading-none tracking-[0.34em] text-gold/58 md:text-[9px]">
+                memorandum
+              </span>
+            </div>
           </motion.div>
 
           <motion.div
@@ -349,37 +353,6 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             </p>
           </motion.div>
 
-          <motion.div
-            variants={heroItem}
-            className="hero-editorial-cta-cluster mt-6 flex w-full flex-col items-start gap-4 md:mt-8 lg:col-span-7 lg:col-start-6 lg:row-start-4 lg:mt-0 lg:pl-10 lg:-mt-16 xl:pl-12 xl:-mt-24 -translate-y-3 md:-translate-y-4 lg:-translate-y-8 xl:-translate-y-9"
-          >
-            <div className="flex flex-wrap items-center justify-start gap-3 md:gap-4">
-              <motion.div
-                whileHover={reduceMotion ? undefined : { y: -4 }}
-                whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 420, damping: 28 }}
-              >
-                <Link
-                  href="/treasury"
-                  className="garnet-btn garnet-btn-soft text-label-xs uppercase tracking-[0.22em] text-void/88 inline-block px-9 py-2.5 transition-[box-shadow,transform] duration-500"
-                >
-                  Treasury
-                </Link>
-              </motion.div>
-              <motion.div
-                whileHover={reduceMotion ? undefined : { y: -4 }}
-                whileTap={reduceMotion ? undefined : { scale: 0.97 }}
-                transition={{ type: "spring", stiffness: 420, damping: 28 }}
-              >
-                <Link
-                  href="/about"
-                  className="gold-outline-btn text-label-xs uppercase tracking-[0.22em] inline-block px-9 py-2.5 shadow-[0_0_36px_rgba(0,0,0,0.4)]"
-                >
-                  The Company
-                </Link>
-              </motion.div>
-            </div>
-          </motion.div>
         </motion.div>
 
         {/* Scroll indicator */}
@@ -628,7 +601,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
       </section>
 
       {/* ═══════════════ thesis ═══════════════ */}
-      <section className="relative overflow-x-hidden bg-void" aria-label="Thesis">
+      <section className="relative overflow-x-hidden bg-void pb-20 md:pb-24 lg:pb-28" aria-label="Thesis">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.14]"
           style={{
