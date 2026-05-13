@@ -15,6 +15,7 @@ export default function FooterBrandVotingGrid({
   showLogo = true,
   showWordmark = true,
   band = "default",
+  defaultEditorialAlignEnd: defaultEditorialAlignEndProp,
 }: {
   typography?: "luxury" | "robinhood";
   instanceId?: string;
@@ -26,11 +27,17 @@ export default function FooterBrandVotingGrid({
   showWordmark?: boolean;
   /** `thesis`: house thesis narrative + qualified-access signup. */
   band?: Band;
+  /** When `band="default"`, editorial + logo align toward the voting column (`true`) or the outer margin (`false`). Defaults from `brandSide`. */
+  defaultEditorialAlignEnd?: boolean;
 }) {
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
 
   const brandTrailing = brandSide === "right";
+  const defaultBrandAlignEnd =
+    band === "default"
+      ? (defaultEditorialAlignEndProp !== undefined ? defaultEditorialAlignEndProp : brandTrailing)
+      : brandTrailing;
 
   const logoRow =
     showLogo ? (
@@ -40,7 +47,7 @@ export default function FooterBrandVotingGrid({
           "flex max-w-full flex-nowrap items-center group w-fit min-w-0",
           showWordmark && "gap-3.5",
           band === "thesis" && "opacity-[0.92]",
-          brandTrailing && "lg:ml-auto",
+          (band === "default" ? defaultBrandAlignEnd : brandTrailing) && "lg:ml-auto",
         )}
       >
         <HbmLogo
@@ -71,18 +78,18 @@ export default function FooterBrandVotingGrid({
         <p
           className={clsx(
             `${displayFont} max-w-[20ch] text-[clamp(1.85rem,4.15vw,2.9rem)] font-light italic leading-[1.06] tracking-[-0.02em] text-cream/[0.9] antialiased [text-shadow:0_2px_48px_rgba(0,0,0,0.55),0_0_60px_rgba(180,175,170,0.06)]`,
-            brandTrailing && "lg:ml-auto",
+            defaultBrandAlignEnd && "lg:ml-auto",
           )}
         >
-          Built to Last
+          Breaking
         </p>
         <p
           className={clsx(
             `${displayFont} max-w-[20ch] text-[clamp(1.85rem,4.15vw,2.9rem)] font-light italic leading-[1.06] tracking-[-0.02em] text-gold/55 antialiased [text-shadow:0_2px_40px_rgba(0,0,0,0.45)]`,
-            brandTrailing && "lg:ml-auto",
+            defaultBrandAlignEnd && "lg:ml-auto",
           )}
         >
-          Ready to Scale
+          Legendary
         </p>
       </div>
 
@@ -90,7 +97,7 @@ export default function FooterBrandVotingGrid({
         <p
           className={clsx(
             `${uiFont} text-[12px] uppercase tracking-[0.15em] leading-[1.9] text-silver-dim/75 md:text-[13px] md:tracking-[0.14em]`,
-            brandTrailing && "lg:ml-auto",
+            defaultBrandAlignEnd && "lg:ml-auto",
           )}
         >
           An enterprise holdings company committed to the infrastructure of decentralized finance and digital assets.
@@ -99,7 +106,7 @@ export default function FooterBrandVotingGrid({
         <p
           className={clsx(
             `${uiFont} border-t border-white/[0.07] pt-3 text-[11px] uppercase tracking-[0.2em] text-silver-dim/42 md:pt-3.5 md:text-[11.5px]`,
-            brandTrailing && "lg:ml-auto",
+            defaultBrandAlignEnd && "lg:ml-auto",
           )}
         >
           Full Discretion
@@ -109,15 +116,7 @@ export default function FooterBrandVotingGrid({
   );
 
   const thesisEditorial = (
-    <div
-      className={clsx(
-        "relative flex flex-col gap-8 md:gap-10",
-        !brandTrailing &&
-          "border-l border-gold/[0.16] pl-6 md:pl-10 [box-shadow:inset_1px_0_0_rgba(180,175,170,0.08)]",
-        brandTrailing &&
-          "lg:border-l-0 lg:border-r lg:border-gold/[0.16] lg:pl-0 lg:pr-10 lg:[box-shadow:inset_-1px_0_0_rgba(180,175,170,0.08)]",
-      )}
-    >
+    <div className="relative flex flex-col gap-8 md:gap-10">
       <div>
         <p className={`${uiFont} text-label-xs uppercase tracking-[0.38em] text-gold/55`}>— House thesis</p>
         <div className="mt-5 space-y-2 md:mt-7">
@@ -214,7 +213,9 @@ export default function FooterBrandVotingGrid({
         "flex w-full min-w-0 flex-col gap-8",
         band === "default" && "max-w-xl",
         band === "thesis" && "max-w-2xl",
-        brandTrailing && "lg:justify-self-end lg:items-end lg:text-right",
+        band === "thesis" && brandTrailing && "lg:justify-self-end lg:items-end lg:text-right",
+        band === "default" && defaultBrandAlignEnd && "lg:justify-self-end lg:items-end lg:text-right",
+        band === "default" && !defaultBrandAlignEnd && "lg:justify-self-start lg:items-start lg:text-left",
       )}
     >
       {band === "default" && logoRow}

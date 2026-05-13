@@ -285,7 +285,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-quote-serif hero-editorial-headline font-cormorant font-light text-cream/[0.97] [text-shadow:0_4px_48px_rgba(0,0,0,0.75)] lg:col-span-12 lg:mt-0"
+            className="hero-editorial-quote-serif hero-editorial-headline font-cormorant font-light text-cream/[0.44] [text-shadow:0_3px_32px_rgba(0,0,0,0.42)] lg:col-span-12 lg:mt-0"
           >
             <span className="inline-flex max-w-full flex-nowrap items-baseline justify-center gap-x-[0.35em] lg:justify-center">
               <AnimatedHeadline text="The Pursuit" delay={0} nowrap />
@@ -293,7 +293,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 text="Of Exception"
                 delay={0}
                 nowrap
-                className="font-semibold italic text-cream/[0.97] [filter:drop-shadow(0_6px_32px_rgba(0,0,0,0.55))]"
+                className="font-semibold italic text-cream/[0.48] [filter:drop-shadow(0_4px_24px_rgba(0,0,0,0.35))]"
               />
             </span>
           </motion.div>
@@ -311,18 +311,18 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             variants={heroItem}
             className="hero-editorial-prose relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
           >
-            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/72 antialiased md:text-[1.2rem] md:leading-[1.74] md:text-cream/75">
+            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/50 antialiased md:text-[1.2rem] md:leading-[1.74] md:text-cream/54">
               We work with organizations to deliver an integrated view of their
               holdings—under defined scope, delivery milestones, and performance accountability to
               leadership.
               Governance, risk management, and financial reporting are structured so leadership has
               consistent, decision-ready information across the enterprise.
             </p>
-            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/72 antialiased md:mt-7 md:text-[1.2rem] md:leading-[1.74] md:text-cream/75">
-              We work with partners for whom credibility is as material as capital: discipline,
-              accuracy in books and records, and external communications that align
-              with facts and withstand review by boards, investors, and regulators. Our standard is
-              institutional rigor—executed with discretion and a long-term orientation.
+            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/78 antialiased md:mt-7 md:text-[1.2rem] md:leading-[1.74] md:text-cream/82">
+              Partners who treat credibility as co-equal with capital expect discipline—accuracy in
+              books and records, and external communications that align with facts and withstand
+              review by boards, investors, and regulators. Our standard is institutional
+              rigor—executed with discretion and a long-term orientation.
             </p>
           </motion.div>
 
@@ -383,8 +383,9 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           <FooterBrandVotingGrid
             typography="robinhood"
             instanceId="home-below-hero"
-            brandSide="left"
+            brandSide="right"
             band="default"
+            defaultEditorialAlignEnd={false}
             showLogo={false}
           />
         </div>
