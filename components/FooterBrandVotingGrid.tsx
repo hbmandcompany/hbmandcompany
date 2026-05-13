@@ -80,7 +80,7 @@ export default function FooterBrandVotingGrid({
           defaultBrandAlignEnd && "lg:ml-auto lg:max-w-max lg:text-right",
         )}
       >
-        Write{" "}
+        Writing{" "}
         <span className="font-semibold italic text-gold/40 [text-shadow:0_2px_32px_rgba(0,0,0,0.4)]">History</span>
       </p>
 
