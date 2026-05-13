@@ -103,7 +103,7 @@ export default function FooterBrandVotingGrid({
   const thesisEditorial = (
     <div className="relative flex flex-col gap-8 md:gap-10">
       <div>
-        <p className={`${uiFont} text-label-xs uppercase tracking-[0.38em] text-gold/55`}>— House thesis</p>
+        <p className={`${uiFont} text-label-xs uppercase tracking-[0.38em] text-gold/55`}>— thesis</p>
         <div className="mt-5 space-y-2 md:mt-7">
           <p
             className={clsx(
