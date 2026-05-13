@@ -56,6 +56,18 @@
     font-family: var(--font-robinhood), "DM Sans", system-ui, sans-serif;
   }
 
+  .font-base-fraunces {
+    font-family: var(--font-base-fraunces), Georgia, serif;
+  }
+
+  .font-base-inter {
+    font-family: var(--font-base-inter), system-ui, sans-serif;
+  }
+
+  .font-base-plex {
+    font-family: var(--font-base-plex), "IBM Plex Mono", monospace;
+  }
+
   /* Homepage: NavBar still uses .font-cormorant / .font-mono-hbm — remap to DM Sans */
   .home-robinhood .font-cormorant,
   .home-robinhood .font-mono-hbm {

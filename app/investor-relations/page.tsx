@@ -27,6 +27,39 @@ const cadence = [
   "Treasury commentary is written for boards, investors, and regulators first; everyone else reads downstream from that standard.",
 ] as const;
 
+const enterpriseStack = [
+  {
+    name: "LightRain",
+    lane: "Treasury, risk, and operating telemetry",
+    fit:
+      "LightRain is the observability layer the house uses when reserves, wallet exposure, and on-chain operating data need to be translated into a board-readable control surface. The workflow maps cleanly to Fortune 500 treasury teams that already expect Bloomberg-, ERP-, and BI-style visibility before approving capital movement.",
+    stack:
+      "Read-only analytics, portfolio risk instrumentation, and PIOL-fed external context give leadership a single surveillance surface instead of fragmented chain explorers and spreadsheet stitching.",
+  },
+  {
+    name: "MoneyBagg",
+    lane: "Balance aggregation and finance operations",
+    fit:
+      "MoneyBagg is positioned around the same problem large enterprises face across banks, custodians, and business units: too many balances, too many ledgers, and not enough consolidated visibility. We use that stack logic where finance teams need one answer about where assets sit and how they reconcile.",
+    stack:
+      "Cross-chain wallet aggregation, self-custody posture, and consolidated balance reporting align with Fortune 500-style controllership disciplines around cash positioning, settlement visibility, and exception management.",
+  },
+  {
+    name: "BlackLetter",
+    lane: "Execution, approvals, and document control",
+    fit:
+      "BlackLetter addresses a workflow every regulated enterprise already understands: signatures, approvals, and records that must survive counsel review. Inside the house, that informs how we think about deal execution, policy acknowledgements, and controlled document flow.",
+    stack:
+      "Chain-of-custody execution, tamper-evident records, and premium signing posture fit naturally beside the legal, procurement, and governance systems that dominate Fortune 500 operating environments.",
+  },
+] as const;
+
+const fortune500Context = [
+  "We are not claiming blanket Fortune 500 deployment. The point is workflow adjacency: our software stack is built around the same control problems those enterprises already pay to solve.",
+  "The house values products that can sit beside existing systems of record rather than demand a theatrical rip-and-replace event.",
+  "What investors should track is not consumer virality but enterprise legibility: can the product survive treasury, legal, controllership, and board review at the same time?",
+] as const;
+
 export const metadata: Metadata = {
   title: "Investor Relations",
   description:
@@ -129,6 +162,53 @@ export default function InvestorRelationsPage() {
               <p className="mt-4 text-sm leading-[1.9] text-silver-dim/72">{item.detail}</p>
             </article>
           ))}
+        </section>
+
+        <section className="mt-12 rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-obsidian/85 via-void/95 to-black p-6 md:p-8">
+          <div className="grid gap-8 lg:grid-cols-[minmax(0,1.1fr)_minmax(18rem,0.9fr)] lg:gap-10">
+            <div>
+              <p className="font-mono-hbm text-[10px] uppercase tracking-[0.24em] text-gold/55">Enterprise software fit</p>
+              <h2 className="mt-3 max-w-4xl font-cormorant text-[2rem] font-light leading-tight text-cream/88 md:text-[2.55rem]">
+                How the house software stack maps onto
+                {" "}
+                <span className="font-semibold italic text-gold/60">Fortune 500-style workflows.</span>
+              </h2>
+              <p className="mt-5 max-w-3xl text-pretty text-[1rem] leading-[1.9] text-silver-dim/74">
+                The operating question is not whether a large enterprise suddenly becomes chain-native in one motion.
+                The question is whether our software companies solve control, reporting, and execution problems that
+                already exist inside the Fortune 500. That is where we see software leverage compounding.
+              </p>
+            </div>
+
+            <aside className="rounded-[1.5rem] border border-gold/[0.14] bg-white/[0.03] p-5">
+              <p className="font-mono-hbm text-[9px] uppercase tracking-[0.22em] text-gold/55">Important context</p>
+              <ul className="mt-4 space-y-4">
+                {fortune500Context.map((item) => (
+                  <li key={item} className="border-l border-gold/30 pl-4 text-sm leading-relaxed text-silver-dim/72">
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </aside>
+          </div>
+
+          <div className="mt-8 grid gap-6 xl:grid-cols-3">
+            {enterpriseStack.map((item) => (
+              <article
+                key={item.name}
+                className="rounded-[1.5rem] border border-white/[0.08] bg-white/[0.03] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.03)]"
+              >
+                <p className="font-mono-hbm text-[9px] uppercase tracking-[0.18em] text-gold/55">{item.name}</p>
+                <h3 className="mt-3 font-cormorant text-[1.55rem] font-semibold leading-snug text-cream/88">
+                  {item.lane}
+                </h3>
+                <p className="mt-4 text-sm leading-[1.9] text-silver-dim/72">{item.fit}</p>
+                <p className="mt-4 border-t border-white/[0.08] pt-4 text-sm leading-[1.85] text-silver-dim/64">
+                  {item.stack}
+                </p>
+              </article>
+            ))}
+          </div>
         </section>
 
         <section className="mt-12 rounded-[2rem] border border-white/[0.08] bg-gradient-to-br from-[#120f10] to-[#090909] p-6 md:p-8">
