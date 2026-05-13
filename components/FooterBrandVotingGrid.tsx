@@ -201,7 +201,7 @@ export default function FooterBrandVotingGrid({
         </>
       }
       descriptionClassName={`${uiFont} mt-3 text-[11px] md:text-[12px] font-light leading-[1.82] tracking-[0.04em] text-silver-dim/65 normal-case`}
-      submitLabel="Request introduction"
+      submitLabel="Request Access"
       successMessage="If there is a fit, the house will follow up by email."
     />
   );

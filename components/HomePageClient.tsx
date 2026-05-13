@@ -376,6 +376,20 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         </div>
       </section>
 
+      {/* ═══════════════ Request access — below hero ═══════════════ */}
+      <section className="relative overflow-x-hidden bg-void" aria-label="Request access to the voting protocol">
+        <div className="gold-rule w-full" />
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 py-12 md:px-12 md:py-14">
+          <FooterBrandVotingGrid
+            typography="robinhood"
+            instanceId="home-below-hero"
+            brandSide="left"
+            band="default"
+            showLogo={false}
+          />
+        </div>
+      </section>
+
       {/* ═══════════════ MARQUEE ═══════════════ */}
       {cryptoMarqueeSlot}
 

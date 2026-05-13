@@ -1,6 +1,8 @@
 "use client";
 
-import { useState, type FormEvent, type ReactNode } from "react";
+import { useState, useEffect, useCallback, type FormEvent, type ReactNode } from "react";
+import { createPortal } from "react-dom";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 type Typography = "luxury" | "robinhood";
 
@@ -29,11 +31,53 @@ export default function VotingProtocolSignup({
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
   const headingId = `${instanceId}-voting-protocol-heading`;
-  const emailId = `${instanceId}-voting-email`;
+  const triggerId = `${instanceId}-voting-email-trigger`;
+  const modalTitleId = `${instanceId}-voting-modal-title`;
+  const dialogId = `${instanceId}-voting-dialog`;
+  const emailModalId = `${instanceId}-voting-email-modal`;
 
+  const reduceMotion = useReducedMotion();
+  const [mounted, setMounted] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  const closeModal = useCallback(() => {
+    setModalOpen(false);
+    setStatus("idle");
+    setMessage("");
+  }, []);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [modalOpen]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeModal();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [modalOpen, closeModal]);
+
+  useEffect(() => {
+    if (!modalOpen) return;
+    const id = requestAnimationFrame(() => {
+      document.getElementById(emailModalId)?.focus();
+    });
+    return () => cancelAnimationFrame(id);
+  }, [modalOpen, emailModalId]);
 
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
@@ -85,70 +129,167 @@ export default function VotingProtocolSignup({
     );
   const buttonLabel = submitLabel ?? "Request access";
 
-  const descClass =
-    descriptionClassName ??
-    `${uiFont} mt-3 text-[11px] uppercase tracking-[0.14em] leading-relaxed text-silver-dim/55`;
+  const defaultNoteTypography = `${uiFont} text-[10px] uppercase tracking-[0.14em] leading-relaxed text-silver-dim/55 md:text-[11px]`;
+  const descClass = descriptionClassName ?? `${defaultNoteTypography} mt-2.5`;
+
+  const inputSurfaceClass = `${uiFont} min-h-[44px] w-full rounded-lg border border-white/[0.10] bg-void/70 px-3.5 text-left text-[12px] tracking-[0.06em] text-cream/90 outline-none transition-[border-color,box-shadow] duration-300 focus-visible:border-gold/35 focus-visible:ring-1 focus-visible:ring-gold/25 md:min-h-[46px] md:rounded-xl md:px-4 md:text-[13px]`;
+
+  const backdropTransition = reduceMotion ? { duration: 0.18 } : { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const };
+  const panelTransition = reduceMotion
+    ? { duration: 0.18 }
+    : { type: "spring" as const, stiffness: 420, damping: 34, mass: 0.88 };
+
+  const modal =
+    mounted ? (
+      createPortal(
+        <AnimatePresence>
+          {modalOpen ? (
+            <motion.div
+              key={`${instanceId}-signup-modal`}
+              className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6"
+              role="presentation"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={backdropTransition}
+            >
+              <button
+                type="button"
+                aria-label="Close dialog"
+                className="absolute inset-0 bg-void/82 backdrop-blur-[6px]"
+                onClick={closeModal}
+              />
+              <motion.div
+                id={dialogId}
+                role="dialog"
+                aria-modal="true"
+                aria-labelledby={modalTitleId}
+                className="relative z-10 max-h-[min(90dvh,640px)] w-full max-w-md overflow-y-auto rounded-2xl border border-white/[0.12] bg-gradient-to-b from-obsidian via-void to-void p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_40px_90px_rgba(0,0,0,0.65)] md:p-8"
+                initial={
+                  reduceMotion
+                    ? { scale: 0.99 }
+                    : { scale: 0.94, y: 20, filter: "blur(6px)" }
+                }
+                animate={
+                  reduceMotion
+                    ? { scale: 1 }
+                    : { scale: 1, y: 0, filter: "blur(0px)" }
+                }
+                transition={panelTransition}
+                onClick={(ev) => ev.stopPropagation()}
+              >
+                <button
+                  type="button"
+                  onClick={closeModal}
+                  className={`${uiFont} absolute right-4 top-4 rounded-lg px-2 py-1 text-[10px] uppercase tracking-[0.2em] text-silver-dim/45 outline-none transition-colors hover:text-cream/70 focus-visible:ring-2 focus-visible:ring-gold/35 md:right-5 md:top-5`}
+                >
+                  Close
+                </button>
+
+                <p className={`${uiFont} text-[10px] text-gold/65 uppercase tracking-[0.28em] md:text-label-xs md:tracking-[0.32em]`}>
+                  {eyebrowText}
+                </p>
+                <h2 id={modalTitleId} className={`${displayFont} mt-3 text-xl font-light leading-snug text-cream/88 md:text-2xl`}>
+                  {headingNode}
+                </h2>
+                <div className="mt-4 max-h-[min(36vh,200px)] overflow-y-auto pr-1">
+                  <p className={descriptionClassName ?? defaultNoteTypography} role="note">
+                    {descriptionNode}
+                  </p>
+                </div>
+
+                <form onSubmit={onSubmit} className="mt-6 space-y-4 border-t border-white/[0.08] pt-6">
+                  <div className="space-y-2">
+                    <label htmlFor={emailModalId} className={`${uiFont} block text-label-xs uppercase tracking-[0.16em] text-silver-dim/55`}>
+                      Email address
+                    </label>
+                    <input
+                      id={emailModalId}
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      required
+                      value={email}
+                      onChange={(ev) => setEmail(ev.target.value)}
+                      disabled={status === "loading"}
+                      placeholder="you@domain.com"
+                      className={inputSurfaceClass}
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={status === "loading"}
+                    className={`gold-outline-btn ${uiFont} w-full bg-black px-4 py-2.5 text-[10px] uppercase tracking-[0.2em] text-cream shadow-[0_0_36px_rgba(0,0,0,0.4)] transition-transform active:scale-[0.99] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void disabled:pointer-events-none disabled:opacity-45 md:text-label-xs md:tracking-[0.22em]`}
+                  >
+                    {status === "loading" ? "Sending…" : buttonLabel}
+                  </button>
+
+                  {(status === "success" || status === "error") && message ? (
+                    <p
+                      className={`${uiFont} text-label-xs uppercase tracking-[0.12em] ${
+                        status === "success" ? "text-digital-80s" : "text-cream/55"
+                      }`}
+                      role="status"
+                      aria-live="polite"
+                    >
+                      {message}
+                    </p>
+                  ) : null}
+                </form>
+              </motion.div>
+            </motion.div>
+          ) : null}
+        </AnimatePresence>,
+        document.body,
+      )
+    ) : null;
+
+  const openModal = () => {
+    setModalOpen(true);
+    setStatus("idle");
+    setMessage("");
+  };
 
   return (
-    <aside
-      className="relative w-full min-w-0 max-w-md rounded-2xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 md:p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)]"
-      aria-labelledby={headingId}
-    >
-      <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-gold/[0.04] blur-3xl" aria-hidden />
+    <>
+      {modal}
 
-      <div className="relative">
-        <p className={`${uiFont} text-label-xs text-gold/65 uppercase tracking-[0.32em]`}>{eyebrowText}</p>
-        <h3
-          id={headingId}
-          className={`${displayFont} mt-3 text-xl font-light leading-snug text-cream/88 md:text-2xl`}
-        >
-          {headingNode}
-        </h3>
-        <p className={descClass} role="note">
-          {descriptionNode}
-        </p>
+      <aside
+        className="relative w-full min-w-0 max-w-[26rem] rounded-xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)] md:p-7"
+        aria-labelledby={headingId}
+      >
+        <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-gold/[0.04] blur-3xl md:h-40 md:w-40" aria-hidden />
 
-        <form onSubmit={onSubmit} className="mt-7 space-y-4">
-          <div className="space-y-2">
-            <label htmlFor={emailId} className={`${uiFont} sr-only`}>
-              Email address
-            </label>
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-              <input
-                id={emailId}
-                name="email"
-                type="email"
-                autoComplete="email"
-                required
-                value={email}
-                onChange={(ev) => setEmail(ev.target.value)}
-                disabled={status === "loading"}
-                placeholder="Email address"
-                className={`${uiFont} min-h-[48px] flex-1 rounded-xl border border-white/[0.10] bg-void/70 px-4 text-[13px] tracking-[0.06em] text-cream/90 placeholder:text-silver-dim/35 outline-none transition-[border-color,box-shadow] duration-300 focus:border-gold/35 focus:ring-1 focus:ring-gold/25 disabled:opacity-55`}
-              />
-              <button
-                type="submit"
-                disabled={status === "loading"}
-                className={`gold-outline-btn ${uiFont} inline-block shrink-0 whitespace-nowrap bg-black px-4 py-1.5 text-[10px] uppercase tracking-[0.18em] text-cream shadow-[0_0_36px_rgba(0,0,0,0.4)] active:scale-[0.98] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void disabled:pointer-events-none disabled:opacity-45 sm:px-5 sm:py-2 sm:text-label-xs sm:tracking-[0.22em]`}
-              >
-                {status === "loading" ? "Sending…" : buttonLabel}
-              </button>
-            </div>
-          </div>
+        <div className="relative">
+          <p className={`${uiFont} text-[10px] text-gold/65 uppercase tracking-[0.28em] md:text-label-xs md:tracking-[0.32em]`}>
+            {eyebrowText}
+          </p>
+          <h3
+            id={headingId}
+            className={`${displayFont} mt-2.5 text-lg font-light leading-snug text-cream/88 md:mt-3 md:text-xl`}
+          >
+            {headingNode}
+          </h3>
+          <p className={descClass} role="note">
+            {descriptionNode}
+          </p>
 
-          {(status === "success" || status === "error") && message && (
-            <p
-              className={`${uiFont} text-label-xs uppercase tracking-[0.12em] ${
-                status === "success" ? "text-digital-80s" : "text-cream/55"
-              }`}
-              role="status"
-              aria-live="polite"
+          <div className="mt-6 md:mt-7">
+            <button
+              id={triggerId}
+              type="button"
+              aria-haspopup="dialog"
+              aria-controls={dialogId}
+              aria-expanded={modalOpen}
+              onClick={openModal}
+              className={`${inputSurfaceClass} flex cursor-pointer items-center text-silver-dim/35 hover:border-white/[0.14] md:hover:border-white/[0.12]`}
             >
-              {message}
-            </p>
-          )}
-        </form>
-      </div>
-    </aside>
+              <span>Request Access</span>
+            </button>
+          </div>
+        </div>
+      </aside>
+    </>
   );
 }
