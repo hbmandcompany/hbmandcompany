@@ -122,7 +122,7 @@ export default function HeroNewsCarousel() {
   const [progress, setProgress] = useState(0);
   const [manualPaused, setManualPaused] = useState(false);
   const [wireHold, setWireHold] = useState(false);
-  const reduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion() ?? false;
   const n = SLIDES.length;
 
   const manualPausedRef = useRef(false);
