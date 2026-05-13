@@ -34,6 +34,9 @@ export default function FooterBrandVotingGrid({
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
 
+  /** Same note + trigger treatment as the “Qualified access” signup block (sentence case, readable silver). */
+  const qualifiedFormNoteClassName = `${uiFont} mt-3 text-[11px] md:text-[12px] font-light leading-[1.82] tracking-[0.04em] text-silver-dim/65 normal-case`;
+
   const brandTrailing = brandSide === "right";
   const defaultBrandAlignEnd =
     band === "default"
@@ -171,7 +174,7 @@ export default function FooterBrandVotingGrid({
           .
         </>
       }
-      descriptionClassName={`${uiFont} mt-3 text-[11px] md:text-[12px] font-light leading-[1.82] tracking-[0.04em] text-silver-dim/65 normal-case`}
+      descriptionClassName={qualifiedFormNoteClassName}
       submitLabel="Request Access"
       successMessage="If there is a fit, the house will follow up by email."
     />
@@ -216,13 +219,25 @@ export default function FooterBrandVotingGrid({
               <>
                 <div className="min-w-0 lg:pr-10 xl:pr-12">{brandColumn}</div>
                 <div className="min-w-0 border-t border-white/[0.08] pt-10 lg:border-l lg:border-t-0 lg:pt-0 lg:pl-10 xl:pl-12">
-                  <VotingProtocolSignup typography={typography} instanceId={instanceId} embedded fullDiscretion />
+                  <VotingProtocolSignup
+                    typography={typography}
+                    instanceId={instanceId}
+                    embedded
+                    fullDiscretion
+                    descriptionClassName={qualifiedFormNoteClassName}
+                  />
                 </div>
               </>
             ) : (
               <>
                 <div className="min-w-0 border-t border-white/[0.08] pt-10 lg:border-r lg:border-t-0 lg:pt-0 lg:pr-10 xl:pr-12 lg:[order-1]">
-                  <VotingProtocolSignup typography={typography} instanceId={instanceId} embedded fullDiscretion />
+                  <VotingProtocolSignup
+                    typography={typography}
+                    instanceId={instanceId}
+                    embedded
+                    fullDiscretion
+                    descriptionClassName={qualifiedFormNoteClassName}
+                  />
                 </div>
                 <div className="min-w-0 lg:pl-10 xl:pl-12 lg:[order-2]">{brandColumn}</div>
               </>

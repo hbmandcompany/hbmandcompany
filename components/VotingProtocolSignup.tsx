@@ -137,11 +137,16 @@ export default function VotingProtocolSignup({
   const buttonLabel = submitLabel ?? "Request access";
 
   const defaultNoteTypography = `${uiFont} text-[11px] uppercase tracking-[0.13em] leading-relaxed text-silver-dim/55 md:text-[12.5px]`;
-  const embeddedNoteTypography = `${uiFont} text-[11px] uppercase tracking-[0.13em] leading-relaxed text-silver-dim/48 md:text-[12.5px]`;
+  const embeddedNoteTypography = `${uiFont} text-[11px] uppercase tracking-[0.13em] leading-relaxed text-silver-dim/34 md:text-[12.5px]`;
   const descClass =
     descriptionClassName ?? `${embedded ? embeddedNoteTypography : defaultNoteTypography} mt-2.5`;
 
-  const inputSurfaceClass = `${uiFont} min-h-[46px] w-full rounded-lg border border-white/[0.10] bg-void/70 px-4 text-left text-[13px] tracking-[0.06em] text-cream/90 outline-none transition-[border-color,box-shadow] duration-300 focus-visible:border-gold/35 focus-visible:ring-1 focus-visible:ring-gold/25 md:min-h-[50px] md:rounded-xl md:px-[1.125rem] md:text-[14px]`;
+  const inputSurfaceBase = `${uiFont} min-h-[46px] w-full rounded-lg border border-white/[0.10] bg-void/70 px-4 text-left text-[13px] tracking-[0.06em] outline-none transition-[border-color,box-shadow] duration-300 focus-visible:border-gold/35 focus-visible:ring-1 focus-visible:ring-gold/25 md:min-h-[50px] md:rounded-xl md:px-[1.125rem] md:text-[14px]`;
+
+  const inputSurfaceClass = `${inputSurfaceBase} text-cream/90`;
+
+  /** Trigger shows silver label (matches “Request Access” row on Qualified access). */
+  const inputTriggerClass = `${inputSurfaceBase} text-silver-dim/35`;
 
   const backdropTransition = reduceMotion ? { duration: 0.18 } : { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const };
   const panelTransition = reduceMotion
@@ -318,9 +323,8 @@ export default function VotingProtocolSignup({
             aria-expanded={modalOpen}
             onClick={openModal}
             className={clsx(
-              inputSurfaceClass,
+              inputTriggerClass,
               "flex cursor-pointer items-center hover:border-white/[0.14] md:hover:border-white/[0.12]",
-              embedded ? "text-silver-dim/28" : "text-silver-dim/35",
             )}
           >
             <span>Request Access</span>

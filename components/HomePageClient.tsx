@@ -59,8 +59,8 @@ const whatWeBuildOutlineCta =
 
 function WhatWeBuildInstrumentCard({ item }: { item: WhatWeBuildItem }) {
   const shell = clsx(
-    "card-3d group relative w-full min-h-[420px] overflow-hidden cursor-pointer bg-obsidian",
-    "md:mx-auto md:max-w-4xl md:min-h-[min(72vh,640px)] lg:min-h-[min(76vh,700px)]",
+    "card-3d group relative flex h-full min-h-[min(52vh,420px)] w-full flex-1 flex-col overflow-hidden cursor-pointer bg-obsidian",
+    "lg:min-h-[min(64vh,560px)]",
   );
   const inner = (
     <>
@@ -98,13 +98,13 @@ function WhatWeBuildInstrumentCard({ item }: { item: WhatWeBuildItem }) {
         href={item.externalHref}
         target="_blank"
         rel="noopener noreferrer"
-        className={`${shell} block`}
+        className={clsx(shell, "block h-full min-h-0")}
       >
         {inner}
       </a>
     );
   }
-  return <div className={shell}>{inner}</div>;
+  return <div className={clsx(shell, "min-h-0")}>{inner}</div>;
 }
 
 const featuredWork: {
@@ -142,7 +142,7 @@ const featuredWork: {
 
 type FeaturedWorkItem = (typeof featuredWork)[number];
 
-/** One full-width Suite band per instrument: 52PickUp, then ThreeWiseMen — one card each. */
+/** Suite instruments shown together: 52PickUp, ThreeWiseMen — one row, two cards. */
 const SUITE_SECTION_ORDER = ["pickup", "spatial"] as const satisfies readonly CardLinocutVariant[];
 
 const suiteSections: FeaturedWorkItem[] = SUITE_SECTION_ORDER.map((pv) => {
@@ -155,8 +155,8 @@ function FeaturedSuiteInstrumentCard({ work }: { work: FeaturedWorkItem }) {
   return (
     <div
       className={clsx(
-        "card-3d group relative h-full w-full min-h-[380px] overflow-hidden cursor-pointer bg-obsidian",
-        "md:mx-auto md:min-h-[520px] md:max-w-4xl",
+        "card-3d group relative h-full w-full min-h-[min(48vh,380px)] overflow-hidden cursor-pointer bg-obsidian",
+        "lg:min-h-[min(58vh,520px)]",
       )}
     >
       <div className="absolute inset-0 transition-all duration-700 group-hover:scale-[1.05]" aria-hidden>
@@ -400,74 +400,83 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
       {/* ═══════════════ MARQUEE ═══════════════ */}
       {cryptoMarqueeSlot}
 
-      {/* ═══════════════ WHAT WE BUILD — full-page band per product ═══════════════ */}
-      {whatWeBuildItems.map((item, sectionIndex) => (
-        <section
-          key={item.id}
-          className={clsx(
-            "relative flex min-h-[100dvh] flex-col justify-center overflow-hidden section-mid py-24 md:py-32",
-            sectionIndex > 0 && "border-t border-white/[0.06]",
-          )}
-        >
-          <div className="pointer-events-none absolute inset-0 purple-bloom" />
-          <div className="pointer-events-none absolute inset-0 city-glow opacity-35" />
+      {/* ═══════════════ WHAT WE BUILD — LightRain & MoneyBagg, side by side ═══════════════ */}
+      <section className="relative flex min-h-0 flex-col justify-center overflow-hidden section-mid py-24 md:py-32">
+        <div className="pointer-events-none absolute inset-0 purple-bloom" />
+        <div className="pointer-events-none absolute inset-0 city-glow opacity-35" />
 
-          <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-            <div className="mb-10 flex flex-col justify-between gap-6 md:mb-14 md:flex-row md:items-end">
-              <div>
-                <SectionReveal>
-                  <span className="text-label-xs uppercase tracking-[0.35em] text-garnet/70">
-                    — What We Build
-                  </span>
-                </SectionReveal>
-                <SectionReveal delay={0.1}>
-                  {item.pixelVariant === "lightrain" ? (
-                    <>
-                      <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
-                        <span className="font-bold italic">LightRain</span>
-                        <span className="text-cream/65"> · Credit / Debit</span>
-                      </h2>
-                      <p className="mt-3 max-w-lg font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/50">
-                        Inflows, outflows &amp; ledger lines — read-only observability on Base · PIOL oracle rails
-                      </p>
-                    </>
-                  ) : (
-                    <>
-                      <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
-                        <span className="font-bold italic">MoneyBagg</span>
-                        <span className="text-cream/65"> · Multi-Chain Balance</span>
-                      </h2>
-                      <p className="mt-3 max-w-lg font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/50">
-                        Non-custodial wallet · self-custody rails
-                      </p>
-                    </>
-                  )}
-                </SectionReveal>
-              </div>
-              <SectionReveal delay={0.2}>
-                {item.pixelVariant === "lightrain" ? (
-                  <Link href="/work" className={whatWeBuildOutlineCta}>
-                    LightRain
-                  </Link>
-                ) : (
-                  <Link
-                    href="https://moneyba.gg"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={whatWeBuildOutlineCta}
-                  >
-                    MoneyBagg
-                  </Link>
-                )}
-              </SectionReveal>
-            </div>
-
-            <SectionReveal delay={0.08}>
-              <WhatWeBuildInstrumentCard item={item} />
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <div className="mb-10 md:mb-14">
+            <SectionReveal>
+              <span className="text-label-xs uppercase tracking-[0.35em] text-garnet/70">— What We Build</span>
             </SectionReveal>
           </div>
-        </section>
-      ))}
+
+          <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:items-stretch md:gap-x-8 md:gap-y-10 xl:gap-x-10">
+            {whatWeBuildItems.map((item, itemIndex) => (
+              <div
+                key={item.id}
+                className={clsx(
+                  "flex h-full min-h-0 flex-col",
+                  itemIndex > 0 && "border-t border-white/[0.06] pt-12 md:border-t-0 md:pt-0",
+                )}
+              >
+                <div
+                  className={clsx(
+                    "mb-8 flex shrink-0 flex-col justify-between gap-6 sm:mb-10 md:min-h-[10.25rem] md:flex-row md:items-end",
+                  )}
+                >
+                  <div>
+                    <SectionReveal delay={itemIndex * 0.06}>
+                      {item.pixelVariant === "lightrain" ? (
+                        <>
+                          <h2 className="text-xl font-light leading-tight text-cream/80 md:text-2xl">
+                            <span className="font-bold italic">LightRain</span>
+                            <span className="text-cream/65"> · Credit / Debit</span>
+                          </h2>
+                          <p className="mt-2.5 max-w-lg font-mono-hbm text-[9px] uppercase leading-relaxed tracking-[0.18em] text-silver-dim/50 md:mt-3 md:text-[9.5px] md:tracking-[0.2em]">
+                            Inflows, outflows &amp; ledger lines — read-only observability on Base · PIOL oracle rails
+                          </p>
+                        </>
+                      ) : (
+                        <>
+                          <h2 className="text-xl font-light leading-tight text-cream/80 md:text-2xl">
+                            <span className="font-bold italic">MoneyBagg</span>
+                            <span className="text-cream/65"> · Multi-Chain Balance</span>
+                          </h2>
+                          <p className="mt-2.5 max-w-lg font-mono-hbm text-[9px] uppercase leading-relaxed tracking-[0.18em] text-silver-dim/50 md:mt-3 md:text-[9.5px] md:tracking-[0.2em]">
+                            Non-custodial wallet · self-custody rails
+                          </p>
+                        </>
+                      )}
+                    </SectionReveal>
+                  </div>
+                  <SectionReveal delay={0.12 + itemIndex * 0.06}>
+                    {item.pixelVariant === "lightrain" ? (
+                      <Link href="/work" className={clsx(whatWeBuildOutlineCta, "shrink-0")}>
+                        LightRain
+                      </Link>
+                    ) : (
+                      <Link
+                        href="https://moneyba.gg"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={clsx(whatWeBuildOutlineCta, "shrink-0")}
+                      >
+                        MoneyBagg
+                      </Link>
+                    )}
+                  </SectionReveal>
+                </div>
+
+                <SectionReveal delay={0.08 + itemIndex * 0.05} className="flex min-h-0 flex-1 flex-col">
+                  <WhatWeBuildInstrumentCard item={item} />
+                </SectionReveal>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ═══════════════ CHAINS MARQUEE ═══════════════ */}
       <MarqueeStrip
@@ -475,45 +484,39 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         reverse speed="slow"
       />
 
-      {/* ═══════════════ FEATURED WORK (Suite — 52PickUp, then ThreeWiseMen, one card per band) ═══════════════ */}
-      {suiteSections.map((work, sectionIndex) => (
-        <section
-          key={work.pixelVariant}
-          className={clsx(
-            "relative overflow-hidden py-28 md:py-40 section-raised",
-            sectionIndex > 0 && "border-t border-white/[0.06]",
-          )}
-        >
-          <div className="absolute inset-0 amber-bloom pointer-events-none opacity-35" />
-          <div className="absolute inset-0 garnet-bloom-top pointer-events-none" />
+      {/* ═══════════════ FEATURED WORK (Suite — 52PickUp & ThreeWiseMen, side by side) ═══════════════ */}
+      <section className="relative overflow-hidden py-28 md:py-40 section-raised">
+        <div className="pointer-events-none absolute inset-0 amber-bloom opacity-35" />
+        <div className="pointer-events-none absolute inset-0 garnet-bloom-top" />
 
-          <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
-            <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
-              <div>
-                <SectionReveal>
-                  <span className="text-label-xs text-garnet/70 uppercase tracking-[0.35em]">— The Suite</span>
-                </SectionReveal>
-                <SectionReveal delay={0.1}>
-                  <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
-                    Tuned for <span className="text-gradient-gold font-bold italic">the session</span>
-                  </h2>
-                </SectionReveal>
-              </div>
-              <SectionReveal delay={0.2}>
-                <Link href="/work" className={whatWeBuildOutlineCta}>
-                  Documentation
-                </Link>
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
+          <div className="mb-14 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+            <div>
+              <SectionReveal>
+                <span className="text-label-xs text-garnet/70 uppercase tracking-[0.35em]">— The Suite</span>
+              </SectionReveal>
+              <SectionReveal delay={0.1}>
+                <h2 className="mt-3 text-2xl font-light leading-tight text-cream/80 md:text-3xl">
+                  Tuned for <span className="text-gradient-gold font-bold italic">the session</span>
+                </h2>
               </SectionReveal>
             </div>
+            <SectionReveal delay={0.2}>
+              <Link href="/work" className={whatWeBuildOutlineCta}>
+                Documentation
+              </Link>
+            </SectionReveal>
+          </div>
 
-            <div className="grid grid-cols-1 gap-3">
-              <SectionReveal delay={0.08}>
+          <div className="grid grid-cols-1 gap-8 md:grid-cols-2 md:gap-x-8 xl:gap-x-10">
+            {suiteSections.map((work, workIndex) => (
+              <SectionReveal key={work.pixelVariant} delay={0.06 + workIndex * 0.08}>
                 <FeaturedSuiteInstrumentCard work={work} />
               </SectionReveal>
-            </div>
+            ))}
           </div>
-        </section>
-      ))}
+        </div>
+      </section>
 
       {/* ═══════════════ Consequence (music) — mid band ═══════════════ */}
       <section className="relative overflow-hidden py-28 md:py-40 section-mid">
