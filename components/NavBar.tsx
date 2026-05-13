@@ -104,7 +104,7 @@ export default function NavBar() {
             ))}
             <Link
               href="/shop"
-              className="garnet-btn font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void px-5 py-1.5"
+              className="garnet-btn garnet-btn-soft font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void/88 px-5 py-1.5"
             >
               Shop
             </Link>
@@ -194,7 +194,7 @@ export default function NavBar() {
               >
                 <Link
                   href="/shop"
-                  className="garnet-btn font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-void px-8 py-2 inline-block"
+                  className="garnet-btn garnet-btn-soft font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-void/88 px-8 py-2 inline-block"
                 >
                   Shop
                 </Link>

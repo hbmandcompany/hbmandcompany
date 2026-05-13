@@ -263,6 +263,19 @@
     transform: translateY(-3px);
   }
 
+  /** Muted primary CTA — softer than full garnet, still mostly solid (nav Shop, hero Treasury). */
+  .garnet-btn-soft {
+    background: linear-gradient(135deg, rgba(205, 205, 205, 0.78) 0%, rgba(155, 155, 155, 0.74) 100%);
+    border: 1px solid rgba(215, 215, 215, 0.42);
+    color: rgba(22, 22, 22, 0.88);
+    box-shadow: 0 7px 28px rgba(0, 0, 0, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.22);
+  }
+  .garnet-btn-soft:hover {
+    background: linear-gradient(135deg, rgba(218, 218, 218, 0.88) 0%, rgba(185, 185, 185, 0.8) 100%);
+    box-shadow: 0 0 26px rgba(210, 210, 210, 0.2), 0 11px 38px rgba(0, 0, 0, 0.44);
+    transform: translateY(-2px);
+  }
+
   .gold-outline-btn {
     background: transparent;
     border: 1px solid rgba(180,175,170,0.4);
@@ -331,11 +344,13 @@
     border-radius: 1rem;
     isolation: isolate;
     box-shadow:
-      0 22px 64px rgba(0, 0, 0, 0.78),
-      0 0 0 1px rgba(255, 255, 255, 0.09),
-      inset 0 1px 0 rgba(255, 255, 255, 0.22),
-      inset 0 -1px 0 rgba(0, 0, 0, 0.55),
-      inset 0 0 36px rgba(0, 0, 0, 0.42);
+      0 32px 80px rgba(0, 0, 0, 0.5),
+      0 0 0 1px rgba(255, 255, 255, 0.04),
+      inset 0 1px 0 rgba(255, 255, 255, 0.06),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.5),
+      inset 0 0 56px rgba(0, 0, 0, 0.38);
+    -webkit-mask-image: radial-gradient(ellipse 96% 94% at 50% 48%, #000 52%, transparent 99%);
+    mask-image: radial-gradient(ellipse 96% 94% at 50% 48%, #000 52%, transparent 99%);
   }
 
   /* Darken hero visual — keeps frame legibility on bright art */
@@ -346,7 +361,7 @@
     z-index: 1;
     pointer-events: none;
     border-radius: inherit;
-    background: rgba(2, 2, 6, 0.34);
+    background: linear-gradient(180deg, rgba(2, 2, 6, 0.2) 0%, rgba(2, 2, 6, 0.5) 72%, rgba(2, 2, 6, 0.62) 100%);
     mix-blend-mode: multiply;
   }
 
@@ -360,12 +375,12 @@
     border-radius: inherit;
     background: linear-gradient(
       148deg,
-      rgba(255, 255, 255, 0.2) 0%,
-      rgba(255, 255, 255, 0.06) 18%,
-      transparent 42%,
-      transparent 58%,
-      rgba(255, 255, 255, 0.03) 78%,
-      rgba(0, 0, 0, 0.18) 100%
+      rgba(255, 255, 255, 0.07) 0%,
+      rgba(255, 255, 255, 0.03) 20%,
+      transparent 45%,
+      transparent 62%,
+      rgba(0, 0, 0, 0.08) 85%,
+      rgba(0, 0, 0, 0.22) 100%
     );
     mix-blend-mode: soft-light;
   }

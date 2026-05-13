@@ -303,7 +303,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             className="hero-editorial-visual mt-4 w-full max-w-[240px] sm:mt-5 sm:max-w-[272px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,304px)] xl:max-w-[min(100%,328px)] lg:justify-self-start"
           >
             <div className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden">
-              <HeroBrutalistIllustration className="rounded-2xl" />
+              <HeroBrutalistIllustration className="rounded-2xl opacity-90" />
             </div>
           </motion.div>
 
@@ -311,14 +311,14 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
             variants={heroItem}
             className="hero-editorial-prose relative mt-10 w-full max-w-lg border-y border-white/[0.07] py-8 text-left md:mt-11 md:max-w-2xl md:py-10 lg:col-span-7 lg:col-start-6 lg:row-start-3 lg:mt-0 lg:max-w-none lg:border-y-0 lg:py-6 lg:pb-1 lg:pl-10 lg:pr-0 xl:pb-1.5 xl:pl-12 -translate-y-6 md:-translate-y-7 lg:-translate-y-10 xl:-translate-y-12"
           >
-            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/50 antialiased md:text-[1.2rem] md:leading-[1.74] md:text-cream/54">
+            <p className="hero-editorial-luxury-prose text-pretty font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/38 antialiased md:text-[1.2rem] md:leading-[1.74] md:text-cream/42">
               We work with organizations to deliver an integrated view of their
               holdings—under defined scope, delivery milestones, and performance accountability to
               leadership.
               Governance, risk management, and financial reporting are structured so leadership has
               consistent, decision-ready information across the enterprise.
             </p>
-            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/78 antialiased md:mt-7 md:text-[1.2rem] md:leading-[1.74] md:text-cream/82">
+            <p className="hero-editorial-luxury-prose text-pretty mt-6 font-luxury-sans text-[1.08rem] font-light leading-[1.72] tracking-[-0.015em] text-cream/56 antialiased md:mt-7 md:text-[1.2rem] md:leading-[1.74] md:text-cream/60">
               Partners who treat credibility as co-equal with capital expect discipline—accuracy in
               books and records, and external communications that align with facts and withstand
               review by boards, investors, and regulators. Our standard is institutional
@@ -347,7 +347,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
               >
                 <Link
                   href="/treasury"
-                  className="garnet-btn text-label-xs uppercase tracking-[0.22em] text-void inline-block px-9 py-2.5 transition-[box-shadow] duration-500 [box-shadow:0_12px_40px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.12)] hover:[box-shadow:0_18px_50px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.14),0_0_48px_rgba(180,175,170,0.07)]"
+                  className="garnet-btn garnet-btn-soft text-label-xs uppercase tracking-[0.22em] text-void/88 inline-block px-9 py-2.5 transition-[box-shadow,transform] duration-500"
                 >
                   Treasury
                 </Link>
@@ -422,7 +422,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                         <span className="text-cream/65"> · Credit / Debit</span>
                       </h2>
                       <p className="mt-3 max-w-lg font-mono-hbm text-[10px] uppercase leading-relaxed tracking-[0.2em] text-silver-dim/50">
-                        MoneyBagg — non-custodial wallet · self-custody rails
+                        Inflows, outflows &amp; ledger lines — read-only observability on Base · PIOL oracle rails
                       </p>
                     </>
                   ) : (
