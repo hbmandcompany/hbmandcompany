@@ -14,7 +14,8 @@ import CardLinocutArt from "@/components/CardLinocutArt";
 import type { CardLinocutVariant } from "@/components/CardLinocutArt";
 import AnimatedHeadline from "@/components/AnimatedHeadline";
 import PostCarrierEditorMockup from "@/components/PostCarrierEditorMockup";
-import HeroBrutalistIllustration from "@/components/HeroBrutalistIllustration";
+import BrandBandCardChrome from "@/components/BrandBandCardChrome";
+import HeroNewsCarousel from "@/components/HeroNewsCarousel";
 import {
   IconSessionRing,
   IconCompStacks,
@@ -300,11 +301,11 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-visual mt-4 w-full max-w-[240px] sm:mt-5 sm:max-w-[272px] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,304px)] xl:max-w-[min(100%,328px)] lg:justify-self-start"
+            className="hero-editorial-visual mt-4 w-full max-w-[min(100%,280px)] sm:mt-5 sm:max-w-[min(100%,320px)] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,380px)] xl:max-w-[min(100%,400px)] lg:justify-self-start"
           >
-            <div className="hero-editorial-visual-frame relative aspect-[4/5] w-full overflow-hidden">
-              <HeroBrutalistIllustration className="rounded-2xl opacity-45" />
-            </div>
+            <BrandBandCardChrome className="flex min-h-[360px] flex-col p-3.5 md:min-h-[380px] md:p-4 lg:min-h-[400px] lg:p-5">
+              <HeroNewsCarousel />
+            </BrandBandCardChrome>
           </motion.div>
 
           <motion.div

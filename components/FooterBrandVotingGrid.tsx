@@ -2,6 +2,7 @@
 
 import clsx from "clsx";
 import Link from "next/link";
+import BrandBandCardChrome from "./BrandBandCardChrome";
 import HbmLogo from "./HbmLogo";
 import VotingProtocolSignup from "./VotingProtocolSignup";
 
@@ -209,11 +210,7 @@ export default function FooterBrandVotingGrid({
   if (band === "default") {
     return (
       <div className="w-full border-b border-white/[0.04] py-12 md:py-16 lg:py-20">
-        <div className="relative w-full overflow-hidden rounded-xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)] md:p-8 lg:p-10">
-          <div
-            className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-gold/[0.04] blur-3xl md:h-40 md:w-40"
-            aria-hidden
-          />
+        <BrandBandCardChrome className="p-6 md:p-8 lg:p-10">
           <div className="relative z-10 grid grid-cols-1 gap-10 md:gap-12 lg:grid-cols-2 lg:items-start lg:gap-0">
             {brandSide === "left" ? (
               <>
@@ -231,7 +228,7 @@ export default function FooterBrandVotingGrid({
               </>
             )}
           </div>
-        </div>
+        </BrandBandCardChrome>
       </div>
     );
   }
