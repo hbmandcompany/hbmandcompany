@@ -301,9 +301,9 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-visual mt-4 w-full max-w-[min(100%,280px)] sm:mt-5 sm:max-w-[min(100%,320px)] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,380px)] xl:max-w-[min(100%,400px)] lg:justify-self-start"
+            className="hero-editorial-visual mt-4 w-full max-w-[min(100%,260px)] sm:mt-5 sm:max-w-[min(100%,300px)] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,360px)] xl:max-w-[min(100%,380px)] lg:justify-self-start"
           >
-            <BrandBandCardChrome className="flex min-h-[360px] flex-col p-3.5 md:min-h-[380px] md:p-4 lg:min-h-[400px] lg:p-5">
+            <BrandBandCardChrome className="flex min-h-[320px] flex-col p-3 md:min-h-[340px] md:p-3.5 lg:min-h-[360px] lg:p-4">
               <HeroNewsCarousel />
             </BrandBandCardChrome>
           </motion.div>
