@@ -208,7 +208,7 @@ export default function ShopPage() {
       <NavBar />
 
       {/* ═══════════════ HERO ═══════════════ */}
-      <section className="relative flex min-h-screen flex-col justify-end pb-16 pt-[calc(env(safe-area-inset-top,0px)+7rem)]">
+      <section className="relative flex min-h-screen min-h-[100dvh] flex-col justify-end pb-[max(4rem,env(safe-area-inset-bottom,1rem))] pt-[calc(env(safe-area-inset-top,0px)+7rem)]">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1509631179647-0177331693ae?w=1920&q=90"

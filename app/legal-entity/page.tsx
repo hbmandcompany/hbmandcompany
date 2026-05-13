@@ -26,7 +26,7 @@ export default function LegalEntityPage() {
   return (
     <>
       <NavBar />
-      <main className="relative min-h-screen bg-void pb-24 pt-[calc(env(safe-area-inset-top,0px)+8rem)] md:pt-32">
+      <main className="relative min-h-screen min-h-[100dvh] bg-void pb-[max(6rem,env(safe-area-inset-bottom,1.25rem))] pt-[calc(env(safe-area-inset-top,0px)+8rem)] md:pt-32">
         <div className="relative z-10 mx-auto max-w-3xl px-6 md:px-12">
           <h1 className="font-cormorant text-display-md font-light text-cream mb-8">Legal entity</h1>
           <div className="space-y-6 font-mono-hbm text-body-md text-silver-dim leading-relaxed">

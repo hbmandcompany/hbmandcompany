@@ -29,7 +29,7 @@ export default function TeamPage() {
   return (
     <>
       <NavBar />
-      <main className="relative min-h-screen bg-void pb-24 pt-[calc(env(safe-area-inset-top,0px)+8rem)] md:pt-32">
+      <main className="relative min-h-screen min-h-[100dvh] bg-void pb-[max(6rem,env(safe-area-inset-bottom,1.25rem))] pt-[calc(env(safe-area-inset-top,0px)+8rem)] md:pt-32">
         <div className="pointer-events-none absolute inset-0 purple-bloom opacity-30 max-md:hidden" aria-hidden />
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
           <p className="font-mono-hbm text-[9px] uppercase tracking-[0.35em] text-gold/50">

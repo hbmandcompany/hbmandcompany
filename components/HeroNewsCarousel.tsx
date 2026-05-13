@@ -209,24 +209,34 @@ export default function HeroNewsCarousel() {
   const totalMsNow = holdMsForUi + marqueeDurationSec(item.dek) * 1000;
   const secondsLeft = Math.max(0, Math.ceil((totalMsNow * (1 - progress)) / 1000));
 
-  const chromeControlsSurface = clsx(
-    "transition-[opacity,visibility] duration-300 ease-out",
-    "max-sm:pointer-events-auto max-sm:visible max-sm:opacity-100",
-    "sm:pointer-events-none sm:invisible sm:opacity-0",
-    "sm:group-hover:pointer-events-auto sm:group-hover:visible sm:group-hover:opacity-100",
-    "sm:group-focus-within:pointer-events-auto sm:group-focus-within:visible sm:group-focus-within:opacity-100",
+  /** sm+: collapse height until hover/focus so no empty band; mobile stays open. */
+  const chromeRevealGrid = clsx(
+    "grid transition-[grid-template-rows] duration-300 ease-out",
+    "grid-rows-[1fr]",
+    "sm:grid-rows-[0fr] sm:group-hover:grid-rows-[1fr] sm:group-focus-within:grid-rows-[1fr]",
+  );
+
+  const chromeRevealInner = clsx(
+    "min-h-0 overflow-hidden",
+  );
+
+  const chromeRevealContent = clsx(
+    "transition-[opacity] duration-300 ease-out",
+    "opacity-100",
+    "sm:pointer-events-none sm:opacity-0",
+    "sm:group-hover:pointer-events-auto sm:group-hover:opacity-100",
+    "sm:group-focus-within:pointer-events-auto sm:group-focus-within:opacity-100",
   );
 
   /** Live + crawl always visible; timer / nav stay hover-revealed on sm+ */
-  const wireFeedSurface = "mt-2 shrink-0 border-t border-white/[0.06] pt-2";
-
-  /** Fixed story column height — hero grid doesn’t jump when slides change length */
-  const storyMinH = "min-h-[176px] md:min-h-[196px]";
+  const wireFeedSurface = "mt-1.5 shrink-0 border-t border-white/[0.06] pt-2";
 
   return (
     <div
       className={clsx(
-        "group relative z-10 flex h-full min-h-0 flex-1 flex-col rounded-lg outline-none transition-[box-shadow] duration-300",
+        "group relative z-10 flex min-h-0 w-full flex-col rounded-lg outline-none transition-[box-shadow] duration-300",
+        "max-sm:flex-1 max-sm:min-h-0",
+        "sm:h-auto sm:flex-none",
         "sm:hover:shadow-[0_0_0_1px_rgba(255,255,255,0.08)] sm:focus-within:shadow-[0_0_0_1px_rgba(255,255,255,0.1)]",
       )}
       role="region"
@@ -247,7 +257,7 @@ export default function HeroNewsCarousel() {
         </div>
       </div>
 
-      <div className={clsx("relative mt-2 flex flex-1 flex-col", storyMinH)}>
+      <div className="relative mt-1.5 shrink-0">
         <AnimatePresence mode="wait" initial={false}>
           <motion.article
             key={item.id}
@@ -256,12 +266,12 @@ export default function HeroNewsCarousel() {
             exit={reduceMotion ? undefined : { opacity: 0 }}
             transition={{ duration: reduceMotion ? 0 : 0.28 }}
             aria-live={reduceMotion ? "off" : "polite"}
-            className="absolute inset-0 flex flex-col gap-1.5 border-l-[3px] border-gold/30 pl-3 md:gap-2 md:pl-4"
+            className="flex min-h-[11.25rem] flex-col gap-0.5 border-l-[3px] border-gold/30 pl-3 sm:min-h-[11.75rem] md:min-h-[13rem] md:gap-1 md:pl-4 lg:min-h-[14.75rem]"
           >
             <p className="shrink-0 font-mono-hbm text-[9px] font-medium uppercase tracking-[0.24em] text-gold/50">
               {item.desk}
             </p>
-            <h2 className="line-clamp-4 shrink-0 font-cormorant text-[1.42rem] font-semibold leading-[1.1] tracking-[-0.03em] text-cream/[0.93] antialiased [text-shadow:0_2px_32px_rgba(0,0,0,0.35)] md:text-[1.62rem] md:leading-[1.08] lg:text-[1.88rem] lg:leading-[1.06]">
+            <h2 className="line-clamp-5 min-h-[5lh] flex-1 font-cormorant text-[1.42rem] font-semibold leading-[1.1] tracking-[-0.03em] text-cream/[0.93] antialiased [text-shadow:0_2px_32px_rgba(0,0,0,0.35)] md:text-[1.62rem] md:leading-[1.08] lg:text-[1.88rem] lg:leading-[1.06]">
               {item.headline}
             </h2>
           </motion.article>
@@ -269,7 +279,7 @@ export default function HeroNewsCarousel() {
       </div>
 
       <div className={wireFeedSurface}>
-        <div className="mb-2 flex items-center gap-2 px-2 sm:px-2.5">
+        <div className="mb-0 flex items-center gap-2 px-2 sm:px-2.5 sm:group-hover:mb-2 sm:group-focus-within:mb-2">
           <span className="shrink-0 font-mono-hbm text-[7px] font-semibold uppercase tracking-[0.16em] text-digital-80s">
             Live
           </span>
@@ -279,69 +289,74 @@ export default function HeroNewsCarousel() {
         </div>
       </div>
 
-      <div className={chromeControlsSurface}>
-        <div className="mb-2 flex items-center gap-2 px-2 sm:px-2.5" aria-hidden={reduceMotion}>
-          <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/[0.08]" aria-hidden>
-            <div
-              className="h-full rounded-full bg-gold/50"
-              style={{
-                width: reduceMotion ? "0%" : `${progress * 100}%`,
-              }}
-            />
-          </div>
-          <span className="font-mono-hbm shrink-0 text-[7px] tabular-nums uppercase tracking-[0.16em] text-silver-dim/45">
-            {reduceMotion ? "—" : manualPaused ? "‖" : `${secondsLeft}`}
-          </span>
-          <button
-            type="button"
-            tabIndex={0}
-            aria-label={manualPaused ? "Resume carousel" : "Pause carousel"}
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleManualPause();
-            }}
-            className="font-mono-hbm shrink-0 rounded px-1.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.22em] text-white/88 transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/40"
-          >
-            {manualPaused ? "Play" : "Pause"}
-          </button>
-        </div>
-
-        <div className="flex items-center justify-between gap-2 px-2 sm:px-2.5">
-          <div className="flex flex-wrap gap-1.5" aria-label="Story position">
-            {SLIDES.map((s, idx) => (
+      <div className={chromeRevealGrid}>
+        <div className={chromeRevealInner}>
+          <div className={chromeRevealContent}>
+            <div className="mb-2 flex items-center gap-2 px-2 sm:px-2.5" aria-hidden={reduceMotion}>
+              <div className="h-0.5 flex-1 overflow-hidden rounded-full bg-white/[0.08]" aria-hidden>
+                <div
+                  className="h-full rounded-full bg-gold/50"
+                  style={{
+                    width: reduceMotion ? "0%" : `${progress * 100}%`,
+                  }}
+                />
+              </div>
+              <span className="font-mono-hbm shrink-0 text-[7px] tabular-nums uppercase tracking-[0.16em] text-silver-dim/45">
+                {reduceMotion ? "—" : manualPaused ? "‖" : `${secondsLeft}`}
+              </span>
               <button
-                key={s.id}
                 type="button"
-                aria-label={`Story ${idx + 1} of ${n}`}
-                aria-current={idx === index ? true : undefined}
-                onClick={() => setIndex(idx)}
-                className={clsx(
-                  "box-border min-h-[7px] rounded-full ring-1 ring-inset transition-[width,background-color,ring-color] duration-300",
-                  "hover:bg-white/16 hover:ring-white/28 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45",
-                  idx === index
-                    ? "w-5 bg-white/[0.28] ring-white/[0.38]"
-                    : "w-1.5 bg-white/[0.08] ring-white/[0.16]",
-                )}
-              />
-            ))}
-          </div>
-          <div className="flex shrink-0 items-center gap-0 text-silver-dim/28">
-            <button
-              type="button"
-              className="font-mono-hbm px-0.5 py-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35"
-              aria-label="Previous story"
-              onClick={() => go(-1)}
-            >
-              ‹
-            </button>
-            <button
-              type="button"
-              className="font-mono-hbm px-0.5 py-0.5 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35"
-              aria-label="Next story"
-              onClick={() => go(1)}
-            >
-              ›
-            </button>
+                tabIndex={0}
+                aria-label={manualPaused ? "Resume carousel" : "Pause carousel"}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleManualPause();
+                }}
+                className="font-mono-hbm shrink-0 rounded px-1.5 py-0.5 text-[8px] font-medium uppercase tracking-[0.22em] text-white/88 transition-colors hover:bg-white/[0.08] hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/40 max-sm:min-h-[44px] max-sm:min-w-[44px] max-sm:px-3 max-sm:py-2 max-sm:text-[9px]"
+              >
+                {manualPaused ? "Play" : "Pause"}
+              </button>
+            </div>
+
+            <div className="flex items-center justify-between gap-2 px-2 sm:px-2.5">
+              <div className="flex flex-wrap gap-1.5" aria-label="Story position">
+                {SLIDES.map((s, idx) => (
+                  <button
+                    key={s.id}
+                    type="button"
+                    aria-label={`Story ${idx + 1} of ${n}`}
+                    aria-current={idx === index ? true : undefined}
+                    onClick={() => setIndex(idx)}
+                    className={clsx(
+                      "box-border min-h-[7px] rounded-full ring-1 ring-inset transition-[width,background-color,ring-color] duration-300",
+                      "hover:bg-white/16 hover:ring-white/28 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/45",
+                      "max-sm:inline-flex max-sm:min-h-[44px] max-sm:min-w-[36px] max-sm:items-center max-sm:justify-center max-sm:px-1",
+                      idx === index
+                        ? "w-5 bg-white/[0.28] ring-white/[0.38] max-sm:min-w-[44px]"
+                        : "w-1.5 bg-white/[0.08] ring-white/[0.16]",
+                    )}
+                  />
+                ))}
+              </div>
+              <div className="flex shrink-0 items-center gap-0 text-silver-dim/28">
+                <button
+                  type="button"
+                  className="font-mono-hbm min-h-[44px] min-w-[44px] px-0.5 py-2 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center"
+                  aria-label="Previous story"
+                  onClick={() => go(-1)}
+                >
+                  ‹
+                </button>
+                <button
+                  type="button"
+                  className="font-mono-hbm min-h-[44px] min-w-[44px] px-0.5 py-2 text-[11px] font-light leading-none transition-colors hover:text-cream/50 focus-visible:text-cream/50 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-gold/35 max-sm:flex max-sm:items-center max-sm:justify-center"
+                  aria-label="Next story"
+                  onClick={() => go(1)}
+                >
+                  ›
+                </button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

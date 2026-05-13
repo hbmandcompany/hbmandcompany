@@ -57,7 +57,7 @@ export default function NavBar() {
         className={clsx(
           "fixed top-0 left-0 right-0 z-50",
           scrolled
-            ? "pt-[max(0.75rem,env(safe-area-inset-top,0px))] px-4 md:px-6"
+            ? "pt-[max(0.75rem,env(safe-area-inset-top,0px))] pl-[max(1rem,env(safe-area-inset-left,0px))] pr-[max(1rem,env(safe-area-inset-right,0px))] md:pl-6 md:pr-6"
             : "pt-[env(safe-area-inset-top,0px)] px-0"
         )}
       >
@@ -65,8 +65,8 @@ export default function NavBar() {
           className={clsx(
             "max-w-[1440px] mx-auto flex items-center justify-between transition-all duration-600",
             scrolled
-              ? "h-14 px-6 md:px-8 rounded-2xl bg-obsidian/96 backdrop-blur-heavy border border-white/[0.035] shadow-deep"
-              : "h-20 md:h-24 px-6 md:px-12"
+              ? "h-14 pl-[max(1.25rem,env(safe-area-inset-left,0px))] pr-[max(1.25rem,env(safe-area-inset-right,0px))] md:pl-8 md:pr-8 rounded-2xl bg-obsidian/96 backdrop-blur-heavy border border-white/[0.035] shadow-deep"
+              : "h-20 md:h-24 pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] md:pl-12 md:pr-12",
           )}
         >
           {/* ── Wordmark ── */}

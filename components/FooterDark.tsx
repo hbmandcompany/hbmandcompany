@@ -147,7 +147,7 @@ export default function FooterDark({
   const uiFont = typography === "robinhood" ? "font-robinhood" : "font-mono-hbm";
 
   return (
-    <footer className="relative overflow-hidden bg-void pb-[env(safe-area-inset-bottom,0px)]">
+    <footer className="relative overflow-hidden bg-void pb-[max(1.25rem,env(safe-area-inset-bottom,0px))]">
       {/* Ambient atmosphere */}
       <div className="absolute inset-0 purple-bloom pointer-events-none opacity-60" />
       <div className="absolute inset-0 garnet-bloom-top pointer-events-none opacity-40" />
@@ -155,7 +155,7 @@ export default function FooterDark({
       {/* Top gold rule — skip when homepage thesis band sits directly above (already has gold-rule + band border) */}
       {showUpperBrandVoting ? <div className="gold-rule w-full" /> : <div className="h-px w-full bg-gradient-to-r from-transparent via-white/[0.06] to-transparent" aria-hidden />}
 
-      <div className="relative z-10 max-w-[1440px] mx-auto px-6 md:px-12">
+      <div className="relative z-10 max-w-[1440px] mx-auto pl-[max(1.5rem,env(safe-area-inset-left,0px))] pr-[max(1.5rem,env(safe-area-inset-right,0px))] md:px-12">
 
         {showUpperBrandVoting ? (
           <FooterBrandVotingGrid typography={typography} instanceId="footer" brandSide="left" />

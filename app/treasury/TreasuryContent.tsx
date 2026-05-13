@@ -114,7 +114,7 @@ export default function TreasuryContent() {
       <NavBar />
 
       {/* ═══ HERO ═══ */}
-      <section className="relative flex min-h-screen flex-col justify-end pb-16 pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-20">
+      <section className="relative flex min-h-screen min-h-[100dvh] flex-col justify-end pb-[max(4rem,env(safe-area-inset-bottom,1rem))] pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-20">
         <div className="absolute inset-0 z-0 overflow-hidden">
           <Image
             src="https://images.unsplash.com/photo-1642543492481-44e81e3914a7?w=1920&q=90"

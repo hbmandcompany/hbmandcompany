@@ -161,6 +161,8 @@ export const viewport: Viewport = {
   viewportFit: "cover",
   themeColor: "#020203",
   colorScheme: "dark",
+  /** iOS 15+: avoid layout jump when dynamic toolbar shows/hides */
+  interactiveWidget: "resizes-content",
 };
 
 export default function RootLayout({
@@ -176,7 +178,7 @@ export default function RootLayout({
       <head>
         <JsonLd />
       </head>
-      <body className="bg-void text-cream antialiased overflow-x-hidden">
+      <body className="bg-void text-cream antialiased overflow-x-hidden min-h-screen min-h-[100dvh]">
         {children}
         <Analytics />
       </body>

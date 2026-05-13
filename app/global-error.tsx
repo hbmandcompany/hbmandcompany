@@ -17,7 +17,7 @@ export default function GlobalError({
   return (
     <html lang="en-US">
       <body className="bg-void text-cream antialiased">
-        <div className="flex min-h-screen flex-col items-center justify-center gap-6 px-6 py-12 text-center">
+        <div className="flex min-h-screen min-h-[100dvh] flex-col items-center justify-center gap-6 px-6 py-12 text-center">
           <h1 className="font-cormorant text-2xl font-light md:text-3xl">Something went wrong</h1>
           <p className="max-w-md font-mono-hbm text-[11px] uppercase leading-relaxed tracking-[0.18em] text-silver-dim/60">
             A critical error occurred. Please try reloading the page.

@@ -26,7 +26,7 @@ export default function TermsPage() {
   return (
     <>
       <NavBar />
-      <main className="min-h-screen bg-void pb-24 pt-[calc(env(safe-area-inset-top,0px)+8rem)] md:pt-32">
+      <main className="min-h-screen min-h-[100dvh] bg-void pb-[max(6rem,env(safe-area-inset-bottom,1.25rem))] pt-[calc(env(safe-area-inset-top,0px)+8rem)] md:pt-32">
         <div className="max-w-3xl mx-auto px-6 md:px-12">
           <h1 className="font-cormorant text-display-md text-cream font-light mb-8">
             Terms of Use

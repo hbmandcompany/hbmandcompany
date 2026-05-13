@@ -236,7 +236,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
       {/* ═══════════════ HERO ═══════════════ */}
       <section
-        className="relative flex min-h-screen flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+6rem)] pb-16 md:pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-20 lg:pt-[calc(env(safe-area-inset-top,0px)+6.25rem)] lg:pb-24"
+        className="relative flex min-h-screen min-h-[100dvh] flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+6rem)] pb-[max(4rem,env(safe-area-inset-bottom,1rem))] md:pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-[max(5rem,env(safe-area-inset-bottom,1rem))] lg:pt-[calc(env(safe-area-inset-top,0px)+6.25rem)] lg:pb-[max(6rem,env(safe-area-inset-bottom,1rem))]"
       >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -276,7 +276,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           variants={heroContainer}
           initial="hidden"
           animate="show"
-          className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center gap-0 px-6 text-center md:px-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10 lg:gap-y-7 lg:px-12 lg:text-left xl:gap-x-14 xl:gap-y-9"
+          className="relative z-10 mx-auto flex w-full max-w-[1440px] flex-col items-center gap-0 pl-[max(1.25rem,env(safe-area-inset-left,0px))] pr-[max(1.25rem,env(safe-area-inset-right,0px))] text-center md:px-12 lg:grid lg:grid-cols-12 lg:items-start lg:gap-x-10 lg:gap-y-7 lg:px-12 lg:text-left xl:gap-x-14 xl:gap-y-9"
         >
           <motion.div variants={heroItem} className="mb-4 flex w-full flex-col items-center md:mb-5 lg:col-span-12 lg:mb-0">
             <span className="font-mono-hbm text-[9px] font-medium uppercase tracking-[0.42em] text-gold/55 md:text-[10px]">
@@ -301,9 +301,9 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
           <motion.div
             variants={heroItem}
-            className="hero-editorial-visual mt-4 w-full max-w-[min(100%,260px)] sm:mt-5 sm:max-w-[min(100%,300px)] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,360px)] xl:max-w-[min(100%,380px)] lg:justify-self-start"
+            className="hero-editorial-visual mt-4 w-full max-w-[min(100%,320px)] sm:mt-5 sm:max-w-[min(100%,380px)] lg:col-span-5 lg:row-start-3 lg:mt-0 lg:max-w-[min(100%,440px)] xl:max-w-[min(100%,460px)] lg:justify-self-start"
           >
-            <BrandBandCardChrome className="flex min-h-[320px] flex-col p-3 md:min-h-[340px] md:p-3.5 lg:min-h-[360px] lg:p-4">
+            <BrandBandCardChrome className="flex h-auto min-h-[420px] flex-col px-4 pt-5 pb-7 sm:min-h-0 md:px-5 md:pt-6 md:pb-8 lg:px-6 lg:pt-7 lg:pb-10">
               <HeroNewsCarousel />
             </BrandBandCardChrome>
           </motion.div>
@@ -371,7 +371,7 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
 
         {/* Scroll indicator */}
         <div
-          className="absolute bottom-10 right-10 z-10 flex flex-col items-center gap-2 opacity-80"
+          className="absolute bottom-[max(2.5rem,env(safe-area-inset-bottom,0px)+0.5rem)] right-[max(2.5rem,env(safe-area-inset-right,0px))] z-10 flex flex-col items-center gap-2 opacity-80 max-md:scale-90"
         >
           <div className="w-px h-14 bg-gradient-to-b from-garnet/50 to-transparent animate-glow-pulse" />
         </div>
