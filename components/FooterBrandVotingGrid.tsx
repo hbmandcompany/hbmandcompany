@@ -66,19 +66,11 @@ export default function FooterBrandVotingGrid({
     ) : null;
 
   const defaultEditorial = (
-    <div
-      className={clsx(
-        "relative flex flex-col gap-8",
-        !brandTrailing &&
-          "border-l border-gold/[0.14] pl-6 md:pl-9 [box-shadow:inset_1px_0_0_rgba(180,175,170,0.06)]",
-        brandTrailing &&
-          "lg:border-l-0 lg:border-r lg:border-gold/[0.14] lg:pl-0 lg:pr-9 lg:[box-shadow:inset_-1px_0_0_rgba(180,175,170,0.06)]",
-      )}
-    >
-      <div className="space-y-2">
+    <div className="relative mt-2 flex flex-col gap-8 md:mt-3">
+      <div className="space-y-2.5">
         <p
           className={clsx(
-            `${displayFont} max-w-[20ch] text-[clamp(1.7rem,3.8vw,2.65rem)] font-light italic leading-[1.06] tracking-[-0.02em] text-cream/[0.9] antialiased [text-shadow:0_2px_48px_rgba(0,0,0,0.55),0_0_60px_rgba(180,175,170,0.06)]`,
+            `${displayFont} max-w-[20ch] text-[clamp(1.85rem,4.15vw,2.9rem)] font-light italic leading-[1.06] tracking-[-0.02em] text-cream/[0.9] antialiased [text-shadow:0_2px_48px_rgba(0,0,0,0.55),0_0_60px_rgba(180,175,170,0.06)]`,
             brandTrailing && "lg:ml-auto",
           )}
         >
@@ -86,7 +78,7 @@ export default function FooterBrandVotingGrid({
         </p>
         <p
           className={clsx(
-            `${displayFont} max-w-[20ch] text-[clamp(1.7rem,3.8vw,2.65rem)] font-light italic leading-[1.06] tracking-[-0.02em] text-gold/55 antialiased [text-shadow:0_2px_40px_rgba(0,0,0,0.45)]`,
+            `${displayFont} max-w-[20ch] text-[clamp(1.85rem,4.15vw,2.9rem)] font-light italic leading-[1.06] tracking-[-0.02em] text-gold/55 antialiased [text-shadow:0_2px_40px_rgba(0,0,0,0.45)]`,
             brandTrailing && "lg:ml-auto",
           )}
         >
@@ -94,10 +86,10 @@ export default function FooterBrandVotingGrid({
         </p>
       </div>
 
-      <div className="flex max-w-md flex-col gap-3">
+      <div className="flex max-w-lg flex-col gap-3.5">
         <p
           className={clsx(
-            `${uiFont} text-[11px] uppercase tracking-[0.16em] leading-[1.9] text-silver-dim/75 md:text-[11.5px] md:tracking-[0.14em]`,
+            `${uiFont} text-[12px] uppercase tracking-[0.15em] leading-[1.9] text-silver-dim/75 md:text-[13px] md:tracking-[0.14em]`,
             brandTrailing && "lg:ml-auto",
           )}
         >
@@ -106,7 +98,7 @@ export default function FooterBrandVotingGrid({
 
         <p
           className={clsx(
-            `${uiFont} border-t border-white/[0.07] pt-3 text-[10px] uppercase tracking-[0.22em] text-silver-dim/42 md:pt-3.5`,
+            `${uiFont} border-t border-white/[0.07] pt-3 text-[11px] uppercase tracking-[0.2em] text-silver-dim/42 md:pt-3.5 md:text-[11.5px]`,
             brandTrailing && "lg:ml-auto",
           )}
         >
@@ -207,7 +199,7 @@ export default function FooterBrandVotingGrid({
   );
 
   const thesisRightStack = (
-    <div className="flex w-full min-w-0 max-w-md flex-col gap-8 md:gap-9">
+    <div className="flex w-full min-w-0 max-w-lg flex-col gap-8 md:gap-9">
       <p className={`${displayFont} text-[0.95rem] font-light leading-[1.82] tracking-[-0.01em] text-cream/72 md:text-base md:leading-[1.84]`}>
         We organize capital around infrastructure that still makes sense when the timeline goes quiet—custody you can
         document, commitments you can re-verify, and governance that does not reset every funding season.
@@ -250,7 +242,7 @@ export default function FooterBrandVotingGrid({
       className={clsx(
         "grid w-full grid-cols-1 border-b border-white/[0.04] lg:items-start",
         band === "thesis"
-          ? "gap-10 py-12 md:gap-x-12 md:gap-y-10 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,28rem)] lg:gap-x-14 xl:gap-x-16"
+          ? "gap-10 py-12 md:gap-x-12 md:gap-y-10 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:gap-x-14 xl:gap-x-16"
           : "gap-12 py-16 md:gap-16 md:py-20 lg:grid-cols-2 lg:gap-16",
       )}
     >

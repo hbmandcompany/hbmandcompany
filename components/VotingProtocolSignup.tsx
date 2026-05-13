@@ -129,10 +129,10 @@ export default function VotingProtocolSignup({
     );
   const buttonLabel = submitLabel ?? "Request access";
 
-  const defaultNoteTypography = `${uiFont} text-[10px] uppercase tracking-[0.14em] leading-relaxed text-silver-dim/55 md:text-[11px]`;
+  const defaultNoteTypography = `${uiFont} text-[11px] uppercase tracking-[0.13em] leading-relaxed text-silver-dim/55 md:text-[12.5px]`;
   const descClass = descriptionClassName ?? `${defaultNoteTypography} mt-2.5`;
 
-  const inputSurfaceClass = `${uiFont} min-h-[44px] w-full rounded-lg border border-white/[0.10] bg-void/70 px-3.5 text-left text-[12px] tracking-[0.06em] text-cream/90 outline-none transition-[border-color,box-shadow] duration-300 focus-visible:border-gold/35 focus-visible:ring-1 focus-visible:ring-gold/25 md:min-h-[46px] md:rounded-xl md:px-4 md:text-[13px]`;
+  const inputSurfaceClass = `${uiFont} min-h-[46px] w-full rounded-lg border border-white/[0.10] bg-void/70 px-4 text-left text-[13px] tracking-[0.06em] text-cream/90 outline-none transition-[border-color,box-shadow] duration-300 focus-visible:border-gold/35 focus-visible:ring-1 focus-visible:ring-gold/25 md:min-h-[50px] md:rounded-xl md:px-[1.125rem] md:text-[14px]`;
 
   const backdropTransition = reduceMotion ? { duration: 0.18 } : { duration: 0.32, ease: [0.16, 1, 0.3, 1] as const };
   const panelTransition = reduceMotion
@@ -164,7 +164,7 @@ export default function VotingProtocolSignup({
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby={modalTitleId}
-                className="relative z-10 max-h-[min(90dvh,640px)] w-full max-w-md overflow-y-auto rounded-2xl border border-white/[0.12] bg-gradient-to-b from-obsidian via-void to-void p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_40px_90px_rgba(0,0,0,0.65)] md:p-8"
+                className="relative z-10 max-h-[min(90dvh,640px)] w-full max-w-lg overflow-y-auto rounded-2xl border border-white/[0.12] bg-gradient-to-b from-obsidian via-void to-void p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_40px_90px_rgba(0,0,0,0.65)] md:p-8"
                 initial={
                   reduceMotion
                     ? { scale: 0.99 }
@@ -186,7 +186,7 @@ export default function VotingProtocolSignup({
                   Close
                 </button>
 
-                <p className={`${uiFont} text-[10px] text-gold/65 uppercase tracking-[0.28em] md:text-label-xs md:tracking-[0.32em]`}>
+                <p className={`${uiFont} text-[11px] text-gold/65 uppercase tracking-[0.26em] md:text-[12px] md:tracking-[0.3em]`}>
                   {eyebrowText}
                 </p>
                 <h2 id={modalTitleId} className={`${displayFont} mt-3 text-xl font-light leading-snug text-cream/88 md:text-2xl`}>
@@ -256,18 +256,18 @@ export default function VotingProtocolSignup({
       {modal}
 
       <aside
-        className="relative w-full min-w-0 max-w-[26rem] rounded-xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)] md:p-7"
+        className="relative w-full min-w-0 max-w-lg rounded-xl border border-white/[0.09] bg-gradient-to-b from-obsidian/95 via-void/90 to-void/95 p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.06),0_24px_64px_rgba(0,0,0,0.55)] md:p-8"
         aria-labelledby={headingId}
       >
         <div className="pointer-events-none absolute -right-14 -top-14 h-36 w-36 rounded-full bg-gold/[0.04] blur-3xl md:h-40 md:w-40" aria-hidden />
 
         <div className="relative">
-          <p className={`${uiFont} text-[10px] text-gold/65 uppercase tracking-[0.28em] md:text-label-xs md:tracking-[0.32em]`}>
+          <p className={`${uiFont} text-[11px] text-gold/65 uppercase tracking-[0.26em] md:text-[12px] md:tracking-[0.3em]`}>
             {eyebrowText}
           </p>
           <h3
             id={headingId}
-            className={`${displayFont} mt-2.5 text-lg font-light leading-snug text-cream/88 md:mt-3 md:text-xl`}
+            className={`${displayFont} mt-2.5 text-xl font-light leading-snug text-cream/88 md:mt-3 md:text-2xl`}
           >
             {headingNode}
           </h3>
