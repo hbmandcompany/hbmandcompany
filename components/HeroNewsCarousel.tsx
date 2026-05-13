@@ -201,20 +201,20 @@ export default function HeroNewsCarousel() {
       )}
       role="region"
       aria-roledescription="carousel"
-      aria-label="News room briefings"
+      aria-label="Newspaper briefings"
     >
       <Link
-        href={`/newsroom?story=${item.id}`}
+        href={`/newspaper?story=${item.id}`}
         className={clsx(
           "flex min-h-0 flex-1 flex-col rounded-lg outline-none transition-[opacity,box-shadow] duration-300",
           "focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
         )}
-        aria-label={`Open this briefing in the news room: ${item.headline}`}
+        aria-label={`Open this story in the newspaper: ${item.headline}`}
       >
       <div className="shrink-0 border-b-2 border-gold/25 pb-2">
         <div className="flex items-start justify-between gap-3">
           <p className="min-w-0 font-mono-hbm text-[9px] font-medium uppercase tracking-[0.34em] text-gold/55">
-            News room
+            Newspaper
           </p>
           <p className="shrink-0 text-right font-mono-hbm text-[8px] font-normal uppercase tracking-[0.22em] text-silver-dim/38">
             <time dateTime={BRIEFING_UPDATED_AT}>

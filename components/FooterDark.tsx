@@ -49,10 +49,10 @@ const footerColumns = [
   {
     heading: "Resources",
     links: [
-      { label: "Research Reports", href: "/contact" },
+      { label: "Research Reports", href: "/research-reports" },
       { label: "Market Data", href: "/contact" },
-      { label: "Quarterly Review", href: "/contact" },
-      { label: "Newsletter", href: "/contact" },
+      { label: "Investor Relations", href: "/investor-relations" },
+      { label: "Newspaper", href: "/newspaper" },
       { label: "Media Kit", href: "/contact" },
       { label: "Risk Framework", href: "/contact" },
     ],
