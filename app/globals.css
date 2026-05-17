@@ -816,6 +816,7 @@
   top: 0 !important;
 }
 
+.ad-placement-slot,
 .hero-front-page__ad-slot {
   position: relative;
   width: 100%;
@@ -824,17 +825,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: hidden;
+}
+
+.ad-placement-slot--dark,
+.hero-front-page__ad-slot.ad-placement-slot--dark {
   background: rgba(9, 9, 11, 0.92);
 }
 
-.hero-front-page__ad-slot-svg {
+.ad-placement-slot__svg {
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
 
-.hero-front-page__ad-slot-label {
+.ad-placement-slot__label {
   position: relative;
   z-index: 1;
   display: flex;
@@ -842,6 +848,27 @@
   align-items: center;
   gap: 0.35rem;
   pointer-events: none;
+}
+
+.ad-placement-slot__eyebrow {
+  font-size: 9px;
+  letter-spacing: 0.34em;
+  text-transform: uppercase;
+  color: rgba(100, 95, 90, 0.75);
+}
+
+.ad-placement-slot--dark .ad-placement-slot__eyebrow {
+  color: rgba(180, 175, 170, 0.55);
+}
+
+.ad-placement-slot__mark {
+  font-weight: 300;
+  letter-spacing: 0.12em;
+  color: rgba(30, 28, 26, 0.4);
+}
+
+.ad-placement-slot--dark .ad-placement-slot__mark {
+  color: rgba(242, 234, 216, 0.35);
 }
 
 .hero-front-page__right-block--text {
@@ -1053,4 +1080,54 @@
   box-shadow:
     0 24px 64px rgba(0, 0, 0, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* DMN-style light broadsheet band (On The Record) */
+.dmn-editorial {
+  background: #fff;
+  color: #111;
+  padding: clamp(1.25rem, 2vw, 2rem);
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.dmn-editorial__four-up {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem 1rem;
+}
+
+@media (min-width: 768px) {
+  .dmn-editorial__four-up {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.5rem 1.25rem;
+  }
+}
+
+.dmn-editorial__business {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .dmn-editorial__business {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.55fr) minmax(0, 0.85fr);
+    gap: 1.5rem;
+    align-items: stretch;
+  }
+}
+
+.dmn-editorial__business-list {
+  min-width: 0;
+}
+
+.dmn-editorial__business-lead,
+.dmn-editorial__business-promo {
+  min-width: 0;
+  min-height: 0;
+}
+
+.desk-wire-grid__signup .ad-placement-slot {
+  min-height: 280px;
 }

@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import type { MagazineStory } from "@/components/MagazineStoryCards";
+import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 
 const EDITION_DATE = "Saturday · May 16, 2026";
 
@@ -106,32 +107,6 @@ function HeroMasthead() {
   );
 }
 
-function HeroCenterAdPlaceholder() {
-  return (
-    <div className="hero-front-page__ad-slot" role="img" aria-label="Advertisement placement">
-      <svg className="hero-front-page__ad-slot-svg" viewBox="0 0 400 200" preserveAspectRatio="xMidYMid slice" aria-hidden>
-        <defs>
-          <pattern id="hero-ad-hatch" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="12" stroke="rgba(180,175,170,0.14)" strokeWidth="1" />
-          </pattern>
-        </defs>
-        <rect width="400" height="200" fill="rgba(9,9,11,0.95)" />
-        <rect width="400" height="200" fill="url(#hero-ad-hatch)" />
-        <rect x="24" y="24" width="352" height="152" fill="none" stroke="rgba(180,175,170,0.22)" strokeWidth="1" strokeDasharray="6 5" />
-        <rect x="40" y="48" width="120" height="72" rx="2" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.08)" />
-        <rect x="176" y="56" width="168" height="10" rx="1" fill="rgba(255,255,255,0.06)" />
-        <rect x="176" y="76" width="140" height="8" rx="1" fill="rgba(255,255,255,0.04)" />
-        <rect x="176" y="92" width="152" height="8" rx="1" fill="rgba(255,255,255,0.04)" />
-        <rect x="176" y="108" width="100" height="20" rx="2" fill="rgba(120,32,40,0.25)" stroke="rgba(180,80,90,0.35)" />
-      </svg>
-      <div className="hero-front-page__ad-slot-label">
-        <span className="font-mono-hbm text-[9px] uppercase tracking-[0.34em] text-silver-dim/55">Ad Placement</span>
-        <span className="font-cormorant text-2xl font-light tracking-[0.12em] text-cream/35">AD</span>
-      </div>
-    </div>
-  );
-}
-
 function HeroSplitCenterImage({ src, alt }: { src: string; alt: string }) {
   return (
     <figure className="hero-front-page__center hero-front-page__center--split">
@@ -140,7 +115,7 @@ function HeroSplitCenterImage({ src, alt }: { src: string; alt: string }) {
       </div>
       <div className="hero-front-page__center-rule" aria-hidden />
       <div className="hero-front-page__center-half hero-front-page__center-half--bottom">
-        <HeroCenterAdPlaceholder />
+        <AdPlacementPlaceholder theme="dark" className="hero-front-page__ad-slot" />
       </div>
     </figure>
   );
@@ -202,7 +177,7 @@ export function HeroNewspaperEdition({
               <div className="hero-front-page__center-half bg-midnight" />
               <div className="hero-front-page__center-rule" aria-hidden />
               <div className="hero-front-page__center-half hero-front-page__center-half--bottom">
-                <HeroCenterAdPlaceholder />
+                <AdPlacementPlaceholder theme="dark" className="hero-front-page__ad-slot" />
               </div>
             </figure>
           )}

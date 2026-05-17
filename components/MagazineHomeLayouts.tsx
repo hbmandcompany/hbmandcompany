@@ -4,7 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import VotingProtocolSignup from "@/components/VotingProtocolSignup";
+import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 export { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
   MagazineSectionMasthead,
@@ -82,6 +82,164 @@ function RecordHeadlineRow({ item }: { item: WireBrief }) {
         <span className="font-mono-hbm mt-1 block text-[7px] text-silver-dim/42">{item.dateline}</span>
       </div>
     </Link>
+  );
+}
+
+function DmnCategoryLabel({ children }: { children: string }) {
+  return (
+    <span className="dmn-editorial__category font-robinhood text-[11px] font-bold uppercase tracking-[0.06em] text-[#2563eb]">
+      {children}
+    </span>
+  );
+}
+
+function DmnTopCard({ item }: { item: WireBrief }) {
+  return (
+    <Link href={`/newspaper?story=${item.storyId}`} className="dmn-editorial__top-card group block">
+      <div className="dmn-editorial__top-card-media relative aspect-[4/3] overflow-hidden bg-neutral-200">
+        {item.imageSrc ? (
+          <Image
+            src={item.imageSrc}
+            alt=""
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            sizes="(max-width: 768px) 50vw, 25vw"
+            unoptimized
+          />
+        ) : null}
+      </div>
+      <div className="dmn-editorial__top-card-body pt-3">
+        <DmnCategoryLabel>{item.category}</DmnCategoryLabel>
+        <h3 className="dmn-editorial__top-card-headline mt-1.5 font-robinhood text-[15px] font-bold leading-snug text-[#111] group-hover:text-[#2563eb] md:text-base">
+          {item.headline}
+        </h3>
+      </div>
+    </Link>
+  );
+}
+
+function DmnTextStory({ item }: { item: WireBrief }) {
+  return (
+    <Link href={`/newspaper?story=${item.storyId}`} className="dmn-editorial__text-story group block border-b border-[#111]/10 py-4 last:border-b-0">
+      <DmnCategoryLabel>{item.category}</DmnCategoryLabel>
+      <p className="mt-1 font-robinhood text-[15px] font-bold leading-snug text-[#111] group-hover:text-[#2563eb] md:text-base">
+        {item.headline}
+      </p>
+    </Link>
+  );
+}
+
+type DmnLeadStory = {
+  storyId: string;
+  category: string;
+  headline: string;
+  dek: string;
+  imageSrc?: string;
+  imageAlt?: string;
+};
+
+type DmnPromoCard = {
+  storyId: string;
+  headline: string;
+  imageSrc: string;
+  imageAlt?: string;
+  href?: string;
+};
+
+/** DMN-style broadsheet band: four-up row + business three-column block. */
+export function DmnEditorialGrid({
+  columnistHeading,
+  topRow,
+  businessHeading,
+  businessList,
+  businessLead,
+  businessPromo,
+}: {
+  columnistHeading: string;
+  topRow: WireBrief[];
+  businessHeading: string;
+  businessList: WireBrief[];
+  businessLead: DmnLeadStory;
+  businessPromo: DmnPromoCard;
+}) {
+  const promoHref = businessPromo.href ?? `/newspaper?story=${businessPromo.storyId}`;
+
+  return (
+    <div className="dmn-editorial">
+      <section className="dmn-editorial__band" aria-label={columnistHeading}>
+        <h2 className="dmn-editorial__section-title font-robinhood text-xl font-bold text-[#111] md:text-2xl">
+          {columnistHeading}
+        </h2>
+        <div className="dmn-editorial__four-up mt-5 border-t border-[#111] pt-5 md:mt-6 md:pt-6">
+          {topRow.slice(0, 4).map((item) => (
+            <DmnTopCard key={item.storyId} item={item} />
+          ))}
+        </div>
+      </section>
+
+      <div className="dmn-editorial__divider my-8 border-t border-[#111] md:my-10" aria-hidden />
+
+      <section className="dmn-editorial__band" aria-label={businessHeading}>
+        <h2 className="dmn-editorial__section-title font-robinhood text-xl font-bold text-[#111] md:text-2xl">
+          {businessHeading}
+        </h2>
+        <div className="dmn-editorial__business mt-5 border-t border-[#111] pt-5 md:mt-6 md:pt-6">
+          <nav className="dmn-editorial__business-list" aria-label={`${businessHeading} headlines`}>
+            {businessList.map((item) => (
+              <DmnTextStory key={item.storyId} item={item} />
+            ))}
+          </nav>
+
+          <article className="dmn-editorial__business-lead">
+            <Link
+              href={`/newspaper?story=${businessLead.storyId}`}
+              className="group grid h-full grid-cols-1 overflow-hidden border border-[#111]/12 bg-white md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
+            >
+              <div className="relative min-h-[200px] md:min-h-[260px]">
+                {businessLead.imageSrc ? (
+                  <Image
+                    src={businessLead.imageSrc}
+                    alt={businessLead.imageAlt ?? businessLead.headline}
+                    fill
+                    className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                    sizes="(max-width: 768px) 100vw, 40vw"
+                    unoptimized
+                  />
+                ) : null}
+              </div>
+              <div className="flex flex-col justify-center gap-3 p-5 md:p-6">
+                <DmnCategoryLabel>{businessLead.category}</DmnCategoryLabel>
+                <h3 className="font-robinhood text-xl font-bold leading-tight text-[#111] group-hover:text-[#2563eb] md:text-2xl">
+                  {businessLead.headline}
+                </h3>
+                <p className="font-robinhood text-sm leading-relaxed text-[#333]/85 line-clamp-5">{businessLead.dek}</p>
+              </div>
+            </Link>
+          </article>
+
+          <Link
+            href={promoHref}
+            className="dmn-editorial__business-promo group grid h-full grid-rows-[1fr_auto] overflow-hidden border border-[#111]"
+          >
+            <div className="relative min-h-[180px]">
+              <Image
+                src={businessPromo.imageSrc}
+                alt={businessPromo.imageAlt ?? ""}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                sizes="(max-width: 768px) 100vw, 22vw"
+                unoptimized
+              />
+            </div>
+            <div className="flex min-h-[120px] items-center bg-white p-5 md:p-6">
+              <h3 className="font-robinhood text-2xl font-bold leading-tight text-[#111] group-hover:text-[#2563eb] md:text-[1.65rem]">
+                {businessPromo.headline}
+              </h3>
+            </div>
+          </Link>
+        </div>
+      </section>
+    </div>
   );
 }
 
@@ -419,17 +577,8 @@ export function DeskWireNewsGrid() {
         ))}
       </div>
 
-      <div className="desk-wire-grid__signup card-3d border border-white/[0.09] bg-obsidian p-5 md:p-6">
-        <VotingProtocolSignup
-          typography="robinhood"
-          instanceId="home-desk-wire"
-          eyebrow="TREASURY"
-          heading="Join the Reserve"
-          description="Request briefings on reserves, cadence, and balance-sheet discipline. By submitting, you agree we may contact you about treasury operations."
-          submitLabel="Request Access"
-          embedded
-          fullDiscretion
-        />
+      <div className="desk-wire-grid__signup card-3d overflow-hidden border border-white/[0.09] bg-obsidian min-h-[280px]">
+        <AdPlacementPlaceholder className="h-full min-h-[280px]" />
       </div>
 
       <div className="desk-wire-grid__tiles grid grid-cols-2 gap-2 sm:grid-cols-4">

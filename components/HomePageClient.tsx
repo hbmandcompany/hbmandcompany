@@ -13,7 +13,7 @@ import {
   ConsequenceRadioDeck,
   DeskWireNewsGrid,
   FrontPageNewsGrid,
-  MagazineRecordGrid,
+  DmnEditorialGrid,
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
 
@@ -280,19 +280,40 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         <div className="pointer-events-none absolute inset-0 garnet-bloom-top" aria-hidden />
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
-            <MagazineSectionMasthead
-              eyebrow="— On The Record"
-              title="Stories Worth the read"
-              titleAccent="the read"
-              aside="Long reads · Dispatches · Analysis"
-              compact
-            />
-          </SectionReveal>
-          <SectionReveal>
-            <MagazineRecordGrid
-              features={suiteSections}
-              briefs={recordBriefs}
-              headlines={recordHeadlines}
+            <DmnEditorialGrid
+              columnistHeading="From HBM & Company · Culture Desk"
+              topRow={recordHeadlines}
+              businessHeading="Markets"
+              businessList={[
+                ...recordBriefs,
+                {
+                  storyId: recordHeadlines[0].storyId,
+                  category: recordHeadlines[0].category,
+                  headline: recordHeadlines[0].headline,
+                  dateline: recordHeadlines[0].dateline,
+                },
+                {
+                  storyId: recordHeadlines[1].storyId,
+                  category: recordHeadlines[1].category,
+                  headline: recordHeadlines[1].headline,
+                  dateline: recordHeadlines[1].dateline,
+                },
+              ]}
+              businessLead={{
+                storyId: suiteSections[0].storyId,
+                category: suiteSections[0].category,
+                headline: suiteSections[0].title,
+                dek: suiteSections[0].description,
+                imageSrc: suiteSections[0].imageSrc,
+                imageAlt: suiteSections[0].imageAlt,
+              }}
+              businessPromo={{
+                storyId: "culture-capital-future",
+                headline: "The Future of Culture & Capital",
+                imageSrc: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85",
+                imageAlt: "City skyline at dusk",
+                href: "/treasury",
+              }}
             />
           </SectionReveal>
         </div>
