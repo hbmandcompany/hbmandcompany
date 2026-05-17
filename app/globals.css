@@ -930,6 +930,25 @@
   font-weight: 400;
 }
 
+.hero-front-page__lead-follow {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}
+
+.hero-front-page__lead-follow-headline {
+  font-size: clamp(1.15rem, 0.95rem + 0.55vw, 1.45rem);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+}
+
+.hero-front-page__lead-follow-dek {
+  font-size: 0.85rem;
+  line-height: 1.55;
+  font-weight: 400;
+}
+
 .hero-front-page__rule {
   height: 1px;
   margin-block: 1rem;

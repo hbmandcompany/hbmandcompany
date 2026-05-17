@@ -125,22 +125,28 @@ function HeroSplitCenterImage({ src, alt }: { src: string; alt: string }) {
 /** DMN-style 3-column broadsheet hero with banner, masthead, and live ticker. */
 export function HeroNewspaperEdition({
   lead,
+  leadFollowUp,
   heroImageSrc,
   heroImageAlt,
   leftBriefs,
   rightFeatured,
   rightSecondary,
   rightTopBriefs,
+  rightSecondaryBriefs,
   tickerHeadlines,
   footer,
 }: {
   lead: MagazineStory;
+  /** Second story stacked under the left-column lead. */
+  leadFollowUp?: MagazineStory;
   heroImageSrc: string;
   heroImageAlt?: string;
   leftBriefs: WireBrief[];
   rightFeatured: MagazineStory;
   rightSecondary: MagazineStory;
   rightTopBriefs: WireBrief[];
+  /** Headlines listed under the right-column secondary feature. */
+  rightSecondaryBriefs?: WireBrief[];
   tickerHeadlines: string[];
   /** Culture desk and below — rendered inside the same edition shell. */
   footer?: ReactNode;
@@ -166,6 +172,20 @@ export function HeroNewspaperEdition({
               </Link>
               <p className="hero-front-page__dek font-robinhood text-silver-dim/76">{lead.dek}</p>
             </article>
+            {leadFollowUp ? (
+              <article className="hero-front-page__lead-follow">
+                <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>
+                <Link
+                  href={`/newspaper?story=${leadFollowUp.storyId}`}
+                  className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
+                >
+                  <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88 transition-colors group-hover:text-gold">
+                    {leadFollowUp.headline}
+                  </h3>
+                </Link>
+                <p className="hero-front-page__lead-follow-dek font-robinhood text-silver-dim/68">{leadFollowUp.dek}</p>
+              </article>
+            ) : null}
             <div className="hero-front-page__rule" aria-hidden />
             <nav className="hero-front-page__briefs" aria-label="More headlines">
               {leftBriefs.slice(0, 5).map((item) => (
@@ -228,6 +248,13 @@ export function HeroNewspaperEdition({
                   {rightSecondary.dek}
                 </p>
               </Link>
+              {rightSecondaryBriefs && rightSecondaryBriefs.length > 0 ? (
+                <nav className="hero-front-page__briefs mt-3" aria-label="Related culture headlines">
+                  {rightSecondaryBriefs.map((item) => (
+                    <HeroBriefLink key={item.storyId} item={item} />
+                  ))}
+                </nav>
+              ) : null}
             </div>
           </aside>
         </div>

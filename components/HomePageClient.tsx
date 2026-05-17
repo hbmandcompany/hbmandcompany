@@ -61,6 +61,70 @@ const featuredStories: MagazineStory[] = [
   },
 ];
 
+const heroLeadFollowUp: MagazineStory = {
+  storyId: "artists-on-chain",
+  category: "Music Intelligence",
+  headline: "The 52 Ways Artists Are Earning On-Chain",
+  dek: "From streaming residuals to protocol yield, a new ledger of artist income is emerging — mapped chain by chain, venue by venue, and royalty line by royalty line.",
+  dateline: "May 15, 2026 · Dispatch",
+  pixelVariant: "pickup",
+};
+
+/** Listed under the Culture & Rights feature on the hero front page. */
+const heroCultureBriefs: WireBrief[] = [
+  {
+    storyId: "masters-reprice",
+    category: "Rights",
+    headline: "Masters Reprice Overnight as Catalogs Trade in Private Rooms",
+    dateline: "May 16",
+  },
+  {
+    storyId: "playlist-edge",
+    category: "Music Intel",
+    headline: "Labels Buy the Same Algorithm the Indies Built",
+    dateline: "May 15",
+  },
+  {
+    storyId: "slate-token",
+    category: "Film",
+    headline: "Slate Financing Closes on Base in 48 Hours",
+    dateline: "May 14",
+  },
+  {
+    storyId: "royalty-rail-brief",
+    category: "Markets",
+    headline: "Royalty Tokens Clear First Institutional Window",
+    dateline: "May 13",
+  },
+];
+
+const heroLeftBriefs: WireBrief[] = [
+  {
+    storyId: "streaming-royalties-chain",
+    category: "Music",
+    headline: "Streaming Royalties Sync to Chain Nightly",
+    dateline: "May 15",
+  },
+  {
+    storyId: "indie-breakout-signals",
+    category: "Music",
+    headline: "Indie Labels Share Breakout Signal Feeds",
+    dateline: "May 14",
+  },
+  {
+    storyId: "desk-dispatch",
+    category: "Dispatch",
+    headline: "The Ledger After the Room Goes Quiet",
+    dateline: "May 10",
+  },
+  {
+    storyId: "film-base-brief",
+    category: "Film",
+    headline: "Tokenised Production Rights Hit Main Slate",
+    dateline: "May 11",
+  },
+];
+
 const recordHeadlines: WireBrief[] = [
   {
     storyId: "masters-reprice",
@@ -286,12 +350,14 @@ export default function HomePageClient() {
           <motion.div variants={heroItem} style={{ willChange: "transform" }}>
             <HeroNewspaperEdition
               lead={featuredStories[0]}
+              leadFollowUp={heroLeadFollowUp}
               heroImageSrc="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1200&q=85"
               heroImageAlt="Electric guitar"
-              leftBriefs={recordHeadlines}
+              leftBriefs={heroLeftBriefs}
               rightFeatured={featuredStories[1]}
               rightSecondary={featuredStories[2]}
               rightTopBriefs={recordBriefs.slice(0, 2)}
+              rightSecondaryBriefs={heroCultureBriefs}
               tickerHeadlines={recordHeadlines.map((h) => h.headline)}
               footer={
                 <DmnEditorialGrid
