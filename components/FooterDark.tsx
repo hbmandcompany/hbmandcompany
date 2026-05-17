@@ -16,10 +16,10 @@ const footerColumns = [
   {
     heading: "Protocol",
     links: [
-      { label: "Network Overview", href: "/work" },
+      { label: "Treasury", href: "/treasury" },
       { label: "Governance", href: "/governance" },
-      { label: "Validators", href: "/work" },
-      { label: "Bridge Infrastructure", href: "/work" },
+      { label: "Validators", href: "/treasury" },
+      { label: "Bridge Infrastructure", href: "/treasury" },
       { label: "Documentation", href: "/documentation" },
       { label: "Whitepaper", href: "/contact" },
     ],
@@ -27,11 +27,11 @@ const footerColumns = [
   {
     heading: "Portfolio",
     links: [
-      { label: "All Projects", href: "/work" },
-      { label: "DeFi", href: "/work" },
-      { label: "Infrastructure", href: "/work" },
-      { label: "Custody", href: "/work" },
-      { label: "Layer-2", href: "/work" },
+      { label: "All Projects", href: "/treasury" },
+      { label: "DeFi", href: "/treasury" },
+      { label: "Infrastructure", href: "/treasury" },
+      { label: "Custody", href: "/treasury" },
+      { label: "Layer-2", href: "/treasury" },
       { label: "Governance", href: "/governance" },
     ],
   },
@@ -39,11 +39,11 @@ const footerColumns = [
     heading: "Ecosystem",
     links: [
       { label: "Ethereum", href: "/ethereum" },
-      { label: "Solana", href: "/work" },
+      { label: "Solana", href: "/treasury" },
       { label: "Base", href: "/base" },
-      { label: "Avalanche", href: "/work" },
-      { label: "Cosmos", href: "/work" },
-      { label: "Arbitrum", href: "/work" },
+      { label: "Avalanche", href: "/treasury" },
+      { label: "Cosmos", href: "/treasury" },
+      { label: "Arbitrum", href: "/treasury" },
     ],
   },
   {

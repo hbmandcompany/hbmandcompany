@@ -6,19 +6,19 @@ import { motion, useReducedMotion } from "framer-motion";
 import FooterDark from "@/components/FooterDark";
 import FooterBrandVotingGrid from "@/components/FooterBrandVotingGrid";
 import MarqueeStrip from "@/components/MarqueeStrip";
-import SectionReveal from "@/components/SectionReveal";
-import { MagazineSectionMasthead, type MagazineStory, type SuiteStory } from "@/components/MagazineStoryCards";
+import type { MagazineStory, SuiteStory } from "@/components/MagazineStoryCards";
 import { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
   BroadsheetFourColumnGrid,
   ConsequenceRadioDeck,
   DeskWireNewsGrid,
-  FrontPageNewsGrid,
   DmnEditorialGrid,
+  FeaturedStoriesFourUp,
   MagazineLifestyleGrid,
   type BroadsheetColumn,
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
+import { HomeEditorialBand } from "@/components/HomeEditorialBand";
 
 const featuredStories: MagazineStory[] = [
   {
@@ -50,6 +50,16 @@ const featuredStories: MagazineStory[] = [
     pixelVariant: "black-letter",
     imageSrc: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=900&q=85",
     imageAlt: "Live performance crowd",
+  },
+  {
+    storyId: "royalty-rail",
+    category: "Markets Desk",
+    headline: "Royalty Tokens Clear First Institutional Window",
+    dek: "Institutional desks open the first cleared window for royalty-token settlement on verified rails.",
+    dateline: "May 13, 2026 · New York",
+    pixelVariant: "moneyba",
+    imageSrc: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=900&q=85",
+    imageAlt: "Financial markets chart",
   },
 ];
 
@@ -233,10 +243,28 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
   return (
     <>
       <div className="font-robinhood font-normal tracking-normal antialiased home-robinhood">
-      {/* ═══════════════ HERO ═══════════════ */}
-      <section
-        className="relative flex min-h-screen min-h-[100dvh] flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[max(4rem,env(safe-area-inset-bottom,1rem))] md:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] md:pb-[max(5rem,env(safe-area-inset-bottom,1rem))] lg:pb-[max(6rem,env(safe-area-inset-bottom,1rem))]"
-      >
+      {/*
+        WRAPPED: hero <section> + Culture Desk <HomeEditorialBand nested>
+        — single editorial card so the front page and Culture Desk read as one surface.
+
+        BEFORE:
+          <section> … hero … </section>
+          <HomeEditorialBand> … DmnEditorialGrid … </HomeEditorialBand>
+
+        AFTER:
+          <div className="home-hero-culture-unified">
+            <article className="home-hero-culture-unified__card">
+              <section className="home-hero-culture-unified__hero"> … hero … </section>
+              <hr className="home-hero-culture-unified__divider" />
+              <HomeEditorialBand nested> … DmnEditorialGrid … </HomeEditorialBand>
+            </article>
+          </div>
+      */}
+      <div className="home-hero-culture-unified">
+        <article className="home-hero-culture-unified__card home-editorial-shell">
+          <section
+            className="home-hero-culture-unified__hero relative flex min-h-screen min-h-[100dvh] flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[max(4rem,env(safe-area-inset-bottom,1rem))] md:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] md:pb-[max(5rem,env(safe-area-inset-bottom,1rem))] lg:pb-[max(6rem,env(safe-area-inset-bottom,1rem))]"
+          >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
@@ -297,18 +325,17 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           <div className="w-px h-14 bg-gradient-to-b from-garnet/50 to-transparent animate-glow-pulse" />
         </div>
 
-        {/* Blend hero image into the next void band (no hard rule line) */}
+        {/* Former void-band fade — hidden inside unified card; __divider separates Culture Desk */}
         <div
-          className="pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-28 bg-gradient-to-b from-transparent via-void/75 to-void sm:h-32 md:h-40"
+          className="home-hero-culture-unified__hero-fade pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-28 bg-gradient-to-b from-transparent via-void/75 to-void sm:h-32 md:h-40"
           aria-hidden
         />
-      </section>
+          </section>
 
-      {/* ═══════════════ CULTURE DESK — DMN-style band (below hero) ═══════════════ */}
-      <section className="relative bg-void py-10 md:py-12" aria-label="Culture desk">
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <DmnEditorialGrid
+          <hr className="home-hero-culture-unified__divider" aria-hidden />
+
+          <HomeEditorialBand ariaLabel="Culture desk" showBreak={false} nested>
+        <DmnEditorialGrid
               columnistHeading="From HBM & Company · Culture Desk"
               topRow={recordHeadlines}
               businessHeading="Markets"
@@ -329,67 +356,41 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
                 href: "/treasury",
               }}
             />
-          </SectionReveal>
+          </HomeEditorialBand>
+        </article>
+      </div>
+
+      {/* CONSEQUENCE RADIO */}
+      <HomeEditorialBand ariaLabel="Consequence Radio">
+        <ConsequenceRadioDeck />
+      </HomeEditorialBand>
+
+      <HomeEditorialBand ariaLabel="Music and culture wire">
+        <MagazineLifestyleGrid />
+      </HomeEditorialBand>
+
+      <HomeEditorialBand ariaLabel="Thesis">
+        <div className="home-editorial-shell home-editorial-shell--thesis">
+          <FooterBrandVotingGrid
+            typography="robinhood"
+            instanceId="home-thesis"
+            brandSide="left"
+            band="thesis"
+          />
         </div>
-      </section>
+      </HomeEditorialBand>
 
-      {/* ═══════════════ CONSEQUENCE RADIO ═══════════════ */}
-      <section className="relative overflow-hidden py-10 md:py-12 section-mid" aria-label="Consequence Radio">
-        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <ConsequenceRadioDeck />
-          </SectionReveal>
-        </div>
-      </section>
+      <HomeEditorialBand ariaLabel="Markets desk and treasury wire">
+        <DeskWireNewsGrid />
+      </HomeEditorialBand>
 
-      {/* ═══════════════ Music & Culture wire (DMN-style) ═══════════════ */}
-      <section className="relative bg-void py-10 md:py-12" aria-label="Music and culture wire">
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <MagazineLifestyleGrid />
-          </SectionReveal>
-        </div>
-      </section>
+      <HomeEditorialBand ariaLabel="Section fronts">
+        <BroadsheetFourColumnGrid columns={broadsheetColumns} />
+      </HomeEditorialBand>
 
-      {/* ═══════════════ Markets desk wire ═══════════════ */}
-      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <DeskWireNewsGrid />
-          </SectionReveal>
-        </div>
-      </section>
-
-      {/* ═══════════════ FOUR-COLUMN BROADSHEET ═══════════════ */}
-      <section className="relative bg-void py-10 md:py-12" aria-label="Section fronts">
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <BroadsheetFourColumnGrid columns={broadsheetColumns} />
-          </SectionReveal>
-        </div>
-      </section>
-
-      {/* ═══════════════ FEATURED STORIES — front page grid ═══════════════ */}
-      <section className="relative flex min-h-0 flex-col justify-center overflow-hidden section-mid py-12 md:py-16">
-        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
-        <div className="pointer-events-none absolute inset-0 city-glow opacity-35" aria-hidden />
-
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <MagazineSectionMasthead
-              eyebrow="— Featured Stories"
-              title="The Front Page"
-              aside="Culture · Music · Film · Markets · Vol. I · 2026"
-              compact
-            />
-          </SectionReveal>
-
-          <SectionReveal>
-            <FrontPageNewsGrid stories={featuredStories} />
-          </SectionReveal>
-        </div>
-      </section>
+      <HomeEditorialBand ariaLabel="Featured stories">
+        <FeaturedStoriesFourUp stories={featuredStories} />
+      </HomeEditorialBand>
 
 
       {/* ═══════════════ MARQUEE ═══════════════ */}
@@ -400,38 +401,6 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         items={["Solana", "Ethereum", "Avalanche", "Polygon", "Arbitrum", "Optimism", "Base", "Cosmos", "Polkadot", "Near", "Sui", "Aptos"]}
         reverse speed="slow"
       />
-
-
-      {/* ═══════════════ thesis ═══════════════ */}
-      <section className="relative overflow-x-hidden bg-void pb-20 md:pb-24 lg:pb-28" aria-label="Thesis">
-        <div
-          className="pointer-events-none absolute inset-0 opacity-[0.14]"
-          style={{
-            backgroundImage: `
-              linear-gradient(rgba(180,175,170,0.065) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(180,175,170,0.05) 1px, transparent 1px)
-            `,
-            backgroundSize: "44px 44px",
-            maskImage: "radial-gradient(ellipse 78% 58% at 50% 42%, black 14%, transparent 70%)",
-            WebkitMaskImage: "radial-gradient(ellipse 78% 58% at 50% 42%, black 14%, transparent 70%)",
-          }}
-          aria-hidden
-        />
-        <div className="pointer-events-none absolute inset-0 purple-bloom opacity-50" aria-hidden />
-        <div className="pointer-events-none absolute inset-0 garnet-bloom-top opacity-35" aria-hidden />
-        <div
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_75%_50%_at_20%_35%,rgba(180,175,170,0.07)_0%,transparent_55%)]"
-          aria-hidden
-        />
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <FooterBrandVotingGrid
-            typography="robinhood"
-            instanceId="home-thesis"
-            brandSide="left"
-            band="thesis"
-          />
-        </div>
-      </section>
 
       <FooterDark typography="robinhood" showUpperBrandVoting={false} />
     </div>

@@ -12,6 +12,7 @@ import {
 } from "@/components/MagazineStoryCards";
 export { ConsequenceRadioDeck } from "@/components/ConsequenceRadioDeck";
 export { MagazineLifestyleGrid } from "@/components/MagazineLifestyleGrid";
+export { FeaturedStoriesFourUp } from "@/components/FeaturedStoriesFourUp";
 
 const goldOutlineCta =
   "gold-outline-btn inline-block px-3 py-1 text-[10px] uppercase tracking-[0.18em] sm:px-4 sm:py-1.5 sm:text-label-xs sm:tracking-[0.2em]";

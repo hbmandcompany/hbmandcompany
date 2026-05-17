@@ -423,7 +423,7 @@ export default function TreasuryContent() {
           <SectionReveal delay={0.25}>
             <div className="mt-16 flex flex-col items-center justify-center gap-4 sm:flex-row">
               <Link
-                href="/work"
+                href="/treasury"
                 className="garnet-btn inline-block px-10 py-3.5 text-center font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void"
               >
                 Portfolio &amp; holdings

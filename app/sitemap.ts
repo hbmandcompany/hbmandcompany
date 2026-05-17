@@ -14,7 +14,6 @@ const routes: {
   { path: "/careers", changeFrequency: "monthly", priority: 0.65 },
   { path: "/press-kit", changeFrequency: "monthly", priority: 0.55 },
   { path: "/legal-entity", changeFrequency: "yearly", priority: 0.45 },
-  { path: "/work", changeFrequency: "monthly", priority: 0.9 },
   { path: "/base", changeFrequency: "monthly", priority: 0.88 },
   { path: "/ethereum", changeFrequency: "monthly", priority: 0.88 },
   { path: "/governance", changeFrequency: "monthly", priority: 0.88 },

@@ -231,7 +231,7 @@ export default function InvestorRelationsPage() {
                 {[
                   { label: "The Company", href: "/about" },
                   { label: "Values & Thesis", href: "/values" },
-                  { label: "All Projects", href: "/work" },
+                  { label: "All Projects", href: "/treasury" },
                 ].map((link) => (
                   <Link
                     key={link.label}

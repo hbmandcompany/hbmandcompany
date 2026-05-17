@@ -373,7 +373,7 @@ export default function EthereumPage() {
               Treasury
             </Link>
             <Link
-              href="/work"
+              href="/treasury"
               className="rounded-full border border-white/[0.12] px-3 py-1.5 font-mono-hbm text-[9px] uppercase tracking-[0.16em] text-silver-dim/76 transition-colors hover:bg-white/[0.05]"
             >
               Portfolio
