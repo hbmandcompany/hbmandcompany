@@ -1415,3 +1415,100 @@
 .desk-wire-grid__signup .ad-placement-slot {
   min-height: 280px;
 }
+
+/* Four-column broadsheet wire */
+.broadsheet-four-col {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(9, 9, 11, 0.72) 0%, rgba(5, 5, 5, 0.88) 100%);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+}
+
+.broadsheet-four-col__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .broadsheet-four-col__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .broadsheet-four-col__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.broadsheet-four-col__column {
+  padding: 1rem 1.15rem 1.25rem;
+  border-top: 3px solid rgba(242, 234, 216, 0.88);
+}
+
+@media (min-width: 768px) {
+  .broadsheet-four-col__column:nth-child(odd) {
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+}
+
+@media (min-width: 1024px) {
+  .broadsheet-four-col__column {
+    border-top: 3px solid rgba(242, 234, 216, 0.88);
+    border-right: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .broadsheet-four-col__column:last-child {
+    border-right: none;
+  }
+}
+
+.broadsheet-four-col__column-header {
+  padding-bottom: 0.65rem;
+  margin-bottom: 0.85rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.broadsheet-four-col__column-title {
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  color: rgba(242, 234, 216, 0.92);
+  text-transform: capitalize;
+}
+
+.broadsheet-four-col__lead-headline {
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: rgba(242, 234, 216, 0.9);
+  transition: color 0.2s ease;
+}
+
+.broadsheet-four-col__list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.broadsheet-four-col__list-item {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.broadsheet-four-col__list-link {
+  display: block;
+  padding: 0.65rem 0;
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(200, 195, 190, 0.78);
+  transition: color 0.2s ease;
+}
+
+.broadsheet-four-col__list-link:hover {
+  color: rgba(180, 175, 170, 1);
+}

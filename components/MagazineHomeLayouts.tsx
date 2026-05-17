@@ -393,6 +393,70 @@ export function FrontPageNewsGrid({ stories }: { stories: MagazineStory[] }) {
   );
 }
 
+export type BroadsheetColumn = {
+  title: string;
+  lead: {
+    storyId: string;
+    headline: string;
+    imageSrc: string;
+    imageAlt?: string;
+  };
+  more: { storyId: string; headline: string }[];
+};
+
+function BroadsheetColumnBlock({ column }: { column: BroadsheetColumn }) {
+  return (
+    <div className="broadsheet-four-col__column">
+      <div className="broadsheet-four-col__column-header">
+        <h3 className="broadsheet-four-col__column-title font-robinhood">{column.title}</h3>
+      </div>
+      <Link
+        href={`/newspaper?story=${column.lead.storyId}`}
+        className="broadsheet-four-col__lead group block"
+      >
+        <figure className="broadsheet-four-col__lead-media relative aspect-[16/10] w-full overflow-hidden bg-midnight">
+          <Image
+            src={column.lead.imageSrc}
+            alt={column.lead.imageAlt ?? column.lead.headline}
+            fill
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+            sizes="(max-width: 768px) 100vw, 25vw"
+            unoptimized
+          />
+        </figure>
+        <h4 className="broadsheet-four-col__lead-headline font-robinhood group-hover:text-gold">
+          {column.lead.headline}
+        </h4>
+      </Link>
+      <ul className="broadsheet-four-col__list">
+        {column.more.map((item) => (
+          <li key={item.storyId} className="broadsheet-four-col__list-item">
+            <Link
+              href={`/newspaper?story=${item.storyId}`}
+              className="broadsheet-four-col__list-link font-robinhood group"
+            >
+              {item.headline}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+/** Four-column broadsheet wire with lead image + headline stack per column. */
+export function BroadsheetFourColumnGrid({ columns }: { columns: BroadsheetColumn[] }) {
+  return (
+    <div className="broadsheet-four-col">
+      <div className="broadsheet-four-col__grid">
+        {columns.slice(0, 4).map((column) => (
+          <BroadsheetColumnBlock key={column.title} column={column} />
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function DeskWireNewsGrid() {
   const wireStories: WireBrief[] = [
     {

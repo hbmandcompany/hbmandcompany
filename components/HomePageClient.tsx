@@ -10,10 +10,12 @@ import SectionReveal from "@/components/SectionReveal";
 import { MagazineSectionMasthead, type MagazineStory, type SuiteStory } from "@/components/MagazineStoryCards";
 import { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
+  BroadsheetFourColumnGrid,
   ConsequenceRadioDeck,
   DeskWireNewsGrid,
   FrontPageNewsGrid,
   DmnEditorialGrid,
+  type BroadsheetColumn,
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
 
@@ -128,6 +130,64 @@ const suiteSections: SuiteStory[] = [
     pixelVariant: "spatial",
     imageSrc: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=900&q=85",
     imageAlt: "Wrapped gift with warm light",
+  },
+];
+
+const broadsheetColumns: BroadsheetColumn[] = [
+  {
+    title: "Music",
+    lead: {
+      storyId: featuredStories[0].storyId,
+      headline: featuredStories[0].headline,
+      imageSrc: featuredStories[0].imageSrc!,
+      imageAlt: featuredStories[0].imageAlt,
+    },
+    more: [
+      { storyId: recordHeadlines[1].storyId, headline: recordHeadlines[1].headline },
+      { storyId: recordHeadlines[0].storyId, headline: recordHeadlines[0].headline },
+      { storyId: suiteSections[0].storyId, headline: suiteSections[0].title },
+    ],
+  },
+  {
+    title: "Culture",
+    lead: {
+      storyId: featuredStories[2].storyId,
+      headline: featuredStories[2].headline,
+      imageSrc: featuredStories[2].imageSrc!,
+      imageAlt: featuredStories[2].imageAlt,
+    },
+    more: [
+      { storyId: recordBriefs[0].storyId, headline: recordBriefs[0].headline },
+      { storyId: recordBriefs[2].storyId, headline: recordBriefs[2].headline },
+      { storyId: "culture-tax-brief", headline: "Who Owns the Sound of a Generation" },
+    ],
+  },
+  {
+    title: "Markets",
+    lead: {
+      storyId: recordHeadlines[3].storyId,
+      headline: recordHeadlines[3].headline,
+      imageSrc: recordHeadlines[3].imageSrc!,
+    },
+    more: [
+      { storyId: "reserve-holdings", headline: "Reserve Holdings Update: Verified Rails and Governance Cadence" },
+      { storyId: "treasury-cadence", headline: "Balance-Sheet Discipline Briefings Open for Q2" },
+      { storyId: "whitepaper-access", headline: "Whitepaper: Institutional Reserve Framework" },
+    ],
+  },
+  {
+    title: "Film",
+    lead: {
+      storyId: featuredStories[1].storyId,
+      headline: featuredStories[1].headline,
+      imageSrc: featuredStories[1].imageSrc!,
+      imageAlt: featuredStories[1].imageAlt,
+    },
+    more: [
+      { storyId: recordHeadlines[2].storyId, headline: recordHeadlines[2].headline },
+      { storyId: recordBriefs[1].storyId, headline: recordBriefs[1].headline },
+      { storyId: suiteSections[1].storyId, headline: suiteSections[1].title },
+    ],
   },
 ];
 
@@ -264,6 +324,34 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         </div>
       </section>
 
+      {/* ═══════════════ CONSEQUENCE RADIO ═══════════════ */}
+      <section className="relative overflow-hidden py-10 md:py-12 section-mid" aria-label="Consequence Radio">
+        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <ConsequenceRadioDeck />
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ Markets desk wire ═══════════════ */}
+      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <DeskWireNewsGrid />
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ FOUR-COLUMN BROADSHEET ═══════════════ */}
+      <section className="relative bg-void py-10 md:py-12" aria-label="Section fronts">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <BroadsheetFourColumnGrid columns={broadsheetColumns} />
+          </SectionReveal>
+        </div>
+      </section>
+
       {/* ═══════════════ FEATURED STORIES — front page grid ═══════════════ */}
       <section className="relative flex min-h-0 flex-col justify-center overflow-hidden section-mid py-12 md:py-16">
         <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
@@ -285,14 +373,6 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         </div>
       </section>
 
-      {/* ═══════════════ Markets desk wire ═══════════════ */}
-      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <DeskWireNewsGrid />
-          </SectionReveal>
-        </div>
-      </section>
 
       {/* ═══════════════ MARQUEE ═══════════════ */}
       {cryptoMarqueeSlot}
@@ -303,15 +383,6 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         reverse speed="slow"
       />
 
-      {/* ═══════════════ CONSEQUENCE RADIO — Pandora-style desk ═══════════════ */}
-      <section className="relative overflow-hidden py-12 md:py-16 section-mid" aria-label="Consequence Radio">
-        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <ConsequenceRadioDeck />
-          </SectionReveal>
-        </div>
-      </section>
 
       {/* ═══════════════ thesis ═══════════════ */}
       <section className="relative overflow-x-hidden bg-void pb-20 md:pb-24 lg:pb-28" aria-label="Thesis">
