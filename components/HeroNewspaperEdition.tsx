@@ -188,7 +188,7 @@ export function HeroNewspaperEdition({
             ) : null}
             <div className="hero-front-page__rule" aria-hidden />
             <nav className="hero-front-page__briefs" aria-label="More headlines">
-              {leftBriefs.slice(0, 5).map((item) => (
+              {leftBriefs.slice(0, 6).map((item) => (
                 <HeroBriefLink key={item.storyId} item={item} />
               ))}
             </nav>

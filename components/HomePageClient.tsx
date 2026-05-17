@@ -84,18 +84,6 @@ const heroCultureBriefs: WireBrief[] = [
     headline: "Labels Buy the Same Algorithm the Indies Built",
     dateline: "May 15",
   },
-  {
-    storyId: "slate-token",
-    category: "Film",
-    headline: "Slate Financing Closes on Base in 48 Hours",
-    dateline: "May 14",
-  },
-  {
-    storyId: "royalty-rail-brief",
-    category: "Markets",
-    headline: "Royalty Tokens Clear First Institutional Window",
-    dateline: "May 13",
-  },
 ];
 
 const heroLeftBriefs: WireBrief[] = [
@@ -122,6 +110,18 @@ const heroLeftBriefs: WireBrief[] = [
     category: "Film",
     headline: "Tokenised Production Rights Hit Main Slate",
     dateline: "May 11",
+  },
+  {
+    storyId: "slate-token",
+    category: "Film",
+    headline: "Slate Financing Closes on Base in 48 Hours",
+    dateline: "May 14",
+  },
+  {
+    storyId: "royalty-rail-brief",
+    category: "Markets",
+    headline: "Royalty Tokens Clear First Institutional Window",
+    dateline: "May 13",
   },
 ];
 
