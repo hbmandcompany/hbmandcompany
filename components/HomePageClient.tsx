@@ -235,17 +235,34 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         />
       </section>
 
-      {/* ═══════════════ Markets desk wire ═══════════════ */}
-      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
+      {/* ═══════════════ CULTURE DESK — DMN-style band (below hero) ═══════════════ */}
+      <section className="relative bg-void py-10 md:py-12" aria-label="Culture desk">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
-            <DeskWireNewsGrid />
+            <DmnEditorialGrid
+              columnistHeading="From HBM & Company · Culture Desk"
+              topRow={recordHeadlines}
+              businessHeading="Markets"
+              businessList={recordBriefs}
+              businessLead={{
+                storyId: suiteSections[0].storyId,
+                category: suiteSections[0].category,
+                headline: suiteSections[0].title,
+                dek: suiteSections[0].description,
+                imageSrc: suiteSections[0].imageSrc,
+                imageAlt: suiteSections[0].imageAlt,
+              }}
+              businessPromo={{
+                storyId: "culture-capital-future",
+                headline: "The Future of Culture & Capital",
+                imageSrc: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85",
+                imageAlt: "City skyline at dusk",
+                href: "/treasury",
+              }}
+            />
           </SectionReveal>
         </div>
       </section>
-
-      {/* ═══════════════ MARQUEE ═══════════════ */}
-      {cryptoMarqueeSlot}
 
       {/* ═══════════════ FEATURED STORIES — front page grid ═══════════════ */}
       <section className="relative flex min-h-0 flex-col justify-center overflow-hidden section-mid py-12 md:py-16">
@@ -268,56 +285,23 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         </div>
       </section>
 
+      {/* ═══════════════ Markets desk wire ═══════════════ */}
+      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <DeskWireNewsGrid />
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ MARQUEE ═══════════════ */}
+      {cryptoMarqueeSlot}
+
       {/* ═══════════════ CHAINS MARQUEE ═══════════════ */}
       <MarqueeStrip
         items={["Solana", "Ethereum", "Avalanche", "Polygon", "Arbitrum", "Optimism", "Base", "Cosmos", "Polkadot", "Near", "Sui", "Aptos"]}
         reverse speed="slow"
       />
-
-      {/* ═══════════════ ON THE RECORD — dense magazine grid ═══════════════ */}
-      <section className="relative overflow-hidden py-12 md:py-16 section-raised">
-        <div className="pointer-events-none absolute inset-0 amber-bloom opacity-35" aria-hidden />
-        <div className="pointer-events-none absolute inset-0 garnet-bloom-top" aria-hidden />
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <DmnEditorialGrid
-              columnistHeading="From HBM & Company · Culture Desk"
-              topRow={recordHeadlines}
-              businessHeading="Markets"
-              businessList={[
-                ...recordBriefs,
-                {
-                  storyId: recordHeadlines[0].storyId,
-                  category: recordHeadlines[0].category,
-                  headline: recordHeadlines[0].headline,
-                  dateline: recordHeadlines[0].dateline,
-                },
-                {
-                  storyId: recordHeadlines[1].storyId,
-                  category: recordHeadlines[1].category,
-                  headline: recordHeadlines[1].headline,
-                  dateline: recordHeadlines[1].dateline,
-                },
-              ]}
-              businessLead={{
-                storyId: suiteSections[0].storyId,
-                category: suiteSections[0].category,
-                headline: suiteSections[0].title,
-                dek: suiteSections[0].description,
-                imageSrc: suiteSections[0].imageSrc,
-                imageAlt: suiteSections[0].imageAlt,
-              }}
-              businessPromo={{
-                storyId: "culture-capital-future",
-                headline: "The Future of Culture & Capital",
-                imageSrc: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85",
-                imageAlt: "City skyline at dusk",
-                href: "/treasury",
-              }}
-            />
-          </SectionReveal>
-        </div>
-      </section>
 
       {/* ═══════════════ CONSEQUENCE RADIO — Pandora-style desk ═══════════════ */}
       <section className="relative overflow-hidden py-12 md:py-16 section-mid" aria-label="Consequence Radio">

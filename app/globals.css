@@ -1082,13 +1082,17 @@
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
 }
 
-/* DMN-style light broadsheet band (On The Record) */
+/* DMN-style editorial band — dark edition shell */
 .dmn-editorial {
-  background: #fff;
-  color: #111;
-  padding: clamp(1.25rem, 2vw, 2rem);
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+  padding: clamp(1.25rem, 2vw, 1.75rem);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(9, 9, 11, 0.72) 0%, rgba(5, 5, 5, 0.88) 100%);
+  box-shadow:
+    0 32px 80px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
 }
 
 .dmn-editorial__four-up {

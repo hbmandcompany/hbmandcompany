@@ -87,7 +87,7 @@ function RecordHeadlineRow({ item }: { item: WireBrief }) {
 
 function DmnCategoryLabel({ children }: { children: string }) {
   return (
-    <span className="dmn-editorial__category font-robinhood text-[11px] font-bold uppercase tracking-[0.06em] text-[#2563eb]">
+    <span className="font-mono-hbm text-[8px] uppercase tracking-[0.26em] text-gold/62">
       {children}
     </span>
   );
@@ -95,22 +95,28 @@ function DmnCategoryLabel({ children }: { children: string }) {
 
 function DmnTopCard({ item }: { item: WireBrief }) {
   return (
-    <Link href={`/newspaper?story=${item.storyId}`} className="dmn-editorial__top-card group block">
-      <div className="dmn-editorial__top-card-media relative aspect-[4/3] overflow-hidden bg-neutral-200">
+    <Link
+      href={`/newspaper?story=${item.storyId}`}
+      className="dmn-editorial__top-card group flex min-h-0 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-obsidian transition-colors hover:border-gold/22"
+    >
+      <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-midnight">
         {item.imageSrc ? (
           <Image
             src={item.imageSrc}
             alt=""
             fill
-            className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+            className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
             sizes="(max-width: 768px) 50vw, 25vw"
             unoptimized
           />
-        ) : null}
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-midnight to-void" />
+        )}
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian/75 to-transparent" />
       </div>
-      <div className="dmn-editorial__top-card-body pt-3">
+      <div className="flex flex-1 flex-col gap-1.5 p-3 md:p-3.5">
         <DmnCategoryLabel>{item.category}</DmnCategoryLabel>
-        <h3 className="dmn-editorial__top-card-headline mt-1.5 font-robinhood text-[15px] font-bold leading-snug text-[#111] group-hover:text-[#2563eb] md:text-base">
+        <h3 className="font-cormorant text-base font-light leading-tight text-cream/88 line-clamp-3 group-hover:text-gold md:text-[1.05rem]">
           {item.headline}
         </h3>
       </div>
@@ -120,9 +126,12 @@ function DmnTopCard({ item }: { item: WireBrief }) {
 
 function DmnTextStory({ item }: { item: WireBrief }) {
   return (
-    <Link href={`/newspaper?story=${item.storyId}`} className="dmn-editorial__text-story group block border-b border-[#111]/10 py-4 last:border-b-0">
+    <Link
+      href={`/newspaper?story=${item.storyId}`}
+      className="dmn-editorial__text-story group block border-b border-white/[0.06] py-3.5 last:border-b-0 hover:bg-white/[0.02]"
+    >
       <DmnCategoryLabel>{item.category}</DmnCategoryLabel>
-      <p className="mt-1 font-robinhood text-[15px] font-bold leading-snug text-[#111] group-hover:text-[#2563eb] md:text-base">
+      <p className="mt-1 font-cormorant text-sm font-light leading-snug text-cream/85 group-hover:text-gold line-clamp-3 md:text-[15px]">
         {item.headline}
       </p>
     </Link>
@@ -167,24 +176,27 @@ export function DmnEditorialGrid({
   return (
     <div className="dmn-editorial">
       <section className="dmn-editorial__band" aria-label={columnistHeading}>
-        <h2 className="dmn-editorial__section-title font-robinhood text-xl font-bold text-[#111] md:text-2xl">
+        <h2 className="dmn-editorial__section-title font-cormorant text-xl font-light text-cream/88 md:text-2xl">
           {columnistHeading}
         </h2>
-        <div className="dmn-editorial__four-up mt-5 border-t border-[#111] pt-5 md:mt-6 md:pt-6">
+        <div className="dmn-editorial__four-up mt-5 border-t border-white/[0.08] pt-5 md:mt-6 md:pt-6">
           {topRow.slice(0, 4).map((item) => (
             <DmnTopCard key={item.storyId} item={item} />
           ))}
         </div>
       </section>
 
-      <div className="dmn-editorial__divider my-8 border-t border-[#111] md:my-10" aria-hidden />
+      <div className="dmn-editorial__divider my-8 border-t border-white/[0.08] md:my-10" aria-hidden />
 
       <section className="dmn-editorial__band" aria-label={businessHeading}>
-        <h2 className="dmn-editorial__section-title font-robinhood text-xl font-bold text-[#111] md:text-2xl">
+        <h2 className="dmn-editorial__section-title font-cormorant text-xl font-light text-cream/88 md:text-2xl">
           {businessHeading}
         </h2>
-        <div className="dmn-editorial__business mt-5 border-t border-[#111] pt-5 md:mt-6 md:pt-6">
-          <nav className="dmn-editorial__business-list" aria-label={`${businessHeading} headlines`}>
+        <div className="dmn-editorial__business mt-5 border-t border-white/[0.08] pt-5 md:mt-6 md:pt-6">
+          <nav
+            className="dmn-editorial__business-list rounded-lg border border-white/[0.08] bg-obsidian/80 px-4 md:px-5"
+            aria-label={`${businessHeading} headlines`}
+          >
             {businessList.map((item) => (
               <DmnTextStory key={item.storyId} item={item} />
             ))}
@@ -193,7 +205,7 @@ export function DmnEditorialGrid({
           <article className="dmn-editorial__business-lead">
             <Link
               href={`/newspaper?story=${businessLead.storyId}`}
-              className="group grid h-full grid-cols-1 overflow-hidden border border-[#111]/12 bg-white md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
+              className="card-3d group grid h-full grid-cols-1 overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
             >
               <div className="relative min-h-[200px] md:min-h-[260px]">
                 {businessLead.imageSrc ? (
@@ -206,33 +218,35 @@ export function DmnEditorialGrid({
                     unoptimized
                   />
                 ) : null}
+                <div className="absolute inset-0 bg-gradient-to-t from-obsidian/70 to-transparent" />
               </div>
               <div className="flex flex-col justify-center gap-3 p-5 md:p-6">
                 <DmnCategoryLabel>{businessLead.category}</DmnCategoryLabel>
-                <h3 className="font-robinhood text-xl font-bold leading-tight text-[#111] group-hover:text-[#2563eb] md:text-2xl">
+                <h3 className="font-cormorant text-xl font-light leading-tight text-cream/90 transition-colors group-hover:text-gold md:text-2xl">
                   {businessLead.headline}
                 </h3>
-                <p className="font-robinhood text-sm leading-relaxed text-[#333]/85 line-clamp-5">{businessLead.dek}</p>
+                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75 line-clamp-5">{businessLead.dek}</p>
               </div>
             </Link>
           </article>
 
           <Link
             href={promoHref}
-            className="dmn-editorial__business-promo group grid h-full grid-rows-[1fr_auto] overflow-hidden border border-[#111]"
+            className="dmn-editorial__business-promo card-3d group grid h-full grid-rows-[1fr_auto] overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian"
           >
             <div className="relative min-h-[180px]">
               <Image
                 src={businessPromo.imageSrc}
                 alt={businessPromo.imageAlt ?? ""}
                 fill
-                className="object-cover transition-transform duration-500 group-hover:scale-[1.02]"
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
                 sizes="(max-width: 768px) 100vw, 22vw"
                 unoptimized
               />
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 to-transparent" />
             </div>
-            <div className="flex min-h-[120px] items-center bg-white p-5 md:p-6">
-              <h3 className="font-robinhood text-2xl font-bold leading-tight text-[#111] group-hover:text-[#2563eb] md:text-[1.65rem]">
+            <div className="flex min-h-[120px] items-center border-t border-white/[0.08] bg-obsidian/95 p-5 md:p-6">
+              <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/90 transition-colors group-hover:text-gold md:text-[1.65rem]">
                 {businessPromo.headline}
               </h3>
             </div>
