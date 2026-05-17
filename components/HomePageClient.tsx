@@ -15,6 +15,7 @@ import {
   DeskWireNewsGrid,
   FrontPageNewsGrid,
   DmnEditorialGrid,
+  MagazineLifestyleGrid,
   type BroadsheetColumn,
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
@@ -146,6 +147,8 @@ const broadsheetColumns: BroadsheetColumn[] = [
       { storyId: recordHeadlines[1].storyId, headline: recordHeadlines[1].headline },
       { storyId: recordHeadlines[0].storyId, headline: recordHeadlines[0].headline },
       { storyId: suiteSections[0].storyId, headline: suiteSections[0].title },
+      { storyId: "streaming-royalties-chain", headline: "Streaming Royalties Sync to Chain Nightly" },
+      { storyId: "indie-breakout-signals", headline: "Indie Labels Share Breakout Signal Feeds" },
     ],
   },
   {
@@ -157,9 +160,11 @@ const broadsheetColumns: BroadsheetColumn[] = [
       imageAlt: featuredStories[2].imageAlt,
     },
     more: [
+      { storyId: featuredStories[2].storyId, headline: featuredStories[2].headline },
       { storyId: recordBriefs[0].storyId, headline: recordBriefs[0].headline },
       { storyId: recordBriefs[2].storyId, headline: recordBriefs[2].headline },
-      { storyId: "culture-tax-brief", headline: "Who Owns the Sound of a Generation" },
+      { storyId: "venue-residencies-stellar", headline: "Venue Residencies Tokenized on Stellar" },
+      { storyId: "culture-capital-future", headline: "The Future of Culture & Capital" },
     ],
   },
   {
@@ -173,6 +178,8 @@ const broadsheetColumns: BroadsheetColumn[] = [
       { storyId: "reserve-holdings", headline: "Reserve Holdings Update: Verified Rails and Governance Cadence" },
       { storyId: "treasury-cadence", headline: "Balance-Sheet Discipline Briefings Open for Q2" },
       { storyId: "whitepaper-access", headline: "Whitepaper: Institutional Reserve Framework" },
+      { storyId: "nft-royalty-pools", headline: "NFT Royalty Pools Open Secondary Desk" },
+      { storyId: "governance-q2-floor", headline: "Governance Vote Sets Q2 Reserve Floor" },
     ],
   },
   {
@@ -187,6 +194,8 @@ const broadsheetColumns: BroadsheetColumn[] = [
       { storyId: recordHeadlines[2].storyId, headline: recordHeadlines[2].headline },
       { storyId: recordBriefs[1].storyId, headline: recordBriefs[1].headline },
       { storyId: suiteSections[1].storyId, headline: suiteSections[1].title },
+      { storyId: "doc-slate-base", headline: "Documentary Slate Lists on Base" },
+      { storyId: "director-cuts-fractional", headline: "Director Cuts Trade as Fractional Rights" },
     ],
   },
 ];
@@ -330,6 +339,15 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
         <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
             <ConsequenceRadioDeck />
+          </SectionReveal>
+        </div>
+      </section>
+
+      {/* ═══════════════ Music & Culture wire (DMN-style) ═══════════════ */}
+      <section className="relative bg-void py-10 md:py-12" aria-label="Music and culture wire">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <MagazineLifestyleGrid />
           </SectionReveal>
         </div>
       </section>

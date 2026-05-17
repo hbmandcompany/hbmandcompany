@@ -12,6 +12,8 @@ import {
   IconStaking,
   IconRadio,
 } from "@/components/IllustrativeIcons";
+import { BillboardTrendingChart } from "@/components/BillboardTrendingChart";
+import { ConsequenceLiveChat } from "@/components/ConsequenceLiveChat";
 
 const RADIO_STATIONS = [
   { id: "session", Icon: IconSessionRing, label: "Session", sub: "Tracking · clock discipline" },
@@ -24,52 +26,12 @@ const RADIO_STATIONS = [
 
 const RADIO_QUEUE = [
   { title: "Midnight Ledger", artist: "HBM Session Band", dur: "3:42" },
-  { title: "Stem Architecture", artist: "Comp Desk", dur: "4:08" },
-  { title: "Trade Lane", artist: "Producer Counter", dur: "2:55" },
-  { title: "Rotation Rights", artist: "Radio Syndicate", dur: "5:12" },
 ] as const;
-
-function ConsequenceQueueCard({
-  track,
-  index,
-  isNowPlaying,
-}: {
-  track: (typeof RADIO_QUEUE)[number];
-  index: number;
-  isNowPlaying: boolean;
-}) {
-  return (
-    <article
-      className={clsx(
-        "consequence-radio-queue-card",
-        isNowPlaying && "consequence-radio-queue-card--active",
-      )}
-    >
-      <div className="consequence-radio-queue-card__top">
-        <span className="consequence-radio-queue-card__index font-mono-hbm">{String(index + 1).padStart(2, "0")}</span>
-        <span
-          className={clsx(
-            "consequence-radio-queue-card__badge font-mono-hbm",
-            isNowPlaying ? "consequence-radio-queue-card__badge--live" : "consequence-radio-queue-card__badge--queued",
-          )}
-        >
-          {isNowPlaying ? "On Air" : "Queued"}
-        </span>
-      </div>
-      <h4 className="consequence-radio-queue-card__title font-robinhood">{track.title}</h4>
-      <p className="consequence-radio-queue-card__artist font-robinhood">{track.artist}</p>
-      <div className="consequence-radio-queue-card__footer">
-        <span className="consequence-radio-queue-card__dur font-mono-hbm">{track.dur}</span>
-      </div>
-    </article>
-  );
-}
 
 /** Dashboard-style Consequence Radio desk. */
 export function ConsequenceRadioDeck() {
   const [activeStation, setActiveStation] = useState("radio");
   const [playing, setPlaying] = useState(true);
-  const station = RADIO_STATIONS.find((s) => s.id === activeStation) ?? RADIO_STATIONS[5];
   const nowPlaying = RADIO_QUEUE[0];
 
   return (
@@ -125,37 +87,33 @@ export function ConsequenceRadioDeck() {
           </div>
         </section>
 
-        <section className="consequence-radio-dashboard__stations" aria-label="Stations">
-          <h3 className="consequence-radio-dashboard__section-label font-mono-hbm">Stations</h3>
-          <div className="consequence-radio-dashboard__station-grid">
-            {RADIO_STATIONS.map(({ id, Icon, label, sub }) => {
-              const isActive = activeStation === id;
-              return (
-                <button
-                  key={id}
-                  type="button"
-                  onClick={() => setActiveStation(id)}
-                  className={clsx("consequence-radio-station-card", isActive && "consequence-radio-station-card--active")}
-                >
-                  <Icon className={clsx("consequence-radio-station-card__icon h-9 w-9", isActive ? "text-white" : "text-white/45")} />
-                  <div className="consequence-radio-station-card__copy">
-                    <p className="font-robinhood text-sm font-semibold text-white/92">{label}</p>
-                    <p className="font-robinhood mt-0.5 text-[11px] leading-snug text-white/50">{sub}</p>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </section>
+        <div className="consequence-radio-dashboard__center">
+          <section className="consequence-radio-dashboard__stations" aria-label="Stations">
+            <h3 className="consequence-radio-dashboard__section-label font-mono-hbm">Stations</h3>
+            <div className="consequence-radio-dashboard__station-grid">
+              {RADIO_STATIONS.map(({ id, Icon, label, sub }) => {
+                const isActive = activeStation === id;
+                return (
+                  <button
+                    key={id}
+                    type="button"
+                    onClick={() => setActiveStation(id)}
+                    className={clsx("consequence-radio-station-card", isActive && "consequence-radio-station-card--active")}
+                  >
+                    <Icon className={clsx("consequence-radio-station-card__icon h-9 w-9", isActive ? "text-white" : "text-white/45")} />
+                    <div className="consequence-radio-station-card__copy">
+                      <p className="font-robinhood text-sm font-semibold text-white/92">{label}</p>
+                      <p className="font-robinhood mt-0.5 text-[11px] leading-snug text-white/50">{sub}</p>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+          <ConsequenceLiveChat />
+        </div>
 
-        <aside className="consequence-radio-dashboard__queue" aria-label={`Up next on ${station.label}`}>
-          <h3 className="consequence-radio-dashboard__section-label font-mono-hbm">Up Next · {station.label}</h3>
-          <div className="consequence-radio-dashboard__queue-list">
-            {RADIO_QUEUE.map((track, index) => (
-              <ConsequenceQueueCard key={track.title} track={track} index={index} isNowPlaying={index === 0} />
-            ))}
-          </div>
-        </aside>
+        <BillboardTrendingChart />
       </div>
     </div>
   );
