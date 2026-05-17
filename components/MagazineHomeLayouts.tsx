@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
@@ -11,14 +10,7 @@ import {
   type MagazineStory,
   type SuiteStory,
 } from "@/components/MagazineStoryCards";
-import {
-  IconSessionRing,
-  IconCompStacks,
-  IconCollab,
-  IconTrade,
-  IconStaking,
-  IconRadio,
-} from "@/components/IllustrativeIcons";
+export { ConsequenceRadioDeck } from "@/components/ConsequenceRadioDeck";
 
 const goldOutlineCta =
   "gold-outline-btn inline-block px-3 py-1 text-[10px] uppercase tracking-[0.18em] sm:px-4 sm:py-1.5 sm:text-label-xs sm:tracking-[0.2em]";
@@ -397,126 +389,6 @@ export function FrontPageNewsGrid({ stories }: { stories: MagazineStory[] }) {
       {thumbStories.map((story) => (
         <RecordThumbCard key={story.storyId} item={storyToBrief(story)} className="front-page-grid__cell" />
       ))}
-    </div>
-  );
-}
-
-const RADIO_STATIONS = [
-  { id: "session", Icon: IconSessionRing, label: "Session", sub: "Tracking · clock discipline" },
-  { id: "comp", Icon: IconCompStacks, label: "Comp", sub: "Lanes · recall-safe" },
-  { id: "collab", Icon: IconCollab, label: "Collab", sub: "Shared timeline" },
-  { id: "trade", Icon: IconTrade, label: "Trade", sub: "Beats · listings" },
-  { id: "staking", Icon: IconStaking, label: "Staking", sub: "Lock · yield" },
-  { id: "radio", Icon: IconRadio, label: "Radio", sub: "Broadcast · rotation" },
-] as const;
-
-const RADIO_QUEUE = [
-  { title: "Midnight Ledger", artist: "HBM Session Band", dur: "3:42" },
-  { title: "Stem Architecture", artist: "Comp Desk", dur: "4:08" },
-  { title: "Trade Lane", artist: "Producer Counter", dur: "2:55" },
-  { title: "Rotation Rights", artist: "Radio Syndicate", dur: "5:12" },
-];
-
-export function ConsequenceRadioDeck() {
-  const [activeStation, setActiveStation] = useState("radio");
-  const [playing, setPlaying] = useState(true);
-  const station = RADIO_STATIONS.find((s) => s.id === activeStation) ?? RADIO_STATIONS[5];
-
-  return (
-    <div className="consequence-radio-shell overflow-hidden border border-white/[0.09] bg-gradient-to-b from-obsidian to-void">
-      <div className="grid grid-cols-1 lg:grid-cols-12">
-        <div className="border-b border-white/[0.08] p-5 md:p-6 lg:col-span-5 lg:border-b-0 lg:border-r">
-          <div className="mb-4 flex items-center justify-between gap-3">
-            <div>
-              <p className="font-mono-hbm text-[8px] uppercase tracking-[0.34em] text-garnet/65">— Consequence</p>
-              <h2 className="font-cormorant mt-1 text-2xl font-light italic text-cream/88 md:text-[1.75rem]">
-                Radio
-              </h2>
-            </div>
-            <span className="font-mono-hbm rounded-full border border-gold/25 bg-gold/10 px-2.5 py-1 text-[8px] uppercase tracking-[0.22em] text-gold/75">
-              Live
-            </span>
-          </div>
-
-          <div className="relative aspect-square max-h-[280px] w-full overflow-hidden rounded-lg border border-white/[0.08] bg-midnight shadow-[inset_0_0_80px_rgba(0,0,0,0.5)]">
-            <Image
-              src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?w=800&q=85"
-              alt=""
-              fill
-              className="object-cover opacity-90"
-              unoptimized
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-void via-void/20 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <p className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-cream/50">Now Playing</p>
-              <p className="font-cormorant mt-1 text-lg text-cream/90">{RADIO_QUEUE[0].title}</p>
-              <p className="font-robinhood text-xs text-silver-dim/65">{RADIO_QUEUE[0].artist}</p>
-            </div>
-          </div>
-
-          <div className="mt-4">
-            <div className="h-1 overflow-hidden rounded-full bg-white/[0.08]">
-              <div className="h-full w-[38%] rounded-full bg-gradient-to-r from-garnet/80 to-gold/70" />
-            </div>
-            <div className="mt-2 flex items-center justify-between font-mono-hbm text-[8px] uppercase tracking-[0.2em] text-silver-dim/45">
-              <span>1:24</span>
-              <span>{RADIO_QUEUE[0].dur}</span>
-            </div>
-          </div>
-
-          <div className="mt-5 flex flex-wrap items-center gap-2">
-            <button
-              type="button"
-              onClick={() => setPlaying((p) => !p)}
-              className="rounded-full border border-white/20 bg-white/[0.06] px-4 py-2 font-mono-hbm text-[9px] uppercase tracking-[0.2em] text-cream transition hover:border-gold/30"
-            >
-              {playing ? "Pause" : "Play"}
-            </button>
-            <Link href="/contact" className="garnet-btn px-4 py-2 font-mono-hbm text-[9px] uppercase tracking-[0.2em] text-void">
-              Get Consequence
-            </Link>
-          </div>
-        </div>
-
-        <div className="p-5 md:p-6 lg:col-span-7">
-          <p className="font-mono-hbm mb-3 text-[8px] uppercase tracking-[0.3em] text-silver-dim/45">Stations</p>
-          <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 sm:gap-3">
-            {RADIO_STATIONS.map(({ id, Icon, label, sub }) => (
-              <button
-                key={id}
-                type="button"
-                onClick={() => setActiveStation(id)}
-                className={clsx(
-                  "flex min-h-[100px] flex-col justify-between rounded-xl border p-3 text-left transition-all duration-300",
-                  activeStation === id
-                    ? "border-gold/35 bg-gold/[0.08] shadow-[0_0_24px_rgba(180,175,170,0.08)]"
-                    : "border-white/[0.07] bg-white/[0.02] hover:border-gold/20",
-                )}
-              >
-                <Icon className={clsx("h-9 w-9", activeStation === id ? "text-gold/80" : "text-gold/35")} />
-                <div>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-cream/80">{label}</p>
-                  <p className="mt-0.5 text-[9px] leading-snug text-silver-dim/55">{sub}</p>
-                </div>
-              </button>
-            ))}
-          </div>
-
-          <p className="font-mono-hbm mb-2 mt-5 text-[8px] uppercase tracking-[0.28em] text-silver-dim/42">Up Next · {station.label}</p>
-          <div className="flex gap-2 overflow-x-auto pb-1 [scrollbar-width:thin]">
-            {RADIO_QUEUE.map((track) => (
-              <div
-                key={track.title}
-                className="shrink-0 rounded-lg border border-white/[0.07] bg-obsidian/90 px-3 py-2 min-w-[140px]"
-              >
-                <p className="font-cormorant text-sm text-cream/85 line-clamp-1">{track.title}</p>
-                <p className="font-robinhood text-[10px] text-silver-dim/55">{track.artist}</p>
-                <span className="font-mono-hbm text-[8px] text-silver-dim/40">{track.dur}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
     </div>
   );
 }
