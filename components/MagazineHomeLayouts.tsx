@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 export { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
   MagazineSectionMasthead,
@@ -157,6 +156,7 @@ export function DmnEditorialGrid({
   businessList,
   businessLead,
   businessPromo,
+  embedded = false,
 }: {
   columnistHeading: string;
   topRow: WireBrief[];
@@ -164,16 +164,23 @@ export function DmnEditorialGrid({
   businessList: WireBrief[];
   businessLead: DmnLeadStory;
   businessPromo: DmnPromoCard;
+  /** Inside hero edition shell — no separate card border. */
+  embedded?: boolean;
 }) {
   const promoHref = businessPromo.href ?? `/newspaper?story=${businessPromo.storyId}`;
 
   return (
-    <div className="dmn-editorial">
+    <div className={clsx("dmn-editorial", embedded && "dmn-editorial--embedded")}>
       <section className="dmn-editorial__band" aria-label={columnistHeading}>
         <h2 className="dmn-editorial__section-title font-cormorant text-xl font-light text-cream/88 md:text-2xl">
           {columnistHeading}
         </h2>
-        <div className="dmn-editorial__four-up mt-5 border-t border-white/[0.08] pt-5 md:mt-6 md:pt-6">
+        <div
+          className={clsx(
+            "dmn-editorial__four-up mt-4 md:mt-5",
+            embedded ? "pt-0" : "border-t border-white/[0.08] pt-5 md:pt-6",
+          )}
+        >
           {topRow.slice(0, 4).map((item) => (
             <DmnTopCard key={item.storyId} item={item} />
           ))}
@@ -529,26 +536,6 @@ export function DeskWireNewsGrid() {
         ))}
       </div>
 
-      <div className="desk-wire-grid__signup card-3d overflow-hidden border border-white/[0.09] bg-obsidian min-h-[280px]">
-        <AdPlacementPlaceholder className="h-full min-h-[280px]" />
-      </div>
-
-      <div className="desk-wire-grid__tiles grid grid-cols-2 gap-2 sm:grid-cols-4">
-        {[
-          { label: "Whitepaper", href: "/documentation" },
-          { label: "Governance", href: "/governance" },
-          { label: "Investor Relations", href: "/investor-relations" },
-          { label: "Legal Entity", href: "/legal-entity" },
-        ].map((t) => (
-          <Link
-            key={t.label}
-            href={t.href}
-            className="rounded-lg border border-white/[0.07] bg-white/[0.02] px-3 py-3 text-center font-mono-hbm text-[8px] uppercase tracking-[0.2em] text-silver-dim/60 transition hover:border-gold/25 hover:text-gold/75"
-          >
-            {t.label}
-          </Link>
-        ))}
-      </div>
     </div>
   );
 }

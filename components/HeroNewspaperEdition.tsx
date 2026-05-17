@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import type { MagazineStory } from "@/components/MagazineStoryCards";
@@ -131,6 +132,7 @@ export function HeroNewspaperEdition({
   rightSecondary,
   rightTopBriefs,
   tickerHeadlines,
+  footer,
 }: {
   lead: MagazineStory;
   heroImageSrc: string;
@@ -140,11 +142,13 @@ export function HeroNewspaperEdition({
   rightSecondary: MagazineStory;
   rightTopBriefs: WireBrief[];
   tickerHeadlines: string[];
+  /** Culture desk and below — rendered inside the same edition shell. */
+  footer?: ReactNode;
 }) {
   return (
     <div className="hero-dmn-shell mx-auto w-full max-w-[1440px]">
       <HeroEditionBanner />
-      <div className="hero-dmn-edition">
+      <div className={footer ? "hero-dmn-edition hero-dmn-edition--with-footer" : "hero-dmn-edition"}>
         <HeroMasthead />
         <HeroEditionTicker headlines={tickerHeadlines} />
 
@@ -227,6 +231,7 @@ export function HeroNewspaperEdition({
             </div>
           </aside>
         </div>
+        {footer}
       </div>
     </div>
   );

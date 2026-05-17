@@ -1,11 +1,9 @@
 "use client";
 
-import type { ReactNode } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import FooterDark from "@/components/FooterDark";
 import FooterBrandVotingGrid from "@/components/FooterBrandVotingGrid";
-import MarqueeStrip from "@/components/MarqueeStrip";
 import type { MagazineStory, SuiteStory } from "@/components/MagazineStoryCards";
 import { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
@@ -18,7 +16,7 @@ import {
   type BroadsheetColumn,
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
-import { HomeEditorialBand } from "@/components/HomeEditorialBand";
+import SectionReveal from "@/components/SectionReveal";
 
 const featuredStories: MagazineStory[] = [
   {
@@ -212,7 +210,7 @@ const broadsheetColumns: BroadsheetColumn[] = [
 
 const heroEase = [0.16, 1, 0.3, 1] as const;
 
-export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlot: ReactNode }) {
+export default function HomePageClient() {
   const reduceMotion = useReducedMotion() === true;
 
   const heroT = reduceMotion ? { duration: 0.2 } : { duration: 0.88, ease: heroEase };
@@ -227,15 +225,12 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
     },
   };
 
-  /* Keep opacity at 1 in "hidden" so a stuck variant never leaves the hero blank (hydration / FM edge cases). */
+  /* No filter blur — blur() on the hero wrapper made masthead/copy look soft (especially on localhost). */
   const heroItem = {
-    hidden: reduceMotion
-      ? { opacity: 1, y: 0, filter: "blur(0px)" }
-      : { opacity: 1, y: 32, filter: "blur(10px)" },
+    hidden: reduceMotion ? { opacity: 1, y: 0 } : { opacity: 1, y: 20 },
     show: {
       opacity: 1,
       y: 0,
-      filter: "blur(0px)",
       transition: heroT,
     },
   };
@@ -243,28 +238,11 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
   return (
     <>
       <div className="font-robinhood font-normal tracking-normal antialiased home-robinhood">
-      {/*
-        WRAPPED: hero <section> + Culture Desk <HomeEditorialBand nested>
-        — single editorial card so the front page and Culture Desk read as one surface.
-
-        BEFORE:
-          <section> … hero … </section>
-          <HomeEditorialBand> … DmnEditorialGrid … </HomeEditorialBand>
-
-        AFTER:
-          <div className="home-hero-culture-unified">
-            <article className="home-hero-culture-unified__card">
-              <section className="home-hero-culture-unified__hero"> … hero … </section>
-              <hr className="home-hero-culture-unified__divider" />
-              <HomeEditorialBand nested> … DmnEditorialGrid … </HomeEditorialBand>
-            </article>
-          </div>
-      */}
-      <div className="home-hero-culture-unified">
-        <article className="home-hero-culture-unified__card home-editorial-shell">
-          <section
-            className="home-hero-culture-unified__hero relative flex min-h-screen min-h-[100dvh] flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[max(4rem,env(safe-area-inset-bottom,1rem))] md:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] md:pb-[max(5rem,env(safe-area-inset-bottom,1rem))] lg:pb-[max(6rem,env(safe-area-inset-bottom,1rem))]"
-          >
+      {/* ═══════════════ FRONT PAGE — hero + culture desk (one edition) ═══════════════ */}
+      <section
+        className="home-front-unified relative flex flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-10 md:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] md:pb-12"
+        aria-label="Front page"
+      >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
@@ -303,8 +281,9 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           initial="hidden"
           animate="show"
           className="relative z-10 mx-auto w-full max-w-[1440px] px-[max(1.25rem,env(safe-area-inset-left,0px))] md:px-12"
+          style={{ transform: "translateZ(0)" }}
         >
-          <motion.div variants={heroItem}>
+          <motion.div variants={heroItem} style={{ willChange: "transform" }}>
             <HeroNewspaperEdition
               lead={featuredStories[0]}
               heroImageSrc="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1200&q=85"
@@ -314,93 +293,91 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
               rightSecondary={featuredStories[2]}
               rightTopBriefs={recordBriefs.slice(0, 2)}
               tickerHeadlines={recordHeadlines.map((h) => h.headline)}
+              footer={
+                <DmnEditorialGrid
+                  embedded
+                  columnistHeading="From HBM & Company · Culture Desk"
+                  topRow={recordHeadlines}
+                  businessHeading="Markets"
+                  businessList={recordBriefs}
+                  businessLead={{
+                    storyId: suiteSections[0].storyId,
+                    category: suiteSections[0].category,
+                    headline: suiteSections[0].title,
+                    dek: suiteSections[0].description,
+                    imageSrc: suiteSections[0].imageSrc,
+                    imageAlt: suiteSections[0].imageAlt,
+                  }}
+                  businessPromo={{
+                    storyId: "culture-capital-future",
+                    headline: "The Future of Culture & Capital",
+                    imageSrc: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85",
+                    imageAlt: "City skyline at dusk",
+                    href: "/treasury",
+                  }}
+                />
+              }
             />
           </motion.div>
         </motion.div>
+      </section>
 
-        {/* Scroll indicator */}
-        <div
-          className="absolute bottom-[max(2.5rem,env(safe-area-inset-bottom,0px)+0.5rem)] right-[max(2.5rem,env(safe-area-inset-right,0px))] z-10 flex flex-col items-center gap-2 opacity-80 max-md:scale-90"
-        >
-          <div className="w-px h-14 bg-gradient-to-b from-garnet/50 to-transparent animate-glow-pulse" />
-        </div>
-
-        {/* Former void-band fade — hidden inside unified card; __divider separates Culture Desk */}
-        <div
-          className="home-hero-culture-unified__hero-fade pointer-events-none absolute inset-x-0 bottom-0 z-[6] h-28 bg-gradient-to-b from-transparent via-void/75 to-void sm:h-32 md:h-40"
+      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Thesis">
+        <motion.div
+          className="pointer-events-none absolute inset-0 opacity-[0.14]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(180,175,170,0.065) 1px, transparent 1px), linear-gradient(90deg, rgba(180,175,170,0.05) 1px, transparent 1px)`,
+            backgroundSize: "44px 44px",
+          }}
           aria-hidden
         />
-          </section>
-
-          <hr className="home-hero-culture-unified__divider" aria-hidden />
-
-          <HomeEditorialBand ariaLabel="Culture desk" showBreak={false} nested>
-        <DmnEditorialGrid
-              columnistHeading="From HBM & Company · Culture Desk"
-              topRow={recordHeadlines}
-              businessHeading="Markets"
-              businessList={recordBriefs}
-              businessLead={{
-                storyId: suiteSections[0].storyId,
-                category: suiteSections[0].category,
-                headline: suiteSections[0].title,
-                dek: suiteSections[0].description,
-                imageSrc: suiteSections[0].imageSrc,
-                imageAlt: suiteSections[0].imageAlt,
-              }}
-              businessPromo={{
-                storyId: "culture-capital-future",
-                headline: "The Future of Culture & Capital",
-                imageSrc: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85",
-                imageAlt: "City skyline at dusk",
-                href: "/treasury",
-              }}
-            />
-          </HomeEditorialBand>
-        </article>
-      </div>
-
-      {/* CONSEQUENCE RADIO */}
-      <HomeEditorialBand ariaLabel="Consequence Radio">
-        <ConsequenceRadioDeck />
-      </HomeEditorialBand>
-
-      <HomeEditorialBand ariaLabel="Music and culture wire">
-        <MagazineLifestyleGrid />
-      </HomeEditorialBand>
-
-      <HomeEditorialBand ariaLabel="Thesis">
-        <div className="home-editorial-shell home-editorial-shell--thesis">
-          <FooterBrandVotingGrid
-            typography="robinhood"
-            instanceId="home-thesis"
-            brandSide="left"
-            band="thesis"
-          />
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <FooterBrandVotingGrid typography="robinhood" instanceId="home-thesis" brandSide="left" band="thesis" />
+          </SectionReveal>
         </div>
-      </HomeEditorialBand>
+      </section>
 
-      <HomeEditorialBand ariaLabel="Markets desk and treasury wire">
-        <DeskWireNewsGrid />
-      </HomeEditorialBand>
+      <section className="relative bg-void py-10 md:py-12" aria-label="Music and culture wire">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <MagazineLifestyleGrid />
+          </SectionReveal>
+        </div>
+      </section>
 
-      <HomeEditorialBand ariaLabel="Section fronts">
-        <BroadsheetFourColumnGrid columns={broadsheetColumns} />
-      </HomeEditorialBand>
+      <section className="relative overflow-hidden py-10 md:py-12 section-mid" aria-label="Consequence Radio">
+        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
+        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <ConsequenceRadioDeck />
+          </SectionReveal>
+        </div>
+      </section>
 
-      <HomeEditorialBand ariaLabel="Featured stories">
-        <FeaturedStoriesFourUp stories={featuredStories} />
-      </HomeEditorialBand>
+      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <DeskWireNewsGrid />
+          </SectionReveal>
+        </div>
+      </section>
 
+      <section className="relative bg-void py-10 md:py-12" aria-label="Section fronts">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <BroadsheetFourColumnGrid columns={broadsheetColumns} />
+          </SectionReveal>
+        </div>
+      </section>
 
-      {/* ═══════════════ MARQUEE ═══════════════ */}
-      {cryptoMarqueeSlot}
-
-      {/* ═══════════════ CHAINS MARQUEE ═══════════════ */}
-      <MarqueeStrip
-        items={["Solana", "Ethereum", "Avalanche", "Polygon", "Arbitrum", "Optimism", "Base", "Cosmos", "Polkadot", "Near", "Sui", "Aptos"]}
-        reverse speed="slow"
-      />
+      <section className="relative bg-void py-10 md:py-12" aria-label="Featured stories">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <FeaturedStoriesFourUp stories={featuredStories} />
+          </SectionReveal>
+        </div>
+      </section>
 
       <FooterDark typography="robinhood" showUpperBrandVoting={false} />
     </div>

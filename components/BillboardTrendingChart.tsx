@@ -65,9 +65,9 @@ export function BillboardTrendingChart() {
       list = list.filter((t) => t.genre === genre);
     }
     if (period === "This Week") {
-      list = list.slice(0, 8);
+      list = list.slice(0, 10);
     } else if (period === "Today") {
-      list = list.slice(0, 5);
+      list = list.slice(0, 10);
     }
     return list.map((track, i) => ({ ...track, rank: i + 1 }));
   }, [period, genre]);
@@ -117,7 +117,7 @@ export function BillboardTrendingChart() {
               <p className="billboard-chart__track font-robinhood">{track.title}</p>
               <p className="billboard-chart__artist font-robinhood">{track.artist}</p>
             </div>
-            <span className="billboard-chart__genre font-mono-hbm hidden sm:inline">{track.genre}</span>
+            <span className="billboard-chart__genre font-mono-hbm">{track.genre}</span>
           </li>
         ))}
       </ol>

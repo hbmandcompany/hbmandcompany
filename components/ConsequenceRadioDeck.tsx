@@ -4,21 +4,11 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import {
-  IconSessionRing,
-  IconCompStacks,
-  IconCollab,
-  IconTrade,
-  IconStaking,
-  IconRadio,
-} from "@/components/IllustrativeIcons";
+import { IconTrade, IconStaking, IconRadio } from "@/components/IllustrativeIcons";
 import { BillboardTrendingChart } from "@/components/BillboardTrendingChart";
 import { ConsequenceLiveChat } from "@/components/ConsequenceLiveChat";
 
 const RADIO_STATIONS = [
-  { id: "session", Icon: IconSessionRing, label: "Session", sub: "Tracking · clock discipline" },
-  { id: "comp", Icon: IconCompStacks, label: "Comp", sub: "Lanes · recall-safe" },
-  { id: "collab", Icon: IconCollab, label: "Collab", sub: "Shared timeline" },
   { id: "trade", Icon: IconTrade, label: "Trade", sub: "Beats · listings" },
   { id: "staking", Icon: IconStaking, label: "Staking", sub: "Lock · yield" },
   { id: "radio", Icon: IconRadio, label: "Radio", sub: "Broadcast · rotation" },
@@ -28,9 +18,9 @@ const RADIO_QUEUE = [
   { title: "Midnight Ledger", artist: "HBM Session Band", dur: "3:42" },
 ] as const;
 
-/** Dashboard-style Consequence Radio desk. */
+/** Dashboard-style Consequence Radio deck. */
 export function ConsequenceRadioDeck() {
-  const [activeStation, setActiveStation] = useState("radio");
+  const [activeStation, setActiveStation] = useState<(typeof RADIO_STATIONS)[number]["id"]>("radio");
   const [playing, setPlaying] = useState(true);
   const nowPlaying = RADIO_QUEUE[0];
 
@@ -90,7 +80,7 @@ export function ConsequenceRadioDeck() {
         <div className="consequence-radio-dashboard__center">
           <section className="consequence-radio-dashboard__stations" aria-label="Stations">
             <h3 className="consequence-radio-dashboard__section-label font-mono-hbm">Stations</h3>
-            <div className="consequence-radio-dashboard__station-grid">
+            <div className="consequence-radio-dashboard__station-grid consequence-radio-dashboard__station-grid--three">
               {RADIO_STATIONS.map(({ id, Icon, label, sub }) => {
                 const isActive = activeStation === id;
                 return (

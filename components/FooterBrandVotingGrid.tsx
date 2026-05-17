@@ -9,6 +9,32 @@ import VotingProtocolSignup from "./VotingProtocolSignup";
 type BrandSide = "left" | "right";
 type Band = "default" | "thesis";
 
+const THESIS_ACCESS_LINKS = [
+  { label: "Whitepaper", href: "/documentation" },
+  { label: "Governance", href: "/governance" },
+  { label: "Investor Relations", href: "/investor-relations" },
+  { label: "Legal Entity", href: "/legal-entity" },
+] as const;
+
+function ThesisAccessTiles({ uiFont }: { uiFont: string }) {
+  return (
+    <div className="thesis-access-tiles grid grid-cols-2 gap-2 border-t border-white/[0.08] pb-12 pt-8 sm:grid-cols-4 md:pb-16 md:pt-10">
+      {THESIS_ACCESS_LINKS.map((t) => (
+        <Link
+          key={t.label}
+          href={t.href}
+          className={clsx(
+            uiFont,
+            "rounded-lg border border-white/[0.07] bg-white/[0.02] px-3 py-3 text-center text-[8px] uppercase tracking-[0.2em] text-silver-dim/60 transition hover:border-gold/25 hover:text-gold/75",
+          )}
+        >
+          {t.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function FooterBrandVotingGrid({
   typography = "luxury",
   instanceId = "footer",
@@ -111,7 +137,7 @@ export default function FooterBrandVotingGrid({
               brandTrailing && "lg:ml-auto",
             )}
           >
-            Proof over noise.
+            HBM: Public Offering.
           </p>
           <p
             className={clsx(
@@ -119,7 +145,7 @@ export default function FooterBrandVotingGrid({
               brandTrailing && "lg:ml-auto",
             )}
           >
-            Endurance over velocity.
+            All Rights Reserved
           </p>
         </div>
       </div>
@@ -131,16 +157,6 @@ export default function FooterBrandVotingGrid({
         )}
       >
         Long horizon · Proof-first · Selective deployment
-      </p>
-
-      <p
-        className={clsx(
-          `${displayFont} max-w-xl text-[0.95rem] font-light leading-[1.82] tracking-[-0.01em] text-cream/62 md:text-base md:leading-[1.84]`,
-          brandTrailing && "lg:ml-auto",
-        )}
-      >
-        Attention is finite by design. We engage when mandates intersect what we build and hold: decentralized rails,
-        durable proof surfaces, and discretion measured in years—not impressions.
       </p>
 
       <p
@@ -181,13 +197,7 @@ export default function FooterBrandVotingGrid({
   );
 
   const thesisRightStack = (
-    <div className="flex w-full min-w-0 max-w-lg flex-col gap-8 md:gap-9">
-      <p className={`${displayFont} text-[0.95rem] font-light leading-[1.82] tracking-[-0.01em] text-cream/72 md:text-base md:leading-[1.84]`}>
-        We organize capital around infrastructure that still makes sense when the timeline goes quiet—custody you can
-        document, commitments you can re-verify, and governance that does not reset every funding season.
-      </p>
-      {signupThesis}
-    </div>
+    <div className="flex w-full min-w-0 max-w-lg flex-col">{signupThesis}</div>
   );
 
   const brandColumn = (
@@ -249,23 +259,26 @@ export default function FooterBrandVotingGrid({
   }
 
   return (
-    <div
-      className={clsx(
-        "grid w-full grid-cols-1 border-b border-white/[0.04] lg:items-start",
-        "gap-10 py-12 md:gap-x-12 md:gap-y-10 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:gap-x-14 xl:gap-x-16",
-      )}
-    >
-      {brandSide === "left" ? (
-        <>
-          {brandColumn}
-          {thesisVotingColumn}
-        </>
-      ) : (
-        <>
-          {thesisVotingColumn}
-          {brandColumn}
-        </>
-      )}
+    <div className="w-full border-b border-white/[0.04]">
+      <div
+        className={clsx(
+          "grid w-full grid-cols-1 lg:items-start",
+          "gap-10 py-12 md:gap-x-12 md:gap-y-10 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:gap-x-14 xl:gap-x-16",
+        )}
+      >
+        {brandSide === "left" ? (
+          <>
+            {brandColumn}
+            {thesisVotingColumn}
+          </>
+        ) : (
+          <>
+            {thesisVotingColumn}
+            {brandColumn}
+          </>
+        )}
+      </div>
+      <ThesisAccessTiles uiFont={uiFont} />
     </div>
   );
 }
