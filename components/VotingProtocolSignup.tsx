@@ -337,7 +337,7 @@ export default function VotingProtocolSignup({
           </div>
         ) : null}
 
-        <div className={clsx(fullDiscretion ? "mt-3 md:mt-4" : "mt-6 md:mt-7")}>
+        <div className={clsx(embedded ? "mt-3 md:mt-4" : fullDiscretion ? "mt-3 md:mt-4" : "mt-6 md:mt-7")}>
           <button
             id={triggerId}
             type="button"

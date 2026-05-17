@@ -18,7 +18,7 @@ const THESIS_ACCESS_LINKS = [
 
 function ThesisAccessTiles({ uiFont }: { uiFont: string }) {
   return (
-    <div className="thesis-access-tiles grid grid-cols-2 gap-2 border-t border-white/[0.08] pb-12 pt-8 sm:grid-cols-4 md:pb-16 md:pt-10">
+    <div className="thesis-access-tiles grid grid-cols-2 gap-2 border-t border-white/[0.08] pb-4 pt-4 sm:grid-cols-4 md:pb-5 md:pt-5">
       {THESIS_ACCESS_LINKS.map((t) => (
         <Link
           key={t.label}
@@ -127,10 +127,10 @@ export default function FooterBrandVotingGrid({
   );
 
   const thesisEditorial = (
-    <div className="relative flex flex-col gap-8 md:gap-10">
+    <div className="relative flex flex-col gap-3 md:gap-4">
       <div>
         <p className={`${uiFont} text-label-xs uppercase tracking-[0.38em] text-gold/55`}>— thesis</p>
-        <div className="mt-5 space-y-2 md:mt-7">
+        <div className="mt-2 space-y-1 md:mt-2.5">
           <p
             className={clsx(
               `${displayFont} max-w-[18ch] text-[clamp(1.85rem,4.2vw,3rem)] font-light italic leading-[1.04] tracking-[-0.03em] text-cream/[0.92] antialiased [text-shadow:0_2px_56px_rgba(0,0,0,0.6)]`,
@@ -161,7 +161,7 @@ export default function FooterBrandVotingGrid({
 
       <p
         className={clsx(
-          `${uiFont} max-w-md border-t border-white/[0.08] pt-4 text-[10px] uppercase tracking-[0.24em] text-silver-dim/40 md:pt-5`,
+          `${uiFont} max-w-md border-t border-white/[0.08] pt-2 text-[10px] uppercase tracking-[0.24em] text-silver-dim/40 md:pt-2.5`,
           brandTrailing && "lg:ml-auto",
         )}
       >
@@ -174,6 +174,7 @@ export default function FooterBrandVotingGrid({
     <VotingProtocolSignup
       typography={typography}
       instanceId={instanceId}
+      embedded
       eyebrow="Qualified access"
       heading={
         <>
@@ -263,7 +264,7 @@ export default function FooterBrandVotingGrid({
       <div
         className={clsx(
           "grid w-full grid-cols-1 lg:items-start",
-          "gap-10 py-12 md:gap-x-12 md:gap-y-10 md:py-16 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:gap-x-14 xl:gap-x-16",
+          "gap-5 py-4 md:gap-x-8 md:gap-y-5 md:py-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,36rem)] lg:gap-x-10 xl:gap-x-12",
         )}
       >
         {brandSide === "left" ? (

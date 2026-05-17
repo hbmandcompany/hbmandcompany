@@ -322,7 +322,7 @@ export default function HomePageClient() {
         </motion.div>
       </section>
 
-      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Thesis">
+      <section className="relative overflow-x-hidden bg-void py-4 md:py-5" aria-label="Thesis">
         <motion.div
           className="pointer-events-none absolute inset-0 opacity-[0.14]"
           style={{
