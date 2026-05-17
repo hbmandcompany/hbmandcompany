@@ -150,23 +150,6 @@ export default function FooterBrandVotingGrid({
         </div>
       </div>
 
-      <p
-        className={clsx(
-          `${uiFont} max-w-md text-[10px] uppercase tracking-[0.28em] text-silver-dim/45`,
-          brandTrailing && "lg:ml-auto",
-        )}
-      >
-        Long horizon · Proof-first · Selective deployment
-      </p>
-
-      <p
-        className={clsx(
-          `${uiFont} max-w-md border-t border-white/[0.08] pt-2 text-[10px] uppercase tracking-[0.24em] text-silver-dim/40 md:pt-2.5`,
-          brandTrailing && "lg:ml-auto",
-        )}
-      >
-        Full Discretion
-      </p>
     </div>
   );
 
@@ -175,16 +158,11 @@ export default function FooterBrandVotingGrid({
       typography={typography}
       instanceId={instanceId}
       embedded
-      eyebrow="Qualified access"
-      heading={
-        <>
-          Speak with the <span className="font-semibold italic">house</span>
-        </>
-      }
+      eyebrow="Priviledged Access"
+      heading="Memorandum"
       description={
         <>
-          Request a confidential introduction when your mandate intersects ours. By submitting, you agree we may contact
-          you to assess fit, diligence, and related stewardship matters. See our{" "}
+          By submitting, you agree we may contact you to assess fit, diligence, and related stewardship matters. See our{" "}
           <a href="/privacy" className="text-gold/50 hover:text-gold/70 transition-colors">
             Privacy policy
           </a>
