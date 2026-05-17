@@ -240,7 +240,7 @@ export default function HomePageClient() {
       <div className="font-robinhood font-normal tracking-normal antialiased home-robinhood">
       {/* ═══════════════ FRONT PAGE — hero + culture desk (one edition) ═══════════════ */}
       <section
-        className="home-front-unified relative flex flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-10 md:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] md:pb-12"
+        className="home-front-unified relative flex flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+0.35rem)] pb-10 md:pt-[calc(env(safe-area-inset-top,0px)+0.5rem)] md:pb-12"
         aria-label="Front page"
       >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}

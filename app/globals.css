@@ -572,12 +572,12 @@
 .hero-dmn-shell {
   display: flex;
   flex-direction: column;
-  gap: 0.65rem;
+  gap: 0.5rem;
 }
 
 .hero-dmn-banner {
   text-align: center;
-  padding: 0.35rem 0.5rem 0.15rem;
+  padding: 0.1rem 0.5rem 0.15rem;
 }
 
 .hero-dmn-banner__wordmark {
