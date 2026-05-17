@@ -7,9 +7,9 @@ import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 
 const navLinks = [
-  { label: "Michelangelo", href: "https://www.michelangelo.agency" },
-  { label: "Vanity", href: "https://vanity.company" },
-  { label: "Kiss", href: "https://www.kiss.photography" },
+  { label: "Music", href: "/music" },
+  { label: "Film", href: "/film" },
+  { label: "Culture", href: "/culture" },
 ] as const;
 
 export default function NavBar() {
@@ -91,16 +91,14 @@ export default function NavBar() {
           {isHome ? (
           <div className="hidden md:flex items-center gap-9">
             {navLinks.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
-                target="_blank"
-                rel="noopener noreferrer"
                 className="group relative font-mono-hbm text-[11px] uppercase tracking-[0.25em] text-silver-dim/65 transition-all duration-300 hover:text-cream/85"
               >
                 {link.label}
                 <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
-              </a>
+              </Link>
             ))}
             <Link
               href="/shop"
@@ -175,14 +173,12 @@ export default function NavBar() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: 0.07 + i * 0.08, duration: 0.5, ease: [0.16,1,0.3,1] }}
                 >
-                  <a
+                  <Link
                     href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
                     className="font-cormorant text-display-md font-light italic text-silver-dim/72 transition-colors duration-300 hover:text-gold"
                   >
                     {link.label}
-                  </a>
+                  </Link>
                 </motion.div>
               ))}
               <motion.div

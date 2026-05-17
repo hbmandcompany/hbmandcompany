@@ -567,3 +567,119 @@
   0%,100% { transform: translateY(0px);   }
   50%     { transform: translateY(-12px); }
 }
+
+/* ── Homepage magazine grids (NYT / Vanity-style density) ── */
+.home-robinhood .magazine-hero-masthead .hero-editorial-headline {
+  font-size: clamp(2.4rem, 1.2rem + 5.5vw, 4.75rem);
+  line-height: 0.88;
+  letter-spacing: -0.04em;
+}
+
+.home-robinhood .magazine-hero-masthead .hero-editorial-headline--horizontal {
+  font-size: clamp(1.75rem, 0.9rem + 3.8vw, 3.85rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.home-robinhood .magazine-hero-masthead .hero-editorial-headline span.inline-block {
+  display: inline-block;
+}
+
+.front-page-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .front-page-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .front-page-grid__lead {
+    grid-column: 1 / span 8;
+    grid-row: 1 / span 2;
+    min-height: 0;
+  }
+
+  .front-page-grid__rail {
+    grid-column: 9 / span 4;
+    grid-row: 1 / span 2;
+    min-height: 0;
+  }
+
+  .front-page-grid__cell {
+    grid-column: span 3;
+  }
+}
+
+.magazine-record-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .magazine-record-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .magazine-record-grid__lead {
+    grid-column: 1 / span 8;
+    grid-row: 1 / span 2;
+    min-height: 0;
+  }
+
+  .magazine-record-grid__rail {
+    grid-column: 9 / span 4;
+    grid-row: 1 / span 2;
+    min-height: 0;
+  }
+
+  .magazine-record-grid__cell {
+    grid-column: span 3;
+  }
+}
+
+.desk-wire-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+  .desk-wire-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0.5rem;
+  }
+
+  .desk-wire-grid__mast {
+    grid-column: 1 / -1;
+  }
+
+  .desk-wire-grid__lead {
+    grid-column: 1 / span 7;
+  }
+
+  .desk-wire-grid__list {
+    grid-column: 8 / span 2;
+    min-height: 0;
+  }
+
+  .desk-wire-grid__signup {
+    grid-column: 10 / span 3;
+    min-height: 0;
+  }
+
+  .desk-wire-grid__tiles {
+    grid-column: 1 / -1;
+  }
+}
+
+.consequence-radio-shell {
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}

@@ -8,7 +8,7 @@ import clsx from "clsx";
 
 type Typography = "luxury" | "robinhood";
 
-const defaultSuccess = "You are on the list. Protocol updates will follow by email.";
+const defaultSuccess = "You are on the list. Treasury updates may follow by email.";
 
 export default function VotingProtocolSignup({
   typography,
@@ -33,7 +33,7 @@ export default function VotingProtocolSignup({
   successMessage?: string;
   /** When true, omit card chrome (used inside a shared parent card with editorial). */
   embedded?: boolean;
-  /** When true, render the whitepaper link row below the description (default-band layout). */
+  /** When true, render the Whitepaper link row below the description (default-band layout). */
   fullDiscretion?: boolean;
 }) {
   const displayFont = typography === "robinhood" ? "font-robinhood" : "font-cormorant";
@@ -115,20 +115,20 @@ export default function VotingProtocolSignup({
     }
   }
 
-  const eyebrowText = eyebrow ?? "Voting protocol";
+  const eyebrowText = eyebrow ?? "TREASURY";
   const headingNode =
     heading ??
     (
       <>
-        Join the <span className="font-semibold italic">governance quorum</span>
+        Join the <span className="font-semibold italic">treasury desk</span>
       </>
     );
   const descriptionNode =
     description ??
     (
       <>
-        Request access to on-chain voting cadence. By submitting, you agree we may contact you about the voting
-        protocol and related governance. See our{" "}
+        Request briefings on reserves, cadence, and balance-sheet discipline. By submitting, you agree we may contact you
+        about treasury operations and related stewardship. See our{" "}
         <a href="/privacy" className="text-gold/50 hover:text-gold/70 transition-colors">
           Privacy policy
         </a>
@@ -290,14 +290,19 @@ export default function VotingProtocolSignup({
           id={headingId}
           className={clsx(
             displayFont,
-            "mt-2.5 text-xl font-light leading-snug md:mt-3 md:text-2xl",
+            "text-xl font-light leading-snug md:text-2xl",
+            fullDiscretion ? "mt-1.5 md:mt-2" : "mt-2.5 md:mt-3",
             embedded ? "text-cream/72" : "text-cream/88",
           )}
         >
           {headingNode}
         </h3>
         <p
-          className={clsx(descClass, embedded && !descriptionClassName && "[&_a]:text-gold/40 [&_a]:hover:text-gold/55")}
+          className={clsx(
+            descClass,
+            embedded && !descriptionClassName && "[&_a]:text-gold/40 [&_a]:hover:text-gold/55",
+            fullDiscretion && "!mt-1.5 md:!mt-2",
+          )}
           role="note"
         >
           {descriptionNode}
@@ -307,18 +312,24 @@ export default function VotingProtocolSignup({
           <div
             className={clsx(
               uiFont,
-              "mt-3 flex flex-col gap-3 border-t pt-3 sm:flex-row sm:items-center sm:justify-start md:pt-3.5",
+              "mt-2 flex flex-col gap-2 border-t pt-2 sm:flex-row sm:items-center sm:justify-start md:pt-2.5",
+              "-ml-1 pl-0 sm:-ml-1.5",
               embedded ? "border-white/[0.05]" : "border-white/[0.07]",
             )}
           >
             <Link
               href="/documentation"
               className={clsx(
-                "shrink-0 text-[11px] uppercase tracking-[0.2em] underline-offset-4 transition-colors hover:underline md:text-[11.5px]",
+                "shrink-0 text-[11px] uppercase tracking-[0.2em] md:text-[11.5px]",
+                "inline-block rounded-full border border-transparent bg-transparent",
+                "px-2.5 py-1.5 sm:px-3 sm:py-1.5",
+                "transition-[color,background-color,border-color,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]",
                 embedded
-                  ? "text-silver-dim/34 hover:text-gold/55"
-                  : "text-silver-dim/42 hover:text-gold/60",
-                "rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
+                  ? "text-silver-dim/34 hover:text-[#D8D4CE]"
+                  : "text-silver-dim/42 hover:text-[#D8D4CE]",
+                "hover:border-[rgba(180,175,170,0.4)] hover:bg-[rgba(180,175,170,0.08)]",
+                "hover:shadow-[0_0_28px_rgba(180,175,170,0.1),0_8px_32px_rgba(0,0,0,0.65)]",
+                "outline-none focus-visible:ring-2 focus-visible:ring-gold/35 focus-visible:ring-offset-2 focus-visible:ring-offset-void",
               )}
             >
               Whitepaper
@@ -326,7 +337,7 @@ export default function VotingProtocolSignup({
           </div>
         ) : null}
 
-        <div className="mt-6 md:mt-7">
+        <div className={clsx(fullDiscretion ? "mt-3 md:mt-4" : "mt-6 md:mt-7")}>
           <button
             id={triggerId}
             type="button"

@@ -12,7 +12,9 @@ export default function SequencerFlowDiagram({
   const copy = baseCopy.illustrations.sequencerFlow;
   const accentColor = accent === "bordeaux" ? "#7d3037" : "currentColor";
 
-  const nodes = [
+  type DiagramNode = { label: string; x: number; y: number; w: number; h: number; dashed?: boolean };
+
+  const nodes: DiagramNode[] = [
     { label: copy.labels.user, x: 110, y: 32, w: 180, h: 34 },
     { label: copy.labels.mempool, x: 110, y: 98, w: 180, h: 34 },
     { label: copy.labels.privateLane, x: 332, y: 106, w: 160, h: 30, dashed: true },
@@ -20,7 +22,7 @@ export default function SequencerFlowDiagram({
     { label: copy.labels.block, x: 110, y: 238, w: 180, h: 34 },
     { label: copy.labels.batch, x: 110, y: 308, w: 180, h: 34 },
     { label: copy.labels.root, x: 110, y: 378, w: 180, h: 34 },
-  ] as const;
+  ];
 
   return (
     <svg

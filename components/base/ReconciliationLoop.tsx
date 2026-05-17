@@ -12,7 +12,9 @@ export default function ReconciliationLoop({
   const copy = baseCopy.illustrations.reconciliationLoop;
   const accentColor = accent === "bordeaux" ? "#7d3037" : "currentColor";
 
-  const nodes = [
+  type DiagramNode = { label: string; x: number; y: number; accent?: boolean };
+
+  const nodes: DiagramNode[] = [
     { label: copy.labels.base, x: 228, y: 28 },
     { label: copy.labels.indexer, x: 386, y: 86 },
     { label: copy.labels.mongo, x: 394, y: 222 },
@@ -21,7 +23,7 @@ export default function ReconciliationLoop({
     { label: copy.labels.attestation, x: 54, y: 106 },
     { label: copy.labels.piol, x: 206, y: 148, accent: true },
     { label: copy.labels.snowflake, x: 226, y: 378 },
-  ] as const;
+  ];
 
   return (
     <svg

@@ -77,33 +77,20 @@ export default function FooterBrandVotingGrid({
     ) : null;
 
   const defaultEditorial = (
-    <div className="relative mt-2 flex flex-col gap-6 md:mt-3 md:gap-7">
-      <div
+    <div className="relative mt-2 flex flex-col gap-5 md:mt-3 md:gap-6">
+      <p
         className={clsx(
-          "flex flex-col items-stretch gap-3 sm:flex-row sm:items-end sm:justify-between sm:gap-x-4 sm:gap-y-0",
-          defaultBrandAlignEnd && "lg:ml-auto lg:w-full max-w-none lg:max-w-[min(100%,42rem)]",
+          `${displayFont} w-full text-pretty text-[1.65rem] font-light italic leading-[1.06] tracking-[-0.02em] text-cream/[0.68] antialiased sm:text-[2.05rem] md:text-[2.3rem] lg:text-[2.55rem] xl:text-[2.8rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.45)]`,
+          defaultBrandAlignEnd && "lg:ml-auto lg:max-w-max lg:text-right",
         )}
       >
-        <p
-          className={clsx(
-            `${displayFont} min-w-0 flex-1 text-pretty text-[1.9rem] font-light italic leading-[1.06] tracking-[-0.02em] text-cream/[0.68] antialiased sm:text-[2.25rem] md:text-[2.5rem] lg:text-[2.75rem] xl:text-[3.05rem] [text-shadow:0_2px_40px_rgba(0,0,0,0.45)]`,
-            defaultBrandAlignEnd && "lg:text-right",
-          )}
-        >
-          The{" "}
-          <span className="font-semibold italic text-gold/40 [text-shadow:0_2px_32px_rgba(0,0,0,0.4)]">Reserve</span>
-        </p>
-        <Link
-          href="/treasury"
-          className="gold-outline-btn shrink-0 self-end text-label-xs uppercase tracking-[0.22em] inline-block px-5 py-2 shadow-[0_0_36px_rgba(0,0,0,0.4)] transition-[box-shadow,transform] duration-500 sm:px-6 sm:py-2 md:px-8 md:py-2.5"
-        >
-          Treasury
-        </Link>
-      </div>
+        Institutional{" "}
+        <span className="font-semibold italic text-gold/40 [text-shadow:0_2px_32px_rgba(0,0,0,0.4)]">Reserve</span>
+      </p>
 
       <p
         className={clsx(
-          `${uiFont} max-w-lg text-[12px] uppercase tracking-[0.15em] leading-[1.88] text-silver-dim/58 md:max-w-2xl md:text-[13px] lg:text-[14px] md:tracking-[0.14em]`,
+          `${uiFont} max-w-lg text-[12px] uppercase tracking-[0.15em] leading-[1.88] text-silver-dim/58 md:max-w-2xl md:text-[14px] lg:text-[15px] md:tracking-[0.14em]`,
           defaultBrandAlignEnd && "lg:ml-auto",
         )}
       >
