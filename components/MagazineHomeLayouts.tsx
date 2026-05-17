@@ -4,9 +4,8 @@ import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import BrandBandCardChrome from "@/components/BrandBandCardChrome";
-import HeroNewsCarousel from "@/components/HeroNewsCarousel";
 import VotingProtocolSignup from "@/components/VotingProtocolSignup";
+export { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
   MagazineSectionMasthead,
   type MagazineStory,
@@ -32,96 +31,6 @@ export type WireBrief = {
   dateline: string;
   imageSrc?: string;
 };
-
-export function HeroMagazineMasthead() {
-  return (
-    <div className="magazine-hero-masthead mx-auto flex w-full max-w-4xl flex-col items-center text-center">
-      <span className="font-mono-hbm mb-5 text-[9px] font-medium uppercase tracking-[0.42em] text-gold/58 md:mb-6 md:text-[10px]">
-        Breaking · Culture &amp; Markets
-      </span>
-      <h2 className="hero-editorial-quote-serif hero-editorial-headline hero-editorial-headline--horizontal font-cormorant font-light text-cream/[0.46] [text-shadow:0_3px_32px_rgba(0,0,0,0.42)]">
-        <span className="inline-flex max-w-full flex-wrap items-baseline justify-center gap-x-[0.32em] text-balance">
-          <span>The New Sound</span>
-          <span className="font-semibold italic text-cream/[0.5]">Of Capital</span>
-        </span>
-      </h2>
-      <p className="font-mono-hbm mt-6 text-[9px] uppercase tracking-[0.38em] text-silver-dim/52 md:mt-7">
-        Culture · Markets · Capital
-      </p>
-    </div>
-  );
-}
-
-export function HeroTopStoryCard() {
-  return (
-    <Link
-      href="/newspaper"
-      className="card-3d group grid h-full overflow-hidden border border-white/[0.09] bg-obsidian outline-none transition-[border-color,box-shadow] duration-500 hover:border-gold/25 hover:shadow-[0_24px_64px_rgba(0,0,0,0.55)] focus-visible:ring-2 focus-visible:ring-gold/30 md:grid-cols-[1fr_minmax(0,38%)] md:items-stretch"
-    >
-      <article className="flex flex-col gap-4 p-6 md:gap-5 md:p-7 lg:p-8">
-        <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
-          <span className="glass-panel-dark font-mono-hbm px-2.5 py-1 text-[8px] uppercase tracking-[0.28em] text-gold/72">
-            Top Story
-          </span>
-          <span className="font-mono-hbm text-[8px] uppercase tracking-[0.24em] text-silver-dim/48">
-            May 16, 2026 · Desk Memo
-          </span>
-        </div>
-        <h2 className="font-cormorant text-[1.55rem] font-light leading-[1.06] text-cream/90 transition-colors group-hover:text-gold md:text-[1.85rem] lg:text-[2rem]">
-          Culture, Music, and Film Are Priced by Capital
-        </h2>
-        <p className="font-robinhood text-[14px] leading-[1.68] text-silver-dim/78 md:text-[15px] md:leading-[1.72]">
-          <span className="float-left mr-2 mt-0.5 font-cormorant text-3xl font-semibold leading-none text-gold/62">
-            C
-          </span>
-          ulture, music, and film no longer sit adjacent to capital — they are priced by it. HBM &amp; Company
-          publishes the stories behind the markets: who owns the masters, who funds the slate, and who reads the
-          ledger when the room goes quiet.
-        </p>
-        <p className="font-robinhood border-t border-white/[0.07] pt-4 text-[13px] leading-[1.65] text-silver-dim/72 md:text-sm md:leading-[1.7]">
-          From breakout artists to on-chain film finance, our desk tracks the flows that move taste, rights, and
-          yield — with the discretion of a private bank and the pace of a newsroom.
-        </p>
-        <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-1">
-          <span className="inline-flex items-center gap-2 rounded-md bg-white/[0.06] px-2.5 py-1">
-            <span className="font-mono-hbm text-[8px] uppercase tracking-[0.32em] text-gold/58">Editor&apos;s Note</span>
-          </span>
-          <span className={goldOutlineCta}>Read Full Brief →</span>
-        </div>
-      </article>
-      <figure className="relative m-0 min-h-[220px] w-full border-t border-white/[0.07] md:min-h-[280px] md:border-l md:border-t-0 lg:min-h-full">
-        <Image
-          src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&q=85"
-          alt="Editorial desk"
-          fill
-          sizes="(max-width: 768px) 100vw, 38vw"
-          className="object-cover object-center transition-transform duration-700 group-hover:scale-[1.03]"
-          priority
-        />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-obsidian/80 via-transparent to-transparent md:bg-gradient-to-l" />
-        <figcaption className="absolute bottom-0 left-0 right-0 p-4 md:p-5">
-          <p className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-cream/45">Photo · Desk</p>
-        </figcaption>
-      </figure>
-    </Link>
-  );
-}
-
-export function HeroMagazineRow() {
-  return (
-    <div className="magazine-hero-row mx-auto mt-10 grid w-full max-w-[1440px] grid-cols-1 gap-4 md:mt-12 md:grid-cols-12 md:gap-5 lg:gap-6">
-      <div className="md:col-span-7 lg:col-span-8">
-        <HeroTopStoryCard />
-      </div>
-      <div className="md:col-span-5 lg:col-span-4">
-        <BrandBandCardChrome className="hero-editorial-visual-frame flex h-full min-h-[360px] flex-col px-3 pt-4 pb-3 md:min-h-[100%] md:px-4 md:pt-5">
-          <p className="font-mono-hbm mb-3 shrink-0 text-[8px] uppercase tracking-[0.32em] text-gold/55">Live Wire</p>
-          <HeroNewsCarousel />
-        </BrandBandCardChrome>
-      </div>
-    </div>
-  );
-}
 
 function RecordThumbCard({ item, className }: { item: WireBrief; className?: string }) {
   return (

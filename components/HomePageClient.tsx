@@ -1,19 +1,18 @@
 "use client";
 
 import type { ReactNode } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
 import FooterBrandVotingGrid from "@/components/FooterBrandVotingGrid";
 import MarqueeStrip from "@/components/MarqueeStrip";
 import SectionReveal from "@/components/SectionReveal";
 import { MagazineSectionMasthead, type MagazineStory, type SuiteStory } from "@/components/MagazineStoryCards";
+import { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
   ConsequenceRadioDeck,
   DeskWireNewsGrid,
   FrontPageNewsGrid,
-  HeroMagazineMasthead,
-  HeroMagazineRow,
   MagazineRecordGrid,
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
@@ -165,11 +164,9 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
   return (
     <>
       <div className="font-robinhood font-normal tracking-normal antialiased home-robinhood">
-      <NavBar />
-
       {/* ═══════════════ HERO ═══════════════ */}
       <section
-        className="relative flex min-h-screen min-h-[100dvh] flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+6rem)] pb-[max(4rem,env(safe-area-inset-bottom,1rem))] md:pt-[calc(env(safe-area-inset-top,0px)+7rem)] md:pb-[max(5rem,env(safe-area-inset-bottom,1rem))] lg:pt-[calc(env(safe-area-inset-top,0px)+6.25rem)] lg:pb-[max(6rem,env(safe-area-inset-bottom,1rem))]"
+        className="relative flex min-h-screen min-h-[100dvh] flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+1.25rem)] pb-[max(4rem,env(safe-area-inset-bottom,1rem))] md:pt-[calc(env(safe-area-inset-top,0px)+1.5rem)] md:pb-[max(5rem,env(safe-area-inset-bottom,1rem))] lg:pb-[max(6rem,env(safe-area-inset-bottom,1rem))]"
       >
         {/* City photo — overflow-hidden here only so headline/descenders aren’t clipped */}
         <div className="absolute inset-0 z-0 overflow-hidden">
@@ -211,10 +208,16 @@ export default function HomePageClient({ cryptoMarqueeSlot }: { cryptoMarqueeSlo
           className="relative z-10 mx-auto w-full max-w-[1440px] px-[max(1.25rem,env(safe-area-inset-left,0px))] md:px-12"
         >
           <motion.div variants={heroItem}>
-            <HeroMagazineMasthead />
-          </motion.div>
-          <motion.div variants={heroItem} className="md:px-2">
-            <HeroMagazineRow />
+            <HeroNewspaperEdition
+              lead={featuredStories[0]}
+              heroImageSrc="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1200&q=85"
+              heroImageAlt="Electric guitar"
+              leftBriefs={recordHeadlines}
+              rightFeatured={featuredStories[1]}
+              rightSecondary={featuredStories[2]}
+              rightTopBriefs={recordBriefs.slice(0, 2)}
+              tickerHeadlines={recordHeadlines.map((h) => h.headline)}
+            />
           </motion.div>
         </motion.div>
 
