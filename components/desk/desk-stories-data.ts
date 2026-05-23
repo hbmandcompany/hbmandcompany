@@ -1,6 +1,6 @@
 import type { DeskStatusTone } from "./StatusPill";
 
-export type StoryTab = "Due Today" | "Due Tomorrow" | "In Review" | "Scheduled";
+export type StoryTab = "Due Today" | "Due Tomorrow" | "This Week" | "Next Week";
 
 export type StoryRow = {
   id: string;
@@ -13,7 +13,7 @@ export type StoryRow = {
   dueWhen?: "today" | "tomorrow";
 };
 
-export const storyTabs: StoryTab[] = ["Due Today", "Due Tomorrow", "In Review", "Scheduled"];
+export const storyTabs: StoryTab[] = ["Due Today", "Due Tomorrow", "This Week", "Next Week"];
 
 export const stories: StoryRow[] = [
   {
