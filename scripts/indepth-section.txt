@@ -1,0 +1,92 @@
+      {/* ═══════════════ IN DEPTH — magazine feature spread ═══════════════ */}
+      <section className="relative overflow-hidden py-32 md:py-44 lg:py-52 section-mid">
+        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
+
+        <div className="relative z-10 mx-auto max-w-[1280px] px-6 md:px-12">
+          <SectionReveal>
+            <MagazineSectionMasthead
+              eyebrow="— In Depth"
+              title="Long-form culture and capital"
+              aside="Long Reads · Analysis · Culture"
+            />
+          </SectionReveal>
+
+          <div className="mt-14 grid grid-cols-1 items-start gap-14 lg:grid-cols-12 lg:gap-x-16">
+            <SectionReveal className="lg:col-span-5">
+              <div className="card-3d relative aspect-[4/5] overflow-hidden border border-white/[0.09] bg-obsidian md:aspect-[3/4]">
+                <Image
+                  src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=960&q=85"
+                  alt="Boardroom at dusk"
+                  fill
+                  className="object-cover object-center"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-void via-void/30 to-transparent" aria-hidden />
+                <div className="absolute bottom-0 left-0 right-0 p-7 md:p-9">
+                  <p className="font-mono-hbm text-[9px] uppercase tracking-[0.32em] text-gold/60">Photo Essay</p>
+                  <p className="font-cormorant mt-2 text-xl font-light italic text-cream/78 md:text-2xl">
+                    The room where the deal gets done
+                  </p>
+                </div>
+              </div>
+            </SectionReveal>
+
+            <div className="flex flex-col space-y-7 lg:col-span-7">
+              <h2 className="font-cormorant text-2xl font-light leading-snug text-cream/82 md:text-3xl lg:text-[2.35rem]">
+                The Takeover Has Already Happened — You Just Haven&apos;t Heard It Yet.
+              </h2>
+              <p className="font-robinhood text-lg font-light leading-relaxed text-cream/72 md:text-xl">
+                For a generation raised on streams, ownership arrived late — and sideways. Catalogs trade hands in
+                private rooms; masters reprice overnight; and the artists who built the sound of an era discover that
+                their influence outlived their contract.
+              </p>
+              <p className="font-robinhood text-body-md leading-[1.85] text-silver-dim/78">
+                Capital followed attention, then attention followed capital — a feedback loop that now runs through
+                on-chain rails, royalty tokens, and the quiet machinery of culture finance.
+              </p>
+              <p className="font-robinhood text-body-md leading-[1.85] text-silver-dim/78">
+                What remains is discretion: who reads the ledger, who sets the terms, and who still believes that a
+                great work is worth more than its last quarter&apos;s multiple.
+              </p>
+
+              <div className="grid grid-cols-2 gap-3 sm:gap-4 pt-2">
+                {[
+                  { Icon: IconSessionRing, t: "Exclusive", s: "Members-only briefings · off the record" },
+                  { Icon: IconCompStacks, t: "Analysis", s: "Deep dives · data and context" },
+                  { Icon: IconCollab, t: "Interview", s: "Founders · artists · stewards" },
+                  { Icon: IconTrade, t: "Markets", s: "Flows · multiples · sentiment" },
+                  { Icon: IconStaking, t: "Archive", s: "Back issues · permanent record" },
+                  { Icon: IconRadio, t: "Listen", s: "Audio editions · dispatches" },
+                ].map(({ Icon, t, s }) => (
+                  <div
+                    key={t}
+                    className="group/icon flex min-h-[132px] flex-col justify-between rounded-2xl border border-white/[0.08] bg-gradient-to-b from-obsidian/90 to-void/95 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-colors duration-500 hover:border-gold/22"
+                  >
+                    <Icon className="h-12 w-12 text-gold/35 transition-colors duration-500 group-hover/icon:text-gold/75" />
+                    <div>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-cream/75">{t}</p>
+                      <p className="mt-1 text-[10px] leading-snug tracking-wide text-silver-dim/62">{s}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap items-center gap-2.5 pt-4 sm:gap-3">
+                <Link
+                  href="/newspaper"
+                  className="inline-block rounded-full border border-white bg-[#0a0a0a] px-4 py-1.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-cream shadow-[0_6px_20px_rgba(0,0,0,0.4)] transition-all duration-300 hover:border-cream/80 hover:bg-[#141414] sm:px-5 sm:py-2"
+                >
+                  Read the Archive
+                </Link>
+                <Link
+                  href="/contact"
+                  className="garnet-btn inline-block px-4 py-1.5 font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void sm:px-5 sm:py-2"
+                >
+                  Subscribe
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+

@@ -8,7 +8,6 @@ export const writerNav: DeskNavItem[] = [
   { section: "ANALYTICS", href: "/desk/intelligence", label: "Engagement", icon: "search" },
 
   { section: "EDITORIAL", href: "/desk/starred", label: "From the Editor", icon: "star" },
-  { section: "EDITORIAL", href: "/desk/calendar", label: "Deadlines", icon: "calendar" },
 
   { section: "ACCOUNT", href: "/desk/settings", label: "Settings", icon: "gear" },
 ];

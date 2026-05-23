@@ -5,11 +5,12 @@ import { usePathname } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { useDesk } from "./DeskContext";
-import { deskBreadcrumb, deskNav, type DeskNavItem } from "./desk-routes";
+import { deskNav, type DeskNavItem } from "./desk-routes";
 import { deskPaper } from "./desk-paper";
 import { writerNav } from "./writer-routes";
+import { DeskMailboxPanel } from "./DeskMailboxPanel";
+import { deskInboxItems } from "./desk-inbox-data";
 import {
-  IconBell,
   IconCalendar,
   IconChevronDown,
   IconFileText,
@@ -17,7 +18,7 @@ import {
   IconGear,
   IconLandmark,
   IconLayoutGrid,
-  IconMail,
+  IconMailbox,
   IconScrollText,
   IconSearch,
   IconSend,
@@ -31,7 +32,7 @@ import {
 function iconFor(key: DeskNavItem["icon"]) {
   switch (key) {
     case "mail":
-      return IconMail;
+      return IconMailbox;
     case "star":
       return IconStar;
     case "grid":
@@ -81,9 +82,11 @@ export function DeskTopBar() {
   const { user } = useDesk();
   const [q, setQ] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
+  const [mailboxOpen, setMailboxOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const mailboxRef = useRef<HTMLDivElement>(null);
 
-  const crumb = useMemo(() => deskBreadcrumb(pathname), [pathname]);
+  const mailboxUnread = useMemo(() => deskInboxItems.filter((i) => i.unread).length, []);
 
   const grouped = useMemo(() => {
     const map = new Map<string, DeskNavItem[]>();
@@ -114,6 +117,7 @@ export function DeskTopBar() {
 
   useEffect(() => {
     setMenuOpen(false);
+    setMailboxOpen(false);
   }, [pathname]);
 
   return (
@@ -124,19 +128,11 @@ export function DeskTopBar() {
         deskPaper.border
       )}
     >
-      <div className="flex min-w-0 items-center gap-6">
-        <Link href="/desk/newsroom" className="hidden shrink-0 select-none sm:block">
-          <div className={clsx("font-cormorant text-[15px] font-light uppercase tracking-[0.22em]", deskPaper.inkHeading)}>
-            HBM <span className={deskPaper.accent}>&amp;</span> Company
-          </div>
-        </Link>
-
-        <div className={clsx("min-w-0 font-robinhood text-[13px]", deskPaper.inkMeta)}>
-          <span className="uppercase tracking-[0.18em]">{crumb.section}</span>
-          <span className={clsx("mx-2", deskPaper.accent)}>/</span>
-          <span className={deskPaper.inkHeading}>{crumb.page}</span>
+      <Link href="/desk/newsroom" className="hidden shrink-0 select-none sm:block">
+        <div className={clsx("font-cormorant text-[15px] font-light uppercase tracking-[0.22em]", deskPaper.inkHeading)}>
+          HBM <span className={deskPaper.accent}>&amp;</span> Company
         </div>
-      </div>
+      </Link>
 
       <div className="relative hidden flex-1 justify-center md:flex">
         <div
@@ -159,19 +155,39 @@ export function DeskTopBar() {
       </div>
 
       <div className="flex items-center gap-3">
-        <button
-          type="button"
-          className={clsx("relative rounded-md p-2 transition-colors", deskPaper.inkMeta, deskPaper.hover, "hover:text-[#20160d]")}
-          aria-label="Notifications"
-        >
-          <IconBell className="h-[18px] w-[18px]" />
-          <span className="absolute right-[9px] top-[9px] h-[6px] w-[6px] rounded-full bg-[#8d6f4d]" />
-        </button>
+        <div ref={mailboxRef} className="relative">
+          <button
+            type="button"
+            onClick={() => {
+              setMailboxOpen((v) => !v);
+              setMenuOpen(false);
+            }}
+            className={clsx(
+              "relative rounded-md p-2 transition-colors",
+              deskPaper.inkMeta,
+              mailboxOpen ? deskPaper.panelRaised : deskPaper.hover,
+              "hover:text-[#20160d]"
+            )}
+            aria-label="Mailbox"
+            aria-expanded={mailboxOpen}
+          >
+            <IconMailbox className="h-[18px] w-[18px]" />
+            {mailboxUnread > 0 ? (
+              <span className="absolute right-[7px] top-[7px] flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#8d6f4d] px-0.5 font-robinhood text-[8px] text-[#f2e6d1]">
+                {mailboxUnread}
+              </span>
+            ) : null}
+          </button>
+          <DeskMailboxPanel open={mailboxOpen} onClose={() => setMailboxOpen(false)} />
+        </div>
 
         <div ref={menuRef} className="relative">
           <button
             type="button"
-            onClick={() => setMenuOpen((v) => !v)}
+            onClick={() => {
+              setMenuOpen((v) => !v);
+              setMailboxOpen(false);
+            }}
             className={clsx(
               "flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors",
               menuOpen ? deskPaper.panelRaised : deskPaper.hover

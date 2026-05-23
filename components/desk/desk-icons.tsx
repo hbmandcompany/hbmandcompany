@@ -160,6 +160,16 @@ export function IconUsers(props: IconProps) {
   );
 }
 
+export function IconMailbox(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M3 7h18v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
+      <path d="M3 7l9 6 9-6" />
+      <path d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2" />
+    </BaseIcon>
+  );
+}
+
 export function IconBell(props: IconProps) {
   return (
     <BaseIcon {...props}>
