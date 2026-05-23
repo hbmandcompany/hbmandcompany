@@ -1,18 +1,14 @@
 import { DeskProvider } from "@/components/desk/DeskContext";
-import { DeskSidebar } from "@/components/desk/DeskSidebar";
 import { DeskTopBar } from "@/components/desk/DeskTopBar";
+import { deskPaper } from "@/components/desk/desk-paper";
 
 export default function DeskShellLayout({ children }: { children: React.ReactNode }) {
   return (
     <DeskProvider>
-      <div className="desk-app flex min-h-dvh bg-void text-cream">
-        <DeskSidebar />
-        <div className="flex min-w-0 flex-1 flex-col">
-          <DeskTopBar />
-          <main className="min-w-0 flex-1 bg-void">{children}</main>
-        </div>
+      <div className={`desk-app flex min-h-dvh flex-col ${deskPaper.page} ${deskPaper.ink}`}>
+        <DeskTopBar />
+        <main className={`min-w-0 flex-1 ${deskPaper.page}`}>{children}</main>
       </div>
     </DeskProvider>
   );
 }
-
