@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans, Plus_Jakarta_Sans, Raleway } from "next/font/google";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import JsonLd from "@/components/JsonLd";
 import "./globals.css";
 
@@ -181,6 +182,7 @@ export default function RootLayout({
       <body className="bg-void text-cream antialiased overflow-x-hidden min-h-screen min-h-[100dvh]">
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
