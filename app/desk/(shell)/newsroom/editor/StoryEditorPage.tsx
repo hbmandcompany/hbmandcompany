@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { clsx } from "clsx";
+import { useDesk } from "@/components/desk/DeskContext";
 import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
+import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
+import { EditorSitePreview } from "@/components/desk/EditorSitePreview";
 import { stories } from "@/components/desk/desk-stories-data";
 
 const defaultDraft = {
@@ -14,12 +17,16 @@ const defaultDraft = {
   tone: "neutral" as const,
 };
 
+type EditorView = "write" | "preview";
+
 export default function StoryEditorPage() {
   const searchParams = useSearchParams();
   const storyId = searchParams.get("story");
+  const { user } = useDesk();
 
   const existing = useMemo(() => stories.find((s) => s.id === storyId), [storyId]);
 
+  const [view, setView] = useState<EditorView>("write");
   const [headline, setHeadline] = useState(existing?.headline ?? "");
   const [dek, setDek] = useState("");
   const [body, setBody] = useState(
@@ -28,6 +35,20 @@ export default function StoryEditorPage() {
       : ""
   );
   const [section, setSection] = useState(existing?.section ?? defaultDraft.section);
+  const [heroImage, setHeroImage] = useState<EditorImageState | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (heroImage?.url) URL.revokeObjectURL(heroImage.url);
+    };
+  }, [heroImage?.url]);
+
+  function updateHeroImage(next: EditorImageState | null) {
+    setHeroImage((prev) => {
+      if (prev?.url && prev.url !== next?.url) URL.revokeObjectURL(prev.url);
+      return next;
+    });
+  }
 
   const wordCount = useMemo(() => {
     const text = [headline, dek, body].join(" ");
@@ -47,7 +68,29 @@ export default function StoryEditorPage() {
           <PaperStatusPill label={status} tone={tone} />
           <span className={clsx("font-robinhood text-[11px] tabular-nums", deskPaper.inkMeta)}>{wordCount.toLocaleString()} words</span>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className={clsx("flex rounded-md border p-0.5", deskPaper.border)}>
+            <button
+              type="button"
+              onClick={() => setView("write")}
+              className={clsx(
+                "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
+                view === "write" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover)
+              )}
+            >
+              Write
+            </button>
+            <button
+              type="button"
+              onClick={() => setView("preview")}
+              className={clsx(
+                "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
+                view === "preview" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover)
+              )}
+            >
+              Site preview
+            </button>
+          </div>
           <button
             type="button"
             className={clsx(
@@ -72,39 +115,54 @@ export default function StoryEditorPage() {
       </div>
 
       <div className="grid flex-1 gap-6 px-6 py-6 lg:grid-cols-[1fr_280px]">
-        <div className={clsx("rounded-md border p-6", deskPaper.card, deskPaper.border)}>
-          <input
-            value={headline}
-            onChange={(e) => setHeadline(e.target.value)}
-            placeholder="Headline"
-            className={clsx(
-              "mb-4 w-full border-0 bg-transparent font-cormorant text-3xl outline-none placeholder:text-[#9a8262]/60",
-              deskPaper.inkHeading
-            )}
-          />
-          <input
-            value={dek}
-            onChange={(e) => setDek(e.target.value)}
-            placeholder="Dek — one-line summary for the story card"
-            className={clsx(
-              "mb-6 w-full border-0 border-b bg-transparent pb-3 font-robinhood text-[15px] outline-none placeholder:text-[#9a8262]/60",
-              deskPaper.border,
-              deskPaper.inkBody
-            )}
-          />
-          <textarea
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-            placeholder="Start writing…"
-            rows={18}
-            className={clsx(
-              "w-full resize-none border-0 bg-transparent font-robinhood text-[15px] leading-[1.75] outline-none placeholder:text-[#9a8262]/60",
-              deskPaper.inkBody
-            )}
-          />
+        <div>
+          {view === "write" ? (
+            <div className={clsx("rounded-md border p-6", deskPaper.card, deskPaper.border)}>
+              <input
+                value={headline}
+                onChange={(e) => setHeadline(e.target.value)}
+                placeholder="Headline"
+                className={clsx(
+                  "mb-4 w-full border-0 bg-transparent font-cormorant text-3xl outline-none placeholder:text-[#9a8262]/60",
+                  deskPaper.inkHeading
+                )}
+              />
+              <input
+                value={dek}
+                onChange={(e) => setDek(e.target.value)}
+                placeholder="Dek — one-line summary for the story card"
+                className={clsx(
+                  "mb-6 w-full border-0 border-b bg-transparent pb-3 font-robinhood text-[15px] outline-none placeholder:text-[#9a8262]/60",
+                  deskPaper.border,
+                  deskPaper.inkBody
+                )}
+              />
+              <textarea
+                value={body}
+                onChange={(e) => setBody(e.target.value)}
+                placeholder="Start writing…"
+                rows={18}
+                className={clsx(
+                  "w-full resize-none border-0 bg-transparent font-robinhood text-[15px] leading-[1.75] outline-none placeholder:text-[#9a8262]/60",
+                  deskPaper.inkBody
+                )}
+              />
+            </div>
+          ) : (
+            <EditorSitePreview
+              headline={headline}
+              dek={dek}
+              body={body}
+              section={section}
+              byline={user.name}
+              image={heroImage}
+            />
+          )}
         </div>
 
         <aside className="space-y-4">
+          <EditorImagePanel image={heroImage} onImageChange={updateHeroImage} />
+
           <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Filing</div>
             <div className="mt-3 space-y-3">
