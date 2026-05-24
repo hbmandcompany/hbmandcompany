@@ -120,7 +120,7 @@ function TrendChart({ data }: { data: number[] }) {
 
   return (
     <svg viewBox={`0 0 ${w} ${h}`} className="h-full w-full" role="img" aria-label="Impression trend over 30 days">
-      {yTicks.map((tick, i) => {
+      {yTicks.map((tick) => {
         const y = pad.top + innerH - ((tick - min) / range) * innerH;
         return (
           <g key={tick}>
