@@ -20,22 +20,34 @@ type DayModalItem =
   | { kind: "deadline"; id: string; title: string; section: string };
 
 const MONTH_LABELS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const WEEKDAY_LABELS = ["S", "M", "T", "W", "T", "F", "S"] as const;
 
-const defaultEvents: CalendarEvent[] = [
-  { id: "e1", month: 5, date: 11, time: "10:00", title: "Station Chief sync — Dallas desk", tone: "blue" },
-  { id: "e2", month: 5, date: 11, time: "15:30", title: "Treasury risk review", tone: "amber" },
-  { id: "e3", month: 5, date: 14, time: "12:00", title: "Proposal #47 quorum check", tone: "gold" },
-  { id: "e4", month: 5, date: 18, time: "09:00", title: "PIOL v2 spec review", tone: "blue" },
-  { id: "e5", month: 5, date: 23, time: "11:00", title: "Editorial standup — newsroom", tone: "gold" },
-];
+function defaultEventsFor(month: number): CalendarEvent[] {
+  return [
+    { id: "e1", month, date: 11, time: "10:00", title: "Station Chief sync — Dallas desk", tone: "blue" },
+    { id: "e2", month, date: 11, time: "15:30", title: "Treasury risk review", tone: "amber" },
+    { id: "e3", month, date: 14, time: "12:00", title: "Proposal #47 quorum check", tone: "gold" },
+    { id: "e4", month, date: 18, time: "09:00", title: "PIOL v2 spec review", tone: "blue" },
+    { id: "e5", month, date: 23, time: "11:00", title: "Editorial standup — newsroom", tone: "gold" },
+  ];
+}
 
 type ModalTarget = { month: number; date: number } | null;
 
-const DISPLAY_YEAR = 2026;
-const DISPLAY_MONTH = 5;
+function buildMonthGrid(year: number, monthIndex: number) {
+  const firstWeekday = new Date(year, monthIndex, 1).getDay();
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
+  const cells: (number | null)[] = [
+    ...Array.from({ length: firstWeekday }, () => null),
+    ...Array.from({ length: daysInMonth }, (_, i) => i + 1),
+  ];
+  const trailing = (7 - (cells.length % 7)) % 7;
+  if (trailing) cells.push(...Array.from({ length: trailing }, () => null));
+  return cells;
+}
 
 export function DeskNewsroomCalendar({
-  events = defaultEvents,
+  events,
   deadlines = storyDeadlines,
 }: {
   events?: CalendarEvent[];
@@ -45,14 +57,29 @@ export function DeskNewsroomCalendar({
 
   const today = useMemo(() => {
     const now = new Date();
-    return { year: now.getFullYear(), month: now.getMonth() + 1, date: now.getDate() };
+    return {
+      year: now.getFullYear(),
+      monthIndex: now.getMonth(),
+      month: now.getMonth() + 1,
+      date: now.getDate(),
+    };
   }, []);
 
-  const days = useMemo(() => Array.from({ length: 31 }, (_, i) => i + 1), []);
+  const monthEvents = useMemo(() => events ?? defaultEventsFor(today.month), [events, today.month]);
+
+  const monthLabel = useMemo(
+    () =>
+      new Intl.DateTimeFormat("en-US", { month: "long", year: "numeric" }).format(
+        new Date(today.year, today.monthIndex, 1)
+      ),
+    [today.monthIndex, today.year]
+  );
+
+  const cells = useMemo(() => buildMonthGrid(today.year, today.monthIndex), [today.monthIndex, today.year]);
 
   const modalItems = useMemo((): DayModalItem[] => {
     if (!modalTarget) return [];
-    const meetings = events
+    const meetings = monthEvents
       .filter((e) => e.month === modalTarget.month && e.date === modalTarget.date)
       .map(
         (e): DayModalItem => ({
@@ -74,7 +101,7 @@ export function DeskNewsroomCalendar({
         })
       );
     return [...dayDeadlines, ...meetings];
-  }, [modalTarget, events, deadlines]);
+  }, [modalTarget, monthEvents, deadlines]);
 
   function openDay(month: number, date: number) {
     setModalTarget({ month, date });
@@ -85,18 +112,18 @@ export function DeskNewsroomCalendar({
   }
 
   function isToday(day: number) {
-    return today.year === DISPLAY_YEAR && today.month === DISPLAY_MONTH && today.date === day;
+    return today.date === day;
   }
 
   return (
     <>
       <section className={clsx("rounded-md p-5", deskPaper.card)}>
         <div className="mb-4">
-          <div className={clsx("font-robinhood text-[13px]", deskPaper.inkHeading)}>May 2026</div>
+          <div className={clsx("font-robinhood text-[13px]", deskPaper.inkHeading)}>{monthLabel}</div>
         </div>
 
         <div className="grid grid-cols-7 gap-2">
-          {["S", "M", "T", "W", "T", "F", "S"].map((d, i) => (
+          {WEEKDAY_LABELS.map((d, i) => (
             <div
               key={`${d}-${i}`}
               className={clsx("pb-1 text-center font-robinhood text-[10px] uppercase tracking-[0.22em]", deskPaper.inkLabel)}
@@ -104,15 +131,26 @@ export function DeskNewsroomCalendar({
               {d}
             </div>
           ))}
-          {days.map((d) => {
+          {cells.map((d, i) => {
+            if (d === null) {
+              return <div key={`empty-${i}`} className="h-10" aria-hidden />;
+            }
+
             const todayCell = isToday(d);
+            const hasEvents =
+              monthEvents.some((e) => e.month === today.month && e.date === d) ||
+              deadlines.some((dl) => dl.month === today.month && dl.date === d);
             return (
               <button
                 key={d}
                 type="button"
-                onClick={() => openDay(DISPLAY_MONTH, d)}
+                onClick={() => openDay(today.month, d)}
                 aria-current={todayCell ? "date" : undefined}
-                aria-label={todayCell ? `Today, May ${d}` : `May ${d}`}
+                aria-label={
+                  todayCell
+                    ? `Today, ${MONTH_LABELS[today.monthIndex]} ${d}`
+                    : `${MONTH_LABELS[today.monthIndex]} ${d}`
+                }
                 className={clsx(
                   "relative flex h-10 items-center justify-center rounded-md border text-[12px] transition-colors duration-200",
                   todayCell
@@ -121,6 +159,14 @@ export function DeskNewsroomCalendar({
                 )}
               >
                 <span className={clsx("font-robinhood tabular-nums", todayCell && "font-semibold")}>{d}</span>
+                {hasEvents ? (
+                  <span
+                    className={clsx(
+                      "absolute bottom-1.5 h-[5px] w-[5px] rounded-full",
+                      todayCell ? "bg-[#f2e6d1]" : "bg-[#8d6f4d]"
+                    )}
+                  />
+                ) : null}
               </button>
             );
           })}

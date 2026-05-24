@@ -1,24 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "./desk-paper";
 import { PaperStatusPill } from "./PaperStatusPill";
 import { stories, storyTabs, type StoryRow, type StoryTab } from "./desk-stories-data";
-
-type SortKey = "name" | "status" | "modified";
-
-function SectionHeading({ title, count }: { title: string; count: number }) {
-  return (
-    <div className="mb-4 flex items-center gap-3">
-      <span className={clsx("shrink-0 font-robinhood text-[10px] uppercase tracking-[0.22em]", deskPaper.inkLabel)}>
-        {title}
-      </span>
-      <span className={clsx("font-robinhood text-[10px]", deskPaper.inkMeta)}>{count} files</span>
-      <div className={clsx("h-px flex-1", deskPaper.divider)} />
-    </div>
-  );
-}
 
 function DocIcon({ tone }: { tone: StoryRow["tone"] }) {
   const fill =
@@ -75,12 +62,8 @@ function MoreIcon() {
   );
 }
 
-function sortStories(items: StoryRow[], key: SortKey): StoryRow[] {
-  const copy = [...items];
-  if (key === "name") copy.sort((a, b) => a.headline.localeCompare(b.headline));
-  if (key === "status") copy.sort((a, b) => a.status.localeCompare(b.status));
-  if (key === "modified") copy.sort((a, b) => a.meta.localeCompare(b.meta));
-  return copy;
+function sortStories(items: StoryRow[]): StoryRow[] {
+  return [...items].sort((a, b) => a.meta.localeCompare(b.meta));
 }
 
 const STORY_TYPES = ["Article", "Feature", "Investigation"] as const;
@@ -98,7 +81,6 @@ function PlusIcon() {
 
 export function DeskStoryQueue() {
   const [tab, setTab] = useState<StoryTab>("Due Today");
-  const [sortKey, setSortKey] = useState<SortKey>("modified");
   const [page, setPage] = useState(0);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [newMenuOpen, setNewMenuOpen] = useState(false);
@@ -110,8 +92,8 @@ export function DeskStoryQueue() {
     else if (tab === "Due Tomorrow") out = out.filter((s) => s.dueWhen === "tomorrow" || s.status === "DRAFT");
     else if (tab === "This Week") out = stories.filter((s) => s.status === "IN REVIEW");
     else if (tab === "Next Week") out = stories.filter((s) => s.status === "SCHEDULED");
-    return sortStories(out, sortKey);
-  }, [tab, sortKey]);
+    return sortStories(out);
+  }, [tab]);
 
   const pageCount = Math.max(1, Math.ceil(filteredStories.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount - 1);
@@ -128,10 +110,6 @@ export function DeskStoryQueue() {
     setTab(t);
     setPage(0);
     setHoverId(null);
-  }
-
-  function cycleSort(key: SortKey) {
-    setSortKey(key);
   }
 
   useEffect(() => {
@@ -154,8 +132,6 @@ export function DeskStoryQueue() {
 
   return (
     <section>
-      <SectionHeading title="STORY QUEUE" count={filteredStories.length} />
-
       <div className={clsx("overflow-hidden rounded-md border", deskPaper.border, deskPaper.card)}>
         {/* Toolbar — Drive-style path + filters + view toggle */}
         <div className={clsx("flex flex-wrap items-center justify-between gap-2 border-b px-3 py-2.5", deskPaper.border, deskPaper.pageAlt)}>
@@ -187,9 +163,9 @@ export function DeskStoryQueue() {
                     </span>
                   </div>
                   {STORY_TYPES.map((type) => (
-                    <button
+                    <Link
                       key={type}
-                      type="button"
+                      href="/desk/newsroom/editor"
                       onClick={() => setNewMenuOpen(false)}
                       className={clsx(
                         "block w-full px-3 py-2 text-left font-robinhood text-[12px] transition-colors",
@@ -199,7 +175,7 @@ export function DeskStoryQueue() {
                       )}
                     >
                       {type}
-                    </button>
+                    </Link>
                   ))}
                 </div>
               ) : null}
@@ -224,26 +200,6 @@ export function DeskStoryQueue() {
               {t}
             </button>
           ))}
-        </div>
-
-        <div
-          className={clsx(
-            "grid grid-cols-[1fr_auto] items-center gap-x-2 border-b px-2 py-2",
-            deskPaper.border,
-            deskPaper.pageAlt
-          )}
-        >
-          <button
-            type="button"
-            onClick={() => cycleSort("name")}
-            className={clsx(
-              "text-left font-robinhood text-[9px] uppercase tracking-[0.16em]",
-              sortKey === "name" ? deskPaper.accent : deskPaper.inkLabel
-            )}
-          >
-            Name {sortKey === "name" ? "↓" : ""}
-          </button>
-          <div className="w-16" />
         </div>
 
         <div className={clsx(LIST_HEIGHT, "overflow-hidden")}>
@@ -288,13 +244,13 @@ export function DeskStoryQueue() {
                   </div>
 
                   <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
-                    <button
-                      type="button"
+                    <Link
+                      href={`/desk/newsroom/editor?story=${story.id}`}
                       aria-label="Edit story"
                       className={clsx("rounded p-1", deskPaper.inkMeta, deskPaper.hover)}
                     >
                       <PencilIcon />
-                    </button>
+                    </Link>
                     <button
                       type="button"
                       aria-label="Submit story"

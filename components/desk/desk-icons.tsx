@@ -61,8 +61,20 @@ export function IconCalendar(props: IconProps) {
 export function IconVideo(props: IconProps) {
   return (
     <BaseIcon {...props}>
-      <path d="M14 8H5a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2h9a2 2 0 0 0 2-2v-1" />
-      <path d="m16 10 5-2v8l-5-2z" />
+      <rect x="2" y="7" width="13" height="10" rx="2.5" />
+      <circle cx="8.5" cy="12" r="2.25" />
+      <path d="M15 9.5l6-3v7l-6-3" />
+    </BaseIcon>
+  );
+}
+
+export function IconVideoConference(props: IconProps) {
+  return (
+    <BaseIcon {...props} strokeWidth={1.65}>
+      <rect x="2" y="6.5" width="14" height="11" rx="3" />
+      <circle cx="9" cy="12" r="2.75" />
+      <circle cx="9" cy="12" r="1" fill="currentColor" stroke="none" />
+      <path d="M16 9.75 21.5 7v10l-5.5-2.75" strokeLinejoin="round" />
     </BaseIcon>
   );
 }
@@ -131,6 +143,18 @@ export function IconSearch(props: IconProps) {
   );
 }
 
+export function IconAnalytics(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M4 20V10" />
+      <path d="M10 20V4" />
+      <path d="M16 20v-8" />
+      <path d="M22 20v-12" />
+      <path d="M3 20h20" />
+    </BaseIcon>
+  );
+}
+
 export function IconSend(props: IconProps) {
   return (
     <BaseIcon {...props}>
@@ -162,10 +186,10 @@ export function IconUsers(props: IconProps) {
 
 export function IconMailbox(props: IconProps) {
   return (
-    <BaseIcon {...props}>
-      <path d="M3 7h18v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z" />
-      <path d="M3 7l9 6 9-6" />
-      <path d="M3 7V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v2" />
+    <BaseIcon {...props} strokeWidth={1.65}>
+      <path d="M4 8h16v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8z" />
+      <path d="M4 8l8 5.5L20 8" />
+      <path d="M4 8V6.5A1.5 1.5 0 0 1 5.5 5h13A1.5 1.5 0 0 1 20 6.5V8" />
     </BaseIcon>
   );
 }
@@ -192,6 +216,16 @@ export function IconGear(props: IconProps) {
     <BaseIcon {...props}>
       <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7z" />
       <path d="M19.4 15a8 8 0 0 0 .1-2l2-1.2-2-3.4-2.3.6a7.7 7.7 0 0 0-1.7-1L15 5h-6l-.5 2.9a7.7 7.7 0 0 0-1.7 1l-2.3-.6-2 3.4 2 1.2a8 8 0 0 0 .1 2l-2 1.2 2 3.4 2.3-.6c.5.4 1.1.7 1.7 1L9 22h6l.5-2.9c.6-.3 1.2-.6 1.7-1l2.3.6 2-3.4z" />
+    </BaseIcon>
+  );
+}
+
+export function IconLogOut(props: IconProps) {
+  return (
+    <BaseIcon {...props}>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <path d="M16 17l5-5-5-5" />
+      <path d="M21 12H9" />
     </BaseIcon>
   );
 }

@@ -14,6 +14,7 @@ export type DeskNavItem = {
     | "landmark"
     | "file"
     | "search"
+    | "analytics"
     | "send"
     | "files"
     | "users"

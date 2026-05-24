@@ -1,16 +1,18 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { useDesk } from "./DeskContext";
-import { deskNav, type DeskNavItem } from "./desk-routes";
+import { type DeskNavItem } from "./desk-routes";
 import { deskPaper } from "./desk-paper";
 import { writerNav } from "./writer-routes";
-import { DeskMailboxPanel } from "./DeskMailboxPanel";
-import { deskInboxItems } from "./desk-inbox-data";
+import { mailboxUnreadCount } from "./desk-inbox-data";
+import { isWriterShellPath } from "./writer-shell";
+import { GlobalSearchTrigger } from "./global-search/GlobalSearchTrigger";
 import {
+  IconAnalytics,
   IconCalendar,
   IconChevronDown,
   IconFileText,
@@ -18,6 +20,7 @@ import {
   IconGear,
   IconLandmark,
   IconLayoutGrid,
+  IconLogOut,
   IconMailbox,
   IconScrollText,
   IconSearch,
@@ -25,6 +28,7 @@ import {
   IconStar,
   IconUsers,
   IconVideo,
+  IconVideoConference,
   IconVote,
   IconWallet,
 } from "./desk-icons";
@@ -53,6 +57,8 @@ function iconFor(key: DeskNavItem["icon"]) {
       return IconFileText;
     case "search":
       return IconSearch;
+    case "analytics":
+      return IconAnalytics;
     case "send":
       return IconSend;
     case "files":
@@ -66,31 +72,18 @@ function iconFor(key: DeskNavItem["icon"]) {
   }
 }
 
-function mergeNavItems(): DeskNavItem[] {
-  const seen = new Set<string>();
-  const out: DeskNavItem[] = [];
-  for (const item of [...deskNav, ...writerNav]) {
-    if (seen.has(item.href)) continue;
-    seen.add(item.href);
-    out.push(item);
-  }
-  return out;
-}
-
 export function DeskTopBar() {
   const pathname = usePathname();
+  const router = useRouter();
   const { user } = useDesk();
-  const [q, setQ] = useState("");
   const [menuOpen, setMenuOpen] = useState(false);
-  const [mailboxOpen, setMailboxOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const mailboxRef = useRef<HTMLDivElement>(null);
 
-  const mailboxUnread = useMemo(() => deskInboxItems.filter((i) => i.unread).length, []);
+  const mailboxUnread = useMemo(() => mailboxUnreadCount(), []);
 
   const grouped = useMemo(() => {
     const map = new Map<string, DeskNavItem[]>();
-    for (const item of mergeNavItems()) {
+    for (const item of writerNav) {
       if (!map.has(item.section)) map.set(item.section, []);
       map.get(item.section)!.push(item);
     }
@@ -117,7 +110,6 @@ export function DeskTopBar() {
 
   useEffect(() => {
     setMenuOpen(false);
-    setMailboxOpen(false);
   }, [pathname]);
 
   return (
@@ -129,56 +121,54 @@ export function DeskTopBar() {
       )}
     >
       <Link href="/desk/newsroom" className="hidden shrink-0 select-none sm:block">
-        <div className={clsx("font-cormorant text-[15px] font-light uppercase tracking-[0.22em]", deskPaper.inkHeading)}>
-          HBM <span className={deskPaper.accent}>&amp;</span> Company
+        <div className="flex items-baseline gap-2.5">
+          <div className={clsx("font-cormorant text-[15px] font-light uppercase tracking-[0.22em]", deskPaper.inkHeading)}>
+            HBM <span className={deskPaper.accent}>&amp;</span> Company
+          </div>
+          {isWriterShellPath(pathname) ? (
+            <span className={clsx("font-robinhood text-[10px] uppercase tracking-[0.14em]", deskPaper.inkMeta)}>
+              Editorial Newsroom
+            </span>
+          ) : null}
         </div>
       </Link>
 
-      <div className="relative hidden flex-1 justify-center md:flex">
-        <div
-          className={clsx(
-            "relative w-full max-w-[480px] transition-[max-width,border-color] duration-300 ease-luxury",
-            "focus-within:max-w-[560px]"
-          )}
-        >
-          <IconSearch className={clsx("pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2", deskPaper.inkLabel)} />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            placeholder="Search inbox, boards, proposals..."
-            className={clsx(
-              "h-10 w-full rounded-lg border pl-10 pr-4 font-robinhood text-[13px] outline-none transition-colors duration-300 ease-luxury",
-              deskPaper.input
-            )}
-          />
-        </div>
+      <div className="flex min-w-0 flex-1 items-center justify-center px-2">
+        <GlobalSearchTrigger />
       </div>
 
       <div className="flex items-center gap-3">
-        <div ref={mailboxRef} className="relative">
-          <button
-            type="button"
-            onClick={() => {
-              setMailboxOpen((v) => !v);
-              setMenuOpen(false);
-            }}
+        <div className="flex items-center gap-1">
+          <Link
+            href="/desk/meetings"
             className={clsx(
-              "relative rounded-md p-2 transition-colors",
+              "rounded-md p-2.5 transition-colors",
               deskPaper.inkMeta,
-              mailboxOpen ? deskPaper.panelRaised : deskPaper.hover,
+              pathname === "/desk/meetings" ? deskPaper.panelRaised : deskPaper.hover,
+              "hover:text-[#20160d]"
+            )}
+            aria-label="Conferencing"
+          >
+            <IconVideoConference className="h-[26px] w-[26px]" />
+          </Link>
+
+          <Link
+            href="/desk/mailbox"
+            className={clsx(
+              "relative rounded-md p-2.5 transition-colors",
+              deskPaper.inkMeta,
+              pathname === "/desk/mailbox" ? deskPaper.panelRaised : deskPaper.hover,
               "hover:text-[#20160d]"
             )}
             aria-label="Mailbox"
-            aria-expanded={mailboxOpen}
           >
-            <IconMailbox className="h-[18px] w-[18px]" />
+            <IconMailbox className="h-[21px] w-[21px]" />
             {mailboxUnread > 0 ? (
-              <span className="absolute right-[7px] top-[7px] flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#8d6f4d] px-0.5 font-robinhood text-[8px] text-[#f2e6d1]">
+              <span className="absolute right-[6px] top-[6px] flex h-[14px] min-w-[14px] items-center justify-center rounded-full bg-[#8d6f4d] px-0.5 font-robinhood text-[8px] text-[#f2e6d1]">
                 {mailboxUnread}
               </span>
             ) : null}
-          </button>
-          <DeskMailboxPanel open={mailboxOpen} onClose={() => setMailboxOpen(false)} />
+          </Link>
         </div>
 
         <div ref={menuRef} className="relative">
@@ -186,7 +176,6 @@ export function DeskTopBar() {
             type="button"
             onClick={() => {
               setMenuOpen((v) => !v);
-              setMailboxOpen(false);
             }}
             className={clsx(
               "flex items-center gap-2 rounded-md px-2 py-1.5 transition-colors",
@@ -242,6 +231,24 @@ export function DeskTopBar() {
                           </Link>
                         );
                       })}
+                      {section === "ACCOUNT" ? (
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setMenuOpen(false);
+                            router.push("/desk/login");
+                          }}
+                          className={clsx(
+                            "flex w-full items-center gap-3 rounded-md px-3 py-2 font-robinhood text-[13px] transition-colors duration-200",
+                            deskPaper.inkBody,
+                            deskPaper.hover,
+                            "hover:text-[#20160d]"
+                          )}
+                        >
+                          <IconLogOut className={clsx("h-4 w-4 shrink-0", deskPaper.inkMeta)} />
+                          Logout
+                        </button>
+                      ) : null}
                     </div>
                   </div>
                 ))}

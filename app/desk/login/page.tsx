@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import { useRouter } from "next/navigation";
 import { clsx } from "clsx";
+import { deskPaper } from "@/components/desk/desk-paper";
 import {
   DeskAuthProvider,
   routeForRole,
@@ -41,17 +42,12 @@ function EyeIcon({ open }: { open: boolean }) {
 }
 
 const roleOptions: { label: string; value: DeskRole }[] = [
-  { label: "Principal", value: "principal" },
   { label: "Writer", value: "writer" },
   { label: "Editor", value: "editor" },
+  { label: "Principal", value: "principal" },
   { label: "Analyst", value: "analyst" },
   { label: "Admin", value: "admin" },
-  { label: "Applicant", value: "applicant" },
-  { label: "Organization", value: "organization" },
 ];
-
-const fadeUp =
-  "opacity-0 [animation:fadeUp_0.6s_cubic-bezier(0.16,1,0.3,1)_forwards]";
 
 function DeskLoginForm() {
   const router = useRouter();
@@ -65,90 +61,70 @@ function DeskLoginForm() {
   }
 
   return (
-    <div className="desk-app min-h-dvh bg-midnight text-cream">
-      <div className="grid min-h-dvh grid-cols-1 md:grid-cols-[55%_45%]">
-        <section className="relative flex items-center justify-center overflow-hidden bg-midnight px-8 py-14 md:px-12">
-          <div
-            className="pointer-events-none absolute inset-0 flex items-center justify-center"
-            aria-hidden
-          >
-            <div
-              className="h-[420px] w-[420px] rounded-full"
-              style={{
-                background:
-                  "radial-gradient(circle, rgba(180,175,170,0.18) 0%, rgba(180,175,170,0.08) 45%, transparent 72%)",
-              }}
-            />
-          </div>
-          <div className="relative z-10 animate-fade-up text-center [animation-duration:600ms] [animation-timing-function:var(--tw-ease-luxury)]">
-            <div className="font-cormorant text-[40px] font-light uppercase tracking-[0.22em] text-cream md:text-[48px]">
-              HBM &amp; Company
+    <div className={clsx("desk-app min-h-dvh", deskPaper.page, deskPaper.ink)}>
+      <div className="grid min-h-dvh grid-cols-1 md:grid-cols-[52%_48%]">
+        <section className={clsx("relative flex items-center justify-center px-8 py-14 md:px-12", deskPaper.pageAlt)}>
+          <div className="relative z-10 text-center">
+            <div className={clsx("font-cormorant text-[40px] font-light uppercase tracking-[0.22em] md:text-[48px]", deskPaper.inkHeading)}>
+              HBM <span className={deskPaper.accent}>&amp;</span> Company
             </div>
-            <div className="mx-auto mt-4 h-px w-20 gold-rule" />
-            <div className="mt-4 font-robinhood text-xs uppercase tracking-[0.3em] text-silver-dim">
-              The Desk
+            <div className={clsx("mx-auto mt-4 h-px w-20", deskPaper.divider)} />
+            <div className={clsx("mt-4 font-robinhood text-xs uppercase tracking-[0.3em]", deskPaper.inkLabel)}>
+              Editorial Newsroom
             </div>
-            <div className="mt-6 font-robinhood text-[11px] text-silver">
-              Duration. Precision. Patrimony.
-            </div>
+            <div className={clsx("mt-6 font-robinhood text-[11px]", deskPaper.inkMeta)}>The contributor desk</div>
           </div>
         </section>
 
-        <section className="relative flex items-center justify-center bg-charcoal px-8 py-14 md:px-12">
+        <section className={clsx("flex items-center justify-center px-8 py-14 md:px-12", deskPaper.page)}>
           <div className="w-full max-w-[420px]">
-            <div className={clsx(fadeUp, "[animation-delay:400ms]")}>
-              <h1 className="font-robinhood text-xl font-medium text-cream">Sign in to your desk</h1>
-              <p className="mt-2 font-robinhood text-sm text-silver-dim">
-                Any credentials are accepted in development. Access is permissioned by role.
-              </p>
-            </div>
+            <h1 className={clsx("font-cormorant text-3xl", deskPaper.inkHeading)}>Sign in</h1>
+            <p className={clsx("mt-2 font-robinhood text-sm", deskPaper.inkBody)}>
+              Any credentials work in development. Access is permissioned by role.
+            </p>
 
             <form
-              className="mt-8 space-y-3"
+              className="mt-8 space-y-4"
               onSubmit={(e) => {
                 e.preventDefault();
                 signIn();
               }}
             >
-              <div className={clsx(fadeUp, "[animation-delay:500ms]")}>
-                <div className="flex flex-wrap gap-2">
-                  {roleOptions.map((opt) => {
-                    const active = currentRole === opt.value;
-                    return (
-                      <button
-                        key={opt.value}
-                        type="button"
-                        onClick={() => setRole(opt.value)}
-                        className={clsx(
-                          "rounded-full border px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-[0.22em] transition-colors",
-                          active
-                            ? "border-l-2 border-l-gold border-gold bg-charcoal-light text-cream"
-                            : "border-transparent text-silver hover:text-cream"
-                        )}
-                      >
-                        {opt.label}
-                      </button>
-                    );
-                  })}
-                </div>
+              <div className="flex flex-wrap gap-2">
+                {roleOptions.map((opt) => {
+                  const active = currentRole === opt.value;
+                  return (
+                    <button
+                      key={opt.value}
+                      type="button"
+                      onClick={() => setRole(opt.value)}
+                      className={clsx(
+                        "rounded-full border px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-[0.18em] transition-colors",
+                        active
+                          ? clsx("border-[#8d6f4d] bg-[#ebe0cc]", deskPaper.inkHeading)
+                          : clsx(deskPaper.border, deskPaper.inkMeta, deskPaper.hover)
+                      )}
+                    >
+                      {opt.label}
+                    </button>
+                  );
+                })}
               </div>
 
-              <div className={clsx(fadeUp, "[animation-delay:600ms]")}>
-                <input
-                  className="input-dark w-full font-robinhood"
-                  placeholder="EMAIL"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  type="text"
-                  inputMode="email"
-                  autoComplete="username"
-                />
-              </div>
+              <input
+                className={clsx("h-10 w-full rounded-md border px-3 font-robinhood text-[13px] outline-none", deskPaper.input)}
+                placeholder="Email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                type="text"
+                inputMode="email"
+                autoComplete="username"
+              />
 
-              <div className={clsx("relative", fadeUp, "[animation-delay:700ms]")}>
+              <div className="relative">
                 <input
-                  className="input-dark w-full pr-12 font-robinhood"
-                  placeholder="PASSWORD"
+                  className={clsx("h-10 w-full rounded-md border px-3 pr-12 font-robinhood text-[13px] outline-none", deskPaper.input)}
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   type={show ? "text" : "password"}
@@ -157,48 +133,51 @@ function DeskLoginForm() {
                 <button
                   type="button"
                   onClick={() => setShow((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 text-silver transition-colors hover:bg-charcoal-light hover:text-cream"
+                  className={clsx("absolute right-3 top-1/2 -translate-y-1/2 rounded-md p-1.5 transition-colors", deskPaper.inkMeta, deskPaper.hover)}
                   aria-label={show ? "Hide password" : "Show password"}
                 >
                   <EyeIcon open={show} />
                 </button>
               </div>
 
-              <div className={clsx("flex justify-end", fadeUp, "[animation-delay:800ms]")}>
-                <button
-                  type="button"
-                  className="font-robinhood text-[11px] uppercase tracking-[0.22em] text-silver transition-colors hover:text-cream"
-                >
+              <div className="flex justify-end">
+                <button type="button" className={clsx("font-robinhood text-[11px] uppercase tracking-wider", deskPaper.accent)}>
                   Forgot credentials
                 </button>
               </div>
 
-              <div className={clsx(fadeUp, "[animation-delay:900ms]")}>
-                <button
-                  type="submit"
-                  className="garnet-btn w-full py-3 font-robinhood text-[11px] uppercase tracking-[0.28em]"
-                >
-                  SIGN IN
-                </button>
+              <button
+                type="submit"
+                className={clsx(
+                  "w-full rounded-md border py-3 font-robinhood text-[11px] uppercase tracking-[0.24em] transition-colors",
+                  "border-[#6a5843] bg-[#8d6f4d] text-[#f2e6d1] hover:bg-[#6a5843]"
+                )}
+              >
+                Sign in
+              </button>
+
+              <div className="flex items-center gap-3">
+                <div className={clsx("h-px flex-1", deskPaper.divider)} />
+                <span className={clsx("font-robinhood text-[11px]", deskPaper.inkMeta)}>or</span>
+                <div className={clsx("h-px flex-1", deskPaper.divider)} />
               </div>
 
-              <div className={clsx(fadeUp, "[animation-delay:1000ms]")}>
-                <div className="my-6 flex items-center gap-3">
-                  <div className="h-px flex-1 gold-rule" />
-                  <span className="font-robinhood text-[11px] text-silver">or</span>
-                  <div className="h-px flex-1 gold-rule" />
-                </div>
-                <button
-                  type="button"
-                  onClick={signIn}
-                  className="gold-outline-btn w-full py-3 font-robinhood text-[11px] uppercase tracking-[0.26em]"
-                >
-                  Continue with SSO
-                </button>
-                <p className="pt-8 text-center font-robinhood text-[10px] text-silver-dim">
-                  By signing in you agree to the operating protocols of the Company.
-                </p>
-              </div>
+              <button
+                type="button"
+                onClick={signIn}
+                className={clsx(
+                  "w-full rounded-md border py-3 font-robinhood text-[11px] uppercase tracking-[0.2em] transition-colors",
+                  deskPaper.border,
+                  deskPaper.inkBody,
+                  deskPaper.hover
+                )}
+              >
+                Continue with SSO
+              </button>
+
+              <p className={clsx("pt-4 text-center font-robinhood text-[10px]", deskPaper.inkMeta)}>
+                By signing in you agree to the editorial operating protocols of the Company.
+              </p>
             </form>
           </div>
         </section>
@@ -210,7 +189,9 @@ function DeskLoginForm() {
 export default function DeskLoginPage() {
   return (
     <DeskAuthProvider>
-      <DeskLoginForm />
+      <Suspense fallback={null}>
+        <DeskLoginForm />
+      </Suspense>
     </DeskAuthProvider>
   );
 }

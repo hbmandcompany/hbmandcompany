@@ -1,12 +1,12 @@
 "use client";
 
-import { DeskStubPlaceholder } from "@/components/desk/DeskStubPlaceholder";
+import { Suspense } from "react";
+import StoryEditorPage from "./StoryEditorPage";
 
-export default function StoryEditorPage() {
+export default function StoryEditorRoute() {
   return (
-    <DeskStubPlaceholder
-      title="Story Editor"
-      subtitle="Full rich text editor with image management and submission workflow coming. This is the Writer's primary composition view."
-    />
+    <Suspense fallback={null}>
+      <StoryEditorPage />
+    </Suspense>
   );
 }

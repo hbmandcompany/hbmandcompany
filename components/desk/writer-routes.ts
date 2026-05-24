@@ -1,13 +1,9 @@
 import type { DeskNavItem } from "./desk-routes";
 
 export const writerNav: DeskNavItem[] = [
-  { section: "NEWSROOM", href: "/desk/newsroom", label: "My Stories", icon: "file" },
-  { section: "NEWSROOM", href: "/desk/newsroom/editor", label: "Story Editor", icon: "send" },
-  { section: "NEWSROOM", href: "/desk/submissions", label: "Submissions", icon: "send" },
+  { section: "NEWSROOM", href: "/desk/newsroom/archive", label: "Archive", icon: "files" },
+  { section: "NEWSROOM", href: "/desk/newsroom/analytics", label: "Analytics", icon: "analytics" },
 
-  { section: "ANALYTICS", href: "/desk/intelligence", label: "Engagement", icon: "search" },
-
-  { section: "EDITORIAL", href: "/desk/starred", label: "From the Editor", icon: "star" },
-
+  { section: "ACCOUNT", href: "/desk/wallet", label: "Wallet", icon: "wallet" },
   { section: "ACCOUNT", href: "/desk/settings", label: "Settings", icon: "gear" },
 ];
