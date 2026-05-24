@@ -11,7 +11,7 @@ const PAGE_SIZE = 2;
 
 function SectionHeading({ title, badge }: { title: string; badge?: number }) {
   return (
-    <div className="mb-4 flex items-center gap-3">
+    <div className="mb-2 flex items-center gap-3">
       <span className={clsx("shrink-0 font-robinhood text-[10px] uppercase tracking-[0.22em]", deskPaper.inkLabel)}>
         {title}
       </span>

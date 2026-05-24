@@ -13,7 +13,7 @@ export default function NewsroomPage() {
         <DeskEngagementPreview />
       </div>
 
-      <aside className="min-w-0 flex-[0.38] space-y-6">
+      <aside className="min-w-0 flex-[0.38] space-y-2">
         <DeskStoryQueue />
         <DeskSubmissions />
       </aside>
