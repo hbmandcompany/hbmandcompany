@@ -12,6 +12,7 @@ import {
 export { ConsequenceRadioDeck } from "@/components/ConsequenceRadioDeck";
 export { MagazineLifestyleGrid } from "@/components/MagazineLifestyleGrid";
 export { FeaturedStoriesFourUp } from "@/components/FeaturedStoriesFourUp";
+import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 
 const goldOutlineCta =
   "gold-outline-btn inline-block px-3 py-1 text-[10px] uppercase tracking-[0.18em] sm:px-4 sm:py-1.5 sm:text-label-xs sm:tracking-[0.2em]";
@@ -156,6 +157,7 @@ export function DmnEditorialGrid({
   businessList,
   businessLead,
   businessPromo,
+  businessPromoAd = false,
   embedded = false,
 }: {
   columnistHeading: string;
@@ -163,11 +165,12 @@ export function DmnEditorialGrid({
   businessHeading: string;
   businessList: WireBrief[];
   businessLead: DmnLeadStory;
-  businessPromo: DmnPromoCard;
+  businessPromo?: DmnPromoCard;
+  businessPromoAd?: boolean;
   /** Inside hero edition shell — no separate card border. */
   embedded?: boolean;
 }) {
-  const promoHref = businessPromo.href ?? `/newspaper?story=${businessPromo.storyId}`;
+  const promoHref = businessPromo?.href ?? `/newspaper?story=${businessPromo?.storyId ?? ""}`;
 
   return (
     <div className={clsx("dmn-editorial", embedded && "dmn-editorial--embedded")}>
@@ -231,6 +234,11 @@ export function DmnEditorialGrid({
             </Link>
           </article>
 
+          {businessPromoAd ? (
+            <div className="dmn-editorial__business-promo dmn-editorial__business-ad overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian">
+              <AdPlacementPlaceholder theme="dark" className="hero-front-page__ad-slot" />
+            </div>
+          ) : businessPromo ? (
           <Link
             href={promoHref}
             className="dmn-editorial__business-promo card-3d group grid h-full grid-rows-[1fr_auto] overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian"
@@ -252,6 +260,7 @@ export function DmnEditorialGrid({
               </h3>
             </div>
           </Link>
+          ) : null}
         </div>
       </section>
     </div>

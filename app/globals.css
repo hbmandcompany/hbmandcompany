@@ -1493,6 +1493,10 @@
   min-height: 0;
 }
 
+.dmn-editorial__business-ad .ad-placement-slot {
+  min-height: 280px;
+}
+
 .desk-wire-grid__signup .ad-placement-slot {
   min-height: 280px;
 }
@@ -2069,6 +2073,19 @@
 
 .lifestyle-wire__ad-slot .ad-placement-slot {
   min-height: 280px;
+}
+
+.home-leaderboard-ad {
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(9, 9, 11, 0.92);
+}
+
+.ad-placement-slot--leaderboard,
+.home-leaderboard-ad .ad-placement-slot {
+  min-height: clamp(140px, 22vw, 250px);
+  width: 100%;
 }
 
 .lifestyle-wire__promo-title {

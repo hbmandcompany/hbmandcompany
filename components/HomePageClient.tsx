@@ -8,7 +8,6 @@ import type { MagazineStory, SuiteStory } from "@/components/MagazineStoryCards"
 import { HeroNewspaperEdition } from "@/components/HeroNewspaperEdition";
 import {
   BroadsheetFourColumnGrid,
-  ConsequenceRadioDeck,
   DeskWireNewsGrid,
   DmnEditorialGrid,
   MagazineLifestyleGrid,
@@ -16,6 +15,7 @@ import {
   type WireBrief,
 } from "@/components/MagazineHomeLayouts";
 import SectionReveal from "@/components/SectionReveal";
+import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 
 const featuredStories: MagazineStory[] = [
   {
@@ -235,7 +235,7 @@ const broadsheetColumns: BroadsheetColumn[] = [
       { storyId: recordBriefs[0].storyId, headline: recordBriefs[0].headline },
       { storyId: recordBriefs[2].storyId, headline: recordBriefs[2].headline },
       { storyId: "venue-residencies-stellar", headline: "Venue Residencies Tokenized on Stellar" },
-      { storyId: "culture-capital-future", headline: "The Future of Culture & Capital" },
+      { storyId: "residency-payout-rails", headline: "Residency Payout Rails Open to Independent Promoters" },
     ],
   },
   {
@@ -373,13 +373,7 @@ export default function HomePageClient() {
                     imageSrc: suiteSections[0].imageSrc,
                     imageAlt: suiteSections[0].imageAlt,
                   }}
-                  businessPromo={{
-                    storyId: "culture-capital-future",
-                    headline: "The Future of Culture & Capital",
-                    imageSrc: "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=900&q=85",
-                    imageAlt: "City skyline at dusk",
-                    href: "/treasury",
-                  }}
+                  businessPromoAd
                 />
               }
             />
@@ -411,19 +405,20 @@ export default function HomePageClient() {
         </div>
       </section>
 
-      <section className="relative overflow-hidden py-10 md:py-12 section-mid" aria-label="Consequence Radio">
-        <div className="pointer-events-none absolute inset-0 purple-bloom" aria-hidden />
-        <div className="relative z-10 mx-auto max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <ConsequenceRadioDeck />
-          </SectionReveal>
-        </div>
-      </section>
-
       <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
             <DeskWireNewsGrid />
+          </SectionReveal>
+        </div>
+      </section>
+
+      <section className="relative bg-void pb-10 md:pb-12" aria-label="Advertisement">
+        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
+          <SectionReveal>
+            <div className="home-leaderboard-ad">
+              <AdPlacementPlaceholder theme="dark" layout="leaderboard" />
+            </div>
           </SectionReveal>
         </div>
       </section>
