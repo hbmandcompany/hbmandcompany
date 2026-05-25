@@ -5,6 +5,7 @@ import Image from "next/image";
 import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
 import SectionReveal from "@/components/SectionReveal";
+import { ShopComingSoonModal } from "@/components/shop/ShopComingSoonModal";
 
 type Category = "all" | "apparel" | "tech" | "accessories";
 
@@ -205,6 +206,7 @@ export default function ShopPage() {
 
   return (
     <>
+      <ShopComingSoonModal />
       <NavBar />
 
       {/* ═══════════════ HERO ═══════════════ */}
