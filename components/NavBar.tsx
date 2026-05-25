@@ -1,17 +1,29 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
-import { getShopUrl } from "@/lib/site-urls";
+import { getShopUrl, isShopHost } from "@/lib/site-urls";
 
 const navLinks = [
   { label: "Music", href: "/music" },
   { label: "Film", href: "/film" },
   { label: "Culture", href: "/culture" },
 ] as const;
+
+function subscribeToHostname() {
+  return () => {};
+}
+
+function getShopSubdomainSnapshot() {
+  return isShopHost(window.location.host);
+}
+
+function getShopSubdomainServerSnapshot() {
+  return false;
+}
 
 export default function NavBar() {
   const [scrolled, setScrolled]   = useState(false);
@@ -20,6 +32,12 @@ export default function NavBar() {
   const lastScrollY               = useRef(0);
   const pathname                  = usePathname();
   const isHome                    = pathname === "/";
+  const isShopSubdomain           = useSyncExternalStore(
+    subscribeToHostname,
+    getShopSubdomainSnapshot,
+    getShopSubdomainServerSnapshot,
+  );
+  const showSiteNav               = isHome && !isShopSubdomain;
 
   /* Smart scroll — hide on down, reveal on up */
   useEffect(() => {
@@ -89,7 +107,7 @@ export default function NavBar() {
           </Link>
 
           {/* ── Desktop nav (homepage only) ── */}
-          {isHome ? (
+          {showSiteNav ? (
           <div className="hidden md:flex items-center gap-9">
             {navLinks.map((link) => (
               <Link
@@ -111,7 +129,7 @@ export default function NavBar() {
           ) : null}
 
           {/* ── Mobile hamburger (homepage only — menu matches desktop) ── */}
-          {isHome ? (
+          {showSiteNav ? (
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             type="button"
@@ -140,7 +158,7 @@ export default function NavBar() {
 
       {/* ── Mobile full-screen overlay menu (homepage only) ── */}
       <AnimatePresence>
-        {menuOpen && isHome && (
+        {menuOpen && showSiteNav && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
