@@ -2058,6 +2058,19 @@
   background: rgba(0, 0, 0, 0.2);
 }
 
+.lifestyle-wire__ad-slot {
+  margin-top: 1rem;
+  min-height: 280px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(9, 9, 11, 0.92);
+}
+
+.lifestyle-wire__ad-slot .ad-placement-slot {
+  min-height: 280px;
+}
+
 .lifestyle-wire__promo-title {
   margin-top: 0.35rem;
   font-size: 1rem;
