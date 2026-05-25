@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 
 type LifestyleStory = {
   storyId: string;
@@ -177,9 +176,22 @@ export function MagazineLifestyleGrid() {
           {artsStories.map((story) => (
             <ThumbStory key={story.storyId} story={story} />
           ))}
-          <div className="lifestyle-wire__ad-slot">
-            <AdPlacementPlaceholder theme="dark" className="hero-front-page__ad-slot" />
-          </div>
+          <Link href="/newspaper" className="lifestyle-wire__promo group block">
+            <figure className="lifestyle-wire__promo-media relative aspect-[4/3] overflow-hidden bg-midnight">
+              <Image
+                src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=85"
+                alt=""
+                fill
+                className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-[1.03]"
+                unoptimized
+              />
+            </figure>
+            <div className="lifestyle-wire__promo-body">
+              <p className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/65">Listen</p>
+              <h4 className="lifestyle-wire__promo-title font-robinhood group-hover:text-gold">Podcasts from HBM &amp; Company</h4>
+              <p className="lifestyle-wire__dek font-robinhood">Desk briefings, culture wires, and treasury dispatches.</p>
+            </div>
+          </Link>
         </aside>
       </div>
     </div>
