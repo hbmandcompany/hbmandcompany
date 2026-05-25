@@ -32,11 +32,6 @@ const foodSecondary: LifestyleStory[] = [
     category: "Rights",
     headline: "Masters Reprice Overnight as Catalogs Trade in Private Rooms",
   },
-  {
-    storyId: "royalty-rail",
-    category: "Markets",
-    headline: "Royalty Tokens Clear First Institutional Window",
-  },
 ];
 
 const foodColTwo: LifestyleStory[] = [
@@ -187,30 +182,6 @@ export function MagazineLifestyleGrid() {
           </div>
         </aside>
       </div>
-
-      <article className="lifestyle-wire__footer-span">
-        <Link href="/treasury" className="lifestyle-wire__footer-link group flex flex-wrap items-end justify-between gap-4">
-          <div className="min-w-0 flex-1">
-            <CategoryLabel>Markets Desk</CategoryLabel>
-            <h3 className="lifestyle-wire__headline lifestyle-wire__headline--lg font-robinhood group-hover:text-gold">
-              Reserve Holdings Update: Verified Rails and Governance Cadence
-            </h3>
-            <p className="lifestyle-wire__dek font-robinhood">
-              Enterprise posture on DeFi infrastructure and digital-asset custody.
-            </p>
-            <span className="lifestyle-wire__byline font-mono-hbm">By HBM Markets Desk</span>
-          </div>
-          <figure className="lifestyle-wire__footer-icon relative h-16 w-16 shrink-0 overflow-hidden rounded-lg border border-white/[0.1] bg-midnight">
-            <Image
-              src="https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=200&q=85"
-              alt=""
-              fill
-              className="object-cover"
-              unoptimized
-            />
-          </figure>
-        </Link>
-      </article>
     </div>
   );
 }
