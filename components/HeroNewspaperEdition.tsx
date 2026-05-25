@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { getShopUrl } from "@/lib/site-urls";
 import type { MagazineStory } from "@/components/MagazineStoryCards";
 import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 
@@ -95,12 +96,12 @@ function HeroMasthead() {
           ))}
         </nav>
         <div className="hero-dmn-masthead__shop">
-          <Link
-            href="/shop"
+          <a
+            href={getShopUrl()}
             className="garnet-btn garnet-btn-soft font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void/88 px-5 py-1.5"
           >
             Shop
-          </Link>
+          </a>
         </div>
       </div>
       <div className="hero-dmn-nameplate__rule" aria-hidden />

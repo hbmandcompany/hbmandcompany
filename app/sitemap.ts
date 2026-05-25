@@ -1,11 +1,14 @@
 import type { MetadataRoute } from "next";
+import { getShopOrigin } from "@/lib/site-urls";
 
 const host = "https://hbmandcompany.com";
+const shopHost = getShopOrigin();
 
 const routes: {
   path: string;
   changeFrequency: "always" | "hourly" | "daily" | "weekly" | "monthly" | "yearly" | "never";
   priority: number;
+  host?: string;
 }[] = [
   { path: "", changeFrequency: "weekly", priority: 1 },
   { path: "/about", changeFrequency: "monthly", priority: 0.9 },
@@ -20,7 +23,7 @@ const routes: {
   { path: "/documentation", changeFrequency: "monthly", priority: 0.85 },
   { path: "/contact", changeFrequency: "monthly", priority: 0.85 },
   { path: "/treasury", changeFrequency: "monthly", priority: 0.85 },
-  { path: "/shop", changeFrequency: "weekly", priority: 0.85 },
+  { path: "/shop", changeFrequency: "weekly", priority: 0.85, host: shopHost },
   { path: "/acquire-hbm", changeFrequency: "monthly", priority: 0.75 },
   { path: "/privacy", changeFrequency: "yearly", priority: 0.4 },
   { path: "/terms", changeFrequency: "yearly", priority: 0.4 },
@@ -28,8 +31,8 @@ const routes: {
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
-  return routes.map(({ path, changeFrequency, priority }) => ({
-    url: path === "" ? host : `${host}${path}`,
+  return routes.map(({ path, changeFrequency, priority, host: routeHost }) => ({
+    url: path === "" ? host : routeHost ? routeHost : `${host}${path}`,
     lastModified: now,
     changeFrequency,
     priority,

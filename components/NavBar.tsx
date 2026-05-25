@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
+import { getShopUrl } from "@/lib/site-urls";
 
 const navLinks = [
   { label: "Music", href: "/music" },
@@ -100,12 +101,12 @@ export default function NavBar() {
                 <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
-            <Link
-              href="/shop"
+            <a
+              href={getShopUrl()}
               className="garnet-btn garnet-btn-soft font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void/88 px-5 py-1.5"
             >
               Shop
-            </Link>
+            </a>
           </div>
           ) : null}
 
@@ -188,12 +189,12 @@ export default function NavBar() {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="mt-4"
               >
-                <Link
-                  href="/shop"
+                <a
+                  href={getShopUrl()}
                   className="garnet-btn garnet-btn-soft font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-void/88 px-8 py-2 inline-block"
                 >
                   Shop
-                </Link>
+                </a>
               </motion.div>
             </nav>
 
