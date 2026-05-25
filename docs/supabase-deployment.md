@@ -11,6 +11,8 @@ This guide covers local setup, Vercel production configuration, and verifying th
 | `lib/supabase/server.ts` | Server client (Server Components, Route Handlers) |
 | `lib/supabase/queries/articles.server.ts` | Server-side editorial queries |
 | `lib/supabase/queries/articles.client.ts` | Client-side editorial queries |
+| `lib/supabase/queries/briefings.server.ts` | Public newspaper + homepage briefings |
+| `lib/desk/article-to-briefing.ts` | Maps Supabase articles to public briefing shapes |
 | `lib/supabase/types.ts` | TypeScript types for `articles` and future tables |
 | `components/supabase/SupabaseProvider.tsx` | React context for client-side Supabase access |
 
@@ -103,6 +105,36 @@ alter table articles enable row level security;
 create policy "Public can read published articles"
   on articles for select
   using (status = 'published');
+
+-- Desk write access (temporary until Supabase Auth in Phase 3)
+-- Tighten these policies once authenticated desk users are in place.
+
+create policy "Desk can read editorial pipeline"
+  on articles for select
+  to anon, authenticated
+  using (status in ('draft', 'review', 'published', 'archived'));
+
+create policy "Desk can insert articles"
+  on articles for insert
+  to anon, authenticated
+  with check (true);
+
+create policy "Desk can update articles"
+  on articles for update
+  to anon, authenticated
+  using (true);
+```
+
+> **Note:** The public read policy above only exposes `published` rows to anonymous users. The desk read policy allows the editorial UI to load drafts and in-review stories. Replace anon write access with role-based policies when Supabase Auth is wired in Phase 3.
+
+Example role-based policy (future):
+
+```sql
+-- After auth: only authenticated desk users can write
+create policy "Authenticated desk users can insert articles"
+  on articles for insert
+  to authenticated
+  with check (auth.uid() is not null);
 ```
 
 Adjust columns and policies to match your editorial workflow.

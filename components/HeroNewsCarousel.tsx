@@ -8,9 +8,12 @@ import {
   NEWSROOM_BRIEFINGS,
   BRIEFING_UPDATED_AT,
   getBriefingUpdatedLabel,
+  type NewsroomBriefing,
 } from "@/lib/newsroomBriefings";
+import { articleToBriefing } from "@/lib/desk/article-to-briefing";
+import { fetchPublishedArticlesClient } from "@/lib/supabase/queries/articles.client";
 
-const SLIDES = NEWSROOM_BRIEFINGS;
+const FALLBACK_SLIDES = NEWSROOM_BRIEFINGS;
 
 const WIRE_HOLD_MS = 4000;
 /** Extra pause before the Live marquee runs on first paint (keeps progress + crawl in sync). */
@@ -73,6 +76,35 @@ function WireCrawl({
 }
 
 export default function HeroNewsCarousel() {
+  const [slides, setSlides] = useState<readonly NewsroomBriefing[]>(FALLBACK_SLIDES);
+  const [updatedAt, setUpdatedAt] = useState(BRIEFING_UPDATED_AT);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadSlides() {
+      const result = await fetchPublishedArticlesClient();
+      if (cancelled || result.error || !result.data?.length) return;
+
+      const live = result.data.map(articleToBriefing);
+      setSlides(live);
+      const latest = live[0]?.publishedAt;
+      if (latest) {
+        const parsed = Date.parse(latest);
+        setUpdatedAt(
+          Number.isNaN(parsed)
+            ? BRIEFING_UPDATED_AT
+            : new Date(parsed).toISOString().split("T")[0],
+        );
+      }
+    }
+
+    void loadSlides();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   const [index, setIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [manualPaused, setManualPaused] = useState(false);
@@ -80,7 +112,7 @@ export default function HeroNewsCarousel() {
   /** Bumps when the current slide restarts (same index) so wire hold + crawl remount. */
   const [crawlNonce, setCrawlNonce] = useState(0);
   const reduceMotion = useReducedMotion() ?? false;
-  const n = SLIDES.length;
+  const n = slides.length;
 
   const manualPausedRef = useRef(false);
   const slideStartRef = useRef(0);
@@ -97,13 +129,13 @@ export default function HeroNewsCarousel() {
   const indexRef = useRef(index);
   indexRef.current = index;
 
-  const item = SLIDES[index];
+  const item = slides[index];
   const wireMarqueePaused = manualPaused || wireHold;
 
   const computeTotalMs = useCallback(() => {
     const hold = visitKeyRef.current === 0 ? WIRE_INITIAL_DELAY_MS : WIRE_HOLD_MS;
-    return hold + marqueeDurationSec(SLIDES[indexRef.current].dek) * 1000;
-  }, []);
+    return hold + marqueeDurationSec(slides[indexRef.current].dek) * 1000;
+  }, [slides]);
 
   useEffect(() => {
     manualPausedRef.current = manualPaused;
@@ -217,8 +249,8 @@ export default function HeroNewsCarousel() {
             Newspaper
           </p>
           <p className="shrink-0 text-right font-mono-hbm text-[8px] font-normal uppercase tracking-[0.22em] text-silver-dim/38">
-            <time dateTime={BRIEFING_UPDATED_AT}>
-              Updated {getBriefingUpdatedLabel(BRIEFING_UPDATED_AT)}
+            <time dateTime={updatedAt}>
+              Updated {getBriefingUpdatedLabel(updatedAt)}
             </time>
           </p>
         </div>
@@ -292,7 +324,7 @@ export default function HeroNewsCarousel() {
 
             <div className="flex items-center justify-between gap-1.5 px-2 pb-0.5 sm:gap-2 sm:px-2 sm:pb-0">
               <div className="flex flex-wrap gap-1 max-sm:gap-0.5" aria-label="Story position">
-                {SLIDES.map((s, idx) => (
+                {slides.map((s, idx) => (
                   <button
                     key={s.id}
                     type="button"

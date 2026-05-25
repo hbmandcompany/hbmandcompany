@@ -5,7 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "./desk-paper";
 import { PaperStatusPill } from "./PaperStatusPill";
-import { stories, storyTabs, type StoryRow, type StoryTab } from "./desk-stories-data";
+import { storyTabs, type StoryRow, type StoryTab } from "./desk-stories-data";
+import { articleToStoryRow } from "@/lib/desk/article-utils";
+import { fetchDeskQueueArticlesClient } from "@/lib/supabase/queries/articles.client";
 
 function DocIcon({ tone }: { tone: StoryRow["tone"] }) {
   const fill =
@@ -84,16 +86,45 @@ export function DeskStoryQueue() {
   const [page, setPage] = useState(0);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [newMenuOpen, setNewMenuOpen] = useState(false);
+  const [stories, setStories] = useState<StoryRow[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const newMenuRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadQueue() {
+      setLoading(true);
+      setLoadError(null);
+      const result = await fetchDeskQueueArticlesClient();
+
+      if (cancelled) return;
+
+      if (result.error) {
+        setLoadError(result.error.message);
+        setStories([]);
+      } else {
+        setStories((result.data ?? []).map(articleToStoryRow));
+      }
+
+      setLoading(false);
+    }
+
+    void loadQueue();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filteredStories = useMemo(() => {
     let out = stories.filter((s) => s.status !== "PUBLISHED");
     if (tab === "Due Today") out = out.filter((s) => s.dueWhen === "today" || s.status === "IN REVIEW" || s.status === "SCHEDULED");
     else if (tab === "Due Tomorrow") out = out.filter((s) => s.dueWhen === "tomorrow" || s.status === "DRAFT");
-    else if (tab === "This Week") out = stories.filter((s) => s.status === "IN REVIEW");
-    else if (tab === "Next Week") out = stories.filter((s) => s.status === "SCHEDULED");
+    else if (tab === "This Week") out = out.filter((s) => s.status === "IN REVIEW");
+    else if (tab === "Next Week") out = out.filter((s) => s.status === "DRAFT");
     return sortStories(out);
-  }, [tab]);
+  }, [tab, stories]);
 
   const pageCount = Math.max(1, Math.ceil(filteredStories.length / PAGE_SIZE));
   const safePage = Math.min(page, pageCount - 1);
@@ -202,6 +233,12 @@ export function DeskStoryQueue() {
           ))}
         </div>
 
+        {loadError ? (
+          <div className={clsx("border-b px-3 py-2 font-robinhood text-[11px] text-desk-red", deskPaper.border)}>
+            {loadError}
+          </div>
+        ) : null}
+
         <div className={clsx(LIST_HEIGHT, "overflow-hidden")}>
           <div className="flex flex-col">
             {slots.map((story, index) => {
@@ -304,7 +341,7 @@ export function DeskStoryQueue() {
             Prev
           </button>
           <span className={clsx("font-robinhood text-[10px]", deskPaper.inkLabel)}>
-            {safePage + 1} / {pageCount}
+            {loading ? "Loading…" : `${safePage + 1} / ${pageCount}`}
           </span>
           <button
             type="button"

@@ -16,6 +16,11 @@ import {
 } from "@/components/MagazineHomeLayouts";
 import SectionReveal from "@/components/SectionReveal";
 import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
+import {
+  briefingToMagazineStory,
+  briefingToWireBrief,
+  type PublicArticleBriefing,
+} from "@/lib/desk/article-to-briefing";
 
 const featuredStories: MagazineStory[] = [
   {
@@ -273,7 +278,34 @@ const broadsheetColumns: BroadsheetColumn[] = [
 
 const heroEase = [0.16, 1, 0.3, 1] as const;
 
-export default function HomePageClient() {
+type HomePageClientProps = {
+  heroBriefings?: PublicArticleBriefing[] | null;
+};
+
+export default function HomePageClient({ heroBriefings = null }: HomePageClientProps) {
+  const liveHero = heroBriefings && heroBriefings.length > 0 ? heroBriefings : null;
+
+  const heroLead = liveHero ? briefingToMagazineStory(liveHero[0]) : featuredStories[0];
+  const heroFollowUp = liveHero?.[1] ? briefingToMagazineStory(liveHero[1]) : heroLeadFollowUp;
+  const heroRightFeatured = liveHero?.[1]
+    ? briefingToMagazineStory(liveHero[1], liveHero[1].heroImageUrl ?? featuredStories[1].imageSrc)
+    : featuredStories[1];
+  const heroRightSecondary = liveHero?.[2]
+    ? briefingToMagazineStory(liveHero[2], liveHero[2].heroImageUrl ?? featuredStories[2].imageSrc)
+    : featuredStories[2];
+  const heroLeft = liveHero
+    ? liveHero.slice(2, 8).map(briefingToWireBrief)
+    : heroLeftBriefs;
+  const heroCulture = liveHero
+    ? liveHero.slice(3, 5).map(briefingToWireBrief)
+    : heroCultureBriefs;
+  const heroTicker = liveHero
+    ? liveHero.map((b) => b.headline)
+    : recordHeadlines.map((h) => h.headline);
+  const heroImage =
+    liveHero?.[0]?.heroImageUrl ??
+    "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1200&q=85";
+
   const reduceMotion = useReducedMotion() === true;
 
   const heroT = reduceMotion ? { duration: 0.2 } : { duration: 0.88, ease: heroEase };
@@ -348,16 +380,16 @@ export default function HomePageClient() {
         >
           <motion.div variants={heroItem} style={{ willChange: "transform" }}>
             <HeroNewspaperEdition
-              lead={featuredStories[0]}
-              leadFollowUp={heroLeadFollowUp}
-              heroImageSrc="https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1200&q=85"
-              heroImageAlt="Electric guitar"
-              leftBriefs={heroLeftBriefs}
-              rightFeatured={featuredStories[1]}
-              rightSecondary={featuredStories[2]}
-              rightTopBriefs={recordBriefs.slice(0, 2)}
-              rightSecondaryBriefs={heroCultureBriefs}
-              tickerHeadlines={recordHeadlines.map((h) => h.headline)}
+              lead={heroLead}
+              leadFollowUp={heroFollowUp}
+              heroImageSrc={heroImage}
+              heroImageAlt={heroLead.headline}
+              leftBriefs={heroLeft}
+              rightFeatured={heroRightFeatured}
+              rightSecondary={heroRightSecondary}
+              rightTopBriefs={liveHero ? liveHero.slice(1, 3).map(briefingToWireBrief) : recordBriefs.slice(0, 2)}
+              rightSecondaryBriefs={heroCulture}
+              tickerHeadlines={heroTicker}
               footer={
                 <DmnEditorialGrid
                   embedded

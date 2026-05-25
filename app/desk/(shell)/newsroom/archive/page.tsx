@@ -1,17 +1,17 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { IconSearch } from "@/components/desk/desk-icons";
+import type { ArchiveHistoryItem, ArchiveSubmissionItem } from "@/components/desk/desk-archive-data";
+import { articleToArchiveHistory, articleToArchiveSubmission } from "@/lib/desk/article-utils";
 import {
-  archiveHistory,
-  archiveSubmissions,
-  type ArchiveHistoryItem,
-  type ArchiveSubmissionItem,
-} from "@/components/desk/desk-archive-data";
+  fetchArchivePipelineClient,
+  fetchArchivePublishedClient,
+} from "@/lib/supabase/queries/articles.client";
 
 const PAGE_SIZE = 3;
 
@@ -121,14 +121,50 @@ export default function NewsroomArchivePage() {
   const [historyPage, setHistoryPage] = useState(0);
   const [submissionSearch, setSubmissionSearch] = useState("");
   const [submissionPage, setSubmissionPage] = useState(0);
+  const [archiveHistory, setArchiveHistory] = useState<ArchiveHistoryItem[]>([]);
+  const [archiveSubmissions, setArchiveSubmissions] = useState<ArchiveSubmissionItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadArchive() {
+      setLoading(true);
+      setLoadError(null);
+
+      const [published, pipeline] = await Promise.all([
+        fetchArchivePublishedClient(),
+        fetchArchivePipelineClient(),
+      ]);
+
+      if (cancelled) return;
+
+      if (published.error || pipeline.error) {
+        setLoadError(published.error?.message ?? pipeline.error?.message ?? "Failed to load archive.");
+        setArchiveHistory([]);
+        setArchiveSubmissions([]);
+      } else {
+        setArchiveHistory((published.data ?? []).map(articleToArchiveHistory));
+        setArchiveSubmissions((pipeline.data ?? []).map(articleToArchiveSubmission));
+      }
+
+      setLoading(false);
+    }
+
+    void loadArchive();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filteredHistory = useMemo(
     () => archiveHistory.filter((row) => matchesHistorySearch(row, historySearch)),
-    [historySearch]
+    [archiveHistory, historySearch]
   );
   const filteredSubmissions = useMemo(
     () => archiveSubmissions.filter((row) => matchesSubmissionSearch(row, submissionSearch)),
-    [submissionSearch]
+    [archiveSubmissions, submissionSearch]
   );
 
   const { pageRows: pageHistory, pageCount: historyPageCount, safePage: safeHistoryPage } = usePaginatedRows(
@@ -162,6 +198,12 @@ export default function NewsroomArchivePage() {
         <p className={clsx("mt-2 max-w-2xl font-robinhood text-sm", deskPaper.inkBody)}>
           Published history and editorial submissions for your byline.
         </p>
+        {loadError ? (
+          <p className={clsx("mt-2 font-robinhood text-[12px] text-desk-red", deskPaper.inkBody)}>{loadError}</p>
+        ) : null}
+        {loading ? (
+          <p className={clsx("mt-2 font-robinhood text-[12px]", deskPaper.inkMeta)}>Loading archive…</p>
+        ) : null}
       </div>
 
       <div className="grid gap-8 lg:grid-cols-2">
@@ -186,7 +228,11 @@ export default function NewsroomArchivePage() {
                 </div>
               ))}
             </div>
-            {pageHistory.length === 0 ? (
+            {loading ? (
+              <div className={clsx("px-4 py-8 text-center font-robinhood text-[12px]", deskPaper.inkMeta)}>
+                Loading…
+              </div>
+            ) : pageHistory.length === 0 ? (
               <div className={clsx("px-4 py-8 text-center font-robinhood text-[12px]", deskPaper.inkMeta)}>
                 No articles match your search.
               </div>
@@ -245,7 +291,11 @@ export default function NewsroomArchivePage() {
                 </div>
               ))}
             </div>
-            {pageSubmissions.length === 0 ? (
+            {loading ? (
+              <div className={clsx("px-4 py-8 text-center font-robinhood text-[12px]", deskPaper.inkMeta)}>
+                Loading…
+              </div>
+            ) : pageSubmissions.length === 0 ? (
               <div className={clsx("px-4 py-8 text-center font-robinhood text-[12px]", deskPaper.inkMeta)}>
                 No submissions match your search.
               </div>

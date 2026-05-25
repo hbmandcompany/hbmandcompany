@@ -1,15 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { clsx } from "clsx";
 import { useDesk } from "@/components/desk/DeskContext";
 import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
 import { EditorSitePreview } from "@/components/desk/EditorSitePreview";
-import { stories } from "@/components/desk/desk-stories-data";
+import { countWords, deskStatusFromArticle, slugifyTitle } from "@/lib/desk/article-utils";
+import {
+  fetchArticleByIdClient,
+  publishArticleClient,
+  saveArticleDraftClient,
+  submitArticleForReviewClient,
+} from "@/lib/supabase/queries/articles.client";
+import type { ArticleStatus } from "@/lib/supabase/types";
 
 const defaultDraft = {
   section: "Finance",
@@ -20,43 +27,154 @@ const defaultDraft = {
 type EditorView = "write" | "preview";
 
 export default function StoryEditorPage() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const storyId = searchParams.get("story");
   const { user } = useDesk();
 
-  const existing = useMemo(() => stories.find((s) => s.id === storyId), [storyId]);
+  const [articleId, setArticleId] = useState<string | null>(storyId);
+  const [loading, setLoading] = useState(Boolean(storyId));
+  const [loadError, setLoadError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+  const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
+  const [articleStatus, setArticleStatus] = useState<ArticleStatus>("draft");
 
   const [view, setView] = useState<EditorView>("write");
-  const [headline, setHeadline] = useState(existing?.headline ?? "");
+  const [headline, setHeadline] = useState("");
   const [dek, setDek] = useState("");
-  const [body, setBody] = useState(
-    existing
-      ? "The Federal Reserve's exploration of a central bank digital dollar has accelerated discussions among stablecoin operators about licensing, reserve requirements, and interstate compliance.\n\nOperators that have built on state money-transmitter frameworks may face a new federal layer — one that could consolidate oversight or fragment it further across agencies.\n\nThis piece examines what operators are preparing for, and what Texas-based issuers in particular are lobbying for."
-      : ""
-  );
-  const [section, setSection] = useState(existing?.section ?? defaultDraft.section);
+  const [body, setBody] = useState("");
+  const [section, setSection] = useState(defaultDraft.section);
   const [heroImage, setHeroImage] = useState<EditorImageState | null>(null);
 
   useEffect(() => {
+    setArticleId(storyId);
+  }, [storyId]);
+
+  useEffect(() => {
+    if (!storyId) {
+      setLoading(false);
+      return;
+    }
+
+    const id = storyId;
+    let cancelled = false;
+
+    async function loadArticle() {
+      setLoading(true);
+      setLoadError(null);
+      const result = await fetchArticleByIdClient(id);
+
+      if (cancelled) return;
+
+      if (result.error) {
+        setLoadError(result.error.message);
+        setLoading(false);
+        return;
+      }
+
+      if (result.data) {
+        const article = result.data;
+        setHeadline(article.title);
+        setDek(article.excerpt ?? "");
+        setBody(article.body ?? "");
+        setArticleStatus(article.status);
+        if (article.hero_image_url) {
+          setHeroImage({
+            url: article.hero_image_url,
+            alt: article.title,
+            caption: "",
+            fileName: "",
+          });
+        }
+      }
+
+      setLoading(false);
+    }
+
+    void loadArticle();
     return () => {
-      if (heroImage?.url) URL.revokeObjectURL(heroImage.url);
+      cancelled = true;
+    };
+  }, [storyId]);
+
+  useEffect(() => {
+    return () => {
+      if (heroImage?.url.startsWith("blob:")) URL.revokeObjectURL(heroImage.url);
     };
   }, [heroImage?.url]);
 
   function updateHeroImage(next: EditorImageState | null) {
     setHeroImage((prev) => {
-      if (prev?.url && prev.url !== next?.url) URL.revokeObjectURL(prev.url);
+      if (prev?.url.startsWith("blob:") && prev.url !== next?.url) URL.revokeObjectURL(prev.url);
       return next;
     });
   }
 
-  const wordCount = useMemo(() => {
-    const text = [headline, dek, body].join(" ");
-    return text.trim() ? text.trim().split(/\s+/).length : 0;
-  }, [headline, dek, body]);
+  const wordCount = useMemo(() => countWords([headline, dek, body].join(" ")), [headline, dek, body]);
 
-  const status = existing?.status ?? defaultDraft.status;
-  const tone = existing?.tone ?? defaultDraft.tone;
+  const { label: status, tone } = useMemo(() => {
+    if (loading) return { label: defaultDraft.status, tone: defaultDraft.tone };
+    return deskStatusFromArticle(articleStatus);
+  }, [loading, articleStatus]);
+
+  const buildPayload = useCallback(
+    () => ({
+      title: headline.trim() || "Untitled draft",
+      slug: slugifyTitle(headline.trim() || "Untitled draft"),
+      excerpt: dek.trim() || null,
+      body: body.trim() || null,
+      status: articleStatus,
+      hero_image_url: heroImage?.url && !heroImage.url.startsWith("blob:") ? heroImage.url : null,
+      author_id: null,
+    }),
+    [headline, dek, body, articleStatus, heroImage]
+  );
+
+  async function persist(
+    action: "draft" | "review" | "publish",
+  ): Promise<boolean> {
+    setSaving(true);
+    setSaveError(null);
+
+    const base = buildPayload();
+    let result;
+
+    if (action === "draft") {
+      result = await saveArticleDraftClient(articleId, { ...base, status: "draft", published_at: null });
+    } else if (action === "review") {
+      result = await submitArticleForReviewClient(articleId, base);
+    } else {
+      result = await publishArticleClient(articleId, base);
+    }
+
+    setSaving(false);
+
+    if (result.error) {
+      setSaveError(result.error.message);
+      return false;
+    }
+
+    if (result.data) {
+      setArticleId(result.data.id);
+      setArticleStatus(result.data.status);
+      setLastSavedAt(new Date());
+
+      if (!articleId) {
+        router.replace(`/desk/newsroom/editor?story=${result.data.id}`);
+      }
+    }
+
+    return true;
+  }
+
+  if (loading) {
+    return (
+      <div className={clsx("flex min-h-[calc(100dvh-56px)] items-center justify-center font-robinhood text-sm", deskPaper.inkMeta)}>
+        Loading story…
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-[calc(100dvh-56px)] flex-col">
@@ -93,26 +211,55 @@ export default function StoryEditorPage() {
           </div>
           <button
             type="button"
+            disabled={saving}
+            onClick={() => void persist("draft")}
             className={clsx(
-              "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
+              "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50",
               deskPaper.border,
               deskPaper.inkMeta,
               deskPaper.hover
             )}
           >
-            Save draft
+            {saving ? "Saving…" : "Save draft"}
           </button>
           <button
             type="button"
+            disabled={saving}
+            onClick={() => void persist("review")}
             className={clsx(
-              "rounded-md border px-4 py-2 font-robinhood text-[10px] uppercase tracking-[0.18em] transition-colors",
-              "border-[#6a5843] bg-[#8d6f4d] text-[#f2e6d1] hover:bg-[#6a5843]"
+              "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50",
+              deskPaper.border,
+              deskPaper.inkMeta,
+              deskPaper.hover
             )}
           >
             Submit for review
           </button>
+          <button
+            type="button"
+            disabled={saving}
+            onClick={() => void persist("publish")}
+            className={clsx(
+              "rounded-md border px-4 py-2 font-robinhood text-[10px] uppercase tracking-[0.18em] transition-colors disabled:opacity-50",
+              "border-[#6a5843] bg-[#8d6f4d] text-[#f2e6d1] hover:bg-[#6a5843]"
+            )}
+          >
+            Publish
+          </button>
         </div>
       </div>
+
+      {loadError ? (
+        <div className={clsx("border-b px-6 py-2 font-robinhood text-[11px] text-desk-red", deskPaper.border)}>
+          {loadError}
+        </div>
+      ) : null}
+
+      {saveError ? (
+        <div className={clsx("border-b px-6 py-2 font-robinhood text-[11px] text-desk-red", deskPaper.border)}>
+          {saveError}
+        </div>
+      ) : null}
 
       <div className="grid flex-1 gap-6 px-6 py-6 lg:grid-cols-[1fr_280px]">
         <div>
@@ -186,9 +333,7 @@ export default function StoryEditorPage() {
               </div>
               <div>
                 <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Due</div>
-                <div className={clsx("font-robinhood text-[13px] tabular-nums", deskPaper.inkBody)}>
-                  {existing?.meta ?? "Set deadline in desk"}
-                </div>
+                <div className={clsx("font-robinhood text-[13px] tabular-nums", deskPaper.inkBody)}>Set deadline in desk</div>
               </div>
             </div>
           </section>
@@ -196,7 +341,7 @@ export default function StoryEditorPage() {
           <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Editor notes</div>
             <p className={clsx("mt-3 font-robinhood text-[12px] leading-relaxed", deskPaper.inkMeta)}>
-              {existing?.status === "IN REVIEW"
+              {articleStatus === "review"
                 ? "Awaiting editor review. You will be notified when notes are returned."
                 : "No open notes. Submit when ready for editorial review."}
             </p>
@@ -204,7 +349,9 @@ export default function StoryEditorPage() {
 
           <section className={clsx("rounded-md border p-4", deskPaper.border, "bg-[#f2e6d1]")}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Auto-save</div>
-            <div className={clsx("mt-2 font-robinhood text-[12px] text-desk-green")}>Saved just now</div>
+            <div className={clsx("mt-2 font-robinhood text-[12px]", lastSavedAt ? "text-desk-green" : deskPaper.inkMeta)}>
+              {lastSavedAt ? `Saved ${lastSavedAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}` : "Not saved yet"}
+            </div>
           </section>
         </aside>
       </div>
