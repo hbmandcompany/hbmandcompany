@@ -11,7 +11,6 @@ import {
   ConsequenceRadioDeck,
   DeskWireNewsGrid,
   DmnEditorialGrid,
-  FeaturedStoriesFourUp,
   MagazineLifestyleGrid,
   type BroadsheetColumn,
   type WireBrief,
@@ -433,14 +432,6 @@ export default function HomePageClient() {
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
             <BroadsheetFourColumnGrid columns={broadsheetColumns} />
-          </SectionReveal>
-        </div>
-      </section>
-
-      <section className="relative bg-void py-10 md:py-12" aria-label="Featured stories">
-        <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
-          <SectionReveal>
-            <FeaturedStoriesFourUp stories={featuredStories} />
           </SectionReveal>
         </div>
       </section>
