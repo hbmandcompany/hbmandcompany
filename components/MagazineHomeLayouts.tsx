@@ -475,8 +475,21 @@ export function BroadsheetFourColumnGrid({ columns }: { columns: BroadsheetColum
   );
 }
 
-export function DeskWireNewsGrid() {
-  const wireStories: WireBrief[] = [
+export function DeskWireNewsGrid({
+  wireStories,
+  lead,
+}: {
+  wireStories?: WireBrief[];
+  lead?: {
+    storyId: string;
+    category: string;
+    headline: string;
+    dek: string;
+    imageSrc?: string;
+    imageAlt?: string;
+  };
+}) {
+  const defaultWireStories: WireBrief[] = [
     {
       storyId: "reserve-holdings",
       category: "Markets Desk",
@@ -500,6 +513,11 @@ export function DeskWireNewsGrid() {
     },
   ];
 
+  const stories = wireStories ?? defaultWireStories;
+  const leadImage =
+    lead?.imageSrc ?? "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=85";
+  const useLiveLead = Boolean(lead);
+
   return (
     <div className="desk-wire-grid">
       <div className="desk-wire-grid__mast">
@@ -515,7 +533,7 @@ export function DeskWireNewsGrid() {
         <div className="grid md:grid-cols-2">
           <div className="relative min-h-[200px] md:min-h-full">
             <Image
-              src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=85"
+              src={leadImage}
               alt=""
               fill
               className="object-cover"
@@ -524,23 +542,38 @@ export function DeskWireNewsGrid() {
             <div className="absolute inset-0 bg-gradient-to-r from-transparent to-obsidian/40 md:bg-gradient-to-l md:from-obsidian/30" />
           </div>
           <div className="flex flex-col gap-4 p-6 md:p-7">
-            <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">Lead Brief</span>
-            <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">
-              Institutional <span className="text-gradient-gold font-medium italic">Reserve</span>
-            </h3>
-            <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">
-              An enterprise holdings company committed to the infrastructure of decentralized finance and digital
-              assets—organizing capital around rails you can verify and durable governance.
-            </p>
-            <Link href="/treasury" className={clsx(goldOutlineCta, "w-fit")}>
-              Read Treasury Desk →
-            </Link>
+            {useLiveLead && lead ? (
+              <>
+                <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">{lead.category}</span>
+                <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">
+                  {lead.headline}
+                </h3>
+                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">{lead.dek}</p>
+                <Link href={`/newspaper?story=${lead.storyId}`} className={clsx(goldOutlineCta, "w-fit")}>
+                  Read full brief →
+                </Link>
+              </>
+            ) : (
+              <>
+                <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">Lead Brief</span>
+                <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">
+                  Institutional <span className="text-gradient-gold font-medium italic">Reserve</span>
+                </h3>
+                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">
+                  An enterprise holdings company committed to the infrastructure of decentralized finance and digital
+                  assets—organizing capital around rails you can verify and durable governance.
+                </p>
+                <Link href="/treasury" className={clsx(goldOutlineCta, "w-fit")}>
+                  Read Treasury Desk →
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </article>
 
       <div className="desk-wire-grid__list border border-white/[0.08] bg-obsidian/90">
-        {wireStories.map((w) => (
+        {stories.map((w) => (
           <RecordHeadlineRow key={w.storyId} item={w} />
         ))}
       </div>
