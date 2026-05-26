@@ -9,7 +9,7 @@ import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
 import { EditorSitePreview } from "@/components/desk/EditorSitePreview";
-import { EditorHomepageCardPreview } from "@/components/desk/EditorHomepageCardPreview";
+import { EditorHomepagePreview } from "@/components/desk/EditorHomepagePreview";
 import { ARTICLE_WEIGHT_OPTIONS } from "@/components/desk/ArticleWeightBadge";
 import { countWords, deskStatusFromArticle, slugifyTitle } from "@/components/desk/desk-article-mappers";
 import {
@@ -363,7 +363,7 @@ export default function StoryEditorPage() {
             </div>
           </section>
 
-          <EditorHomepageCardPreview headline={headline} dek={dek} section={section} weight={weight} />
+          <EditorHomepagePreview headline={headline} dek={dek} category={section} image={heroImage} compact />
 
           <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Editor notes</div>

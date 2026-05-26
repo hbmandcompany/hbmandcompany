@@ -1,84 +1,104 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import { readDeskRoleCookie, setDeskRoleCookie, type DeskRoleCookie } from "./desk-auth-cookie";
+import { createClient } from "@/lib/supabase/client";
+import { fetchDeskProfileClient } from "@/lib/supabase/queries/profiles.client";
+import { profileRoleToDeskRole, routeForRole, roleLabelFor, type DeskRole } from "@/lib/desk/desk-auth";
 
-export type DeskRole =
-  | "principal"
-  | "writer"
-  | "editor"
-  | "analyst"
-  | "admin"
-  | "applicant"
-  | "organization";
-
-const roleLabels: Record<DeskRole, string> = {
-  principal: "Principal",
-  writer: "Writer",
-  editor: "Editor",
-  analyst: "Analyst",
-  admin: "Admin",
-  applicant: "Applicant",
-  organization: "Organization",
-};
-
-export function roleLabelFor(role: DeskRole): string {
-  return roleLabels[role];
-}
-
-export function routeForRole(role: DeskRole): string {
-  switch (role) {
-    case "principal":
-      return "/desk";
-    case "writer":
-      return "/desk/newsroom";
-    case "editor":
-      return "/desk/newsroom/editor";
-    case "analyst":
-      return "/desk/intelligence";
-    case "admin":
-      return "/desk/admin";
-    case "applicant":
-      return "/desk/applications";
-    case "organization":
-      return "/desk/orgs";
-    default:
-      return "/desk/newsroom";
-  }
-}
+export type { DeskRole };
+export { routeForRole, roleLabelFor };
 
 type DeskAuthContextValue = {
   currentRole: DeskRole;
-  setRole: (role: DeskRole) => void;
-  signInAs: (role: DeskRoleCookie) => void;
+  isLoading: boolean;
+  isAuthenticated: boolean;
+  signIn: (email: string, password: string) => Promise<{ error: string | null; role: DeskRole | null }>;
+  signOut: () => Promise<void>;
 };
 
 const DeskAuthContext = createContext<DeskAuthContextValue | null>(null);
 
 export function DeskAuthProvider({ children }: { children: React.ReactNode }) {
   const [currentRole, setCurrentRole] = useState<DeskRole>("writer");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const cookieRole = readDeskRoleCookie();
-    if (cookieRole === "writer") setCurrentRole("writer");
-    if (cookieRole === "principal") setCurrentRole("principal");
+    const supabase = createClient();
+
+    async function loadProfile() {
+      const {
+        data: { user },
+      } = await supabase.auth.getUser();
+
+      if (!user) {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        return;
+      }
+
+      const { data: profile } = await fetchDeskProfileClient();
+      if (profile) {
+        setCurrentRole(profileRoleToDeskRole(profile.role));
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+      setIsLoading(false);
+    }
+
+    void loadProfile();
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      if (!session) {
+        setIsAuthenticated(false);
+        setCurrentRole("writer");
+        setIsLoading(false);
+        return;
+      }
+      void loadProfile();
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   const value = useMemo(
     () => ({
       currentRole,
-      setRole: (role: DeskRole) => {
-        setCurrentRole(role);
-        if (role === "writer" || role === "principal") {
-          setDeskRoleCookie(role);
+      isLoading,
+      isAuthenticated,
+      signIn: async (email: string, password: string) => {
+        const supabase = createClient();
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+          return { error: error.message, role: null };
         }
+
+        const { data: profile, error: profileError } = await fetchDeskProfileClient();
+        if (profileError) {
+          await supabase.auth.signOut();
+          return { error: profileError.message, role: null };
+        }
+        if (!profile) {
+          await supabase.auth.signOut();
+          return { error: "No desk profile found for this account.", role: null };
+        }
+
+        const role = profileRoleToDeskRole(profile.role);
+        setCurrentRole(role);
+        setIsAuthenticated(true);
+        return { error: null, role };
       },
-      signInAs: (role: DeskRoleCookie) => {
-        setDeskRoleCookie(role);
-        setCurrentRole(role === "writer" ? "writer" : "principal");
+      signOut: async () => {
+        const supabase = createClient();
+        await supabase.auth.signOut();
+        setIsAuthenticated(false);
+        setCurrentRole("writer");
       },
     }),
-    [currentRole],
+    [currentRole, isLoading, isAuthenticated],
   );
 
   return <DeskAuthContext.Provider value={value}>{children}</DeskAuthContext.Provider>;

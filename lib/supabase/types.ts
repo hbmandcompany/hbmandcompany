@@ -39,6 +39,15 @@ export type TickerItem = {
   updated_at: string;
 };
 
+export type DeskProfileRole = "writer" | "principal" | "editor" | "analyst" | "admin";
+
+export type DeskProfile = {
+  id: string;
+  role: DeskProfileRole;
+  display_name: string | null;
+  created_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -60,6 +69,17 @@ export type Database = {
           updated_at?: string;
         };
         Update: Partial<TickerItem>;
+        Relationships: [];
+      };
+      desk_profiles: {
+        Row: DeskProfile;
+        Insert: {
+          id: string;
+          role?: DeskProfileRole;
+          display_name?: string | null;
+          created_at?: string;
+        };
+        Update: Partial<Omit<DeskProfile, "id">>;
         Relationships: [];
       };
     };

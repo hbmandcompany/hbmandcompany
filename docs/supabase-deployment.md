@@ -157,6 +157,64 @@ create policy "Desk can manage ticker items"
 
 When `ticker_items` has rows, the homepage uses them instead of auto-generated article headlines.
 
+## Database: `desk_profiles` table
+
+Desk authentication uses Supabase Auth plus a profile row that stores the user's editorial role.
+
+```sql
+create type desk_profile_role as enum ('writer', 'principal', 'editor', 'analyst', 'admin');
+
+create table desk_profiles (
+  id uuid primary key references auth.users (id) on delete cascade,
+  role desk_profile_role not null default 'writer',
+  display_name text,
+  created_at timestamptz not null default now()
+);
+
+alter table desk_profiles enable row level security;
+
+create policy "Users can read own desk profile"
+  on desk_profiles for select
+  to authenticated
+  using (auth.uid() = id);
+
+create policy "Service role manages desk profiles"
+  on desk_profiles for all
+  to service_role
+  using (true)
+  with check (true);
+```
+
+After creating a user in **Authentication → Users**, insert a matching profile:
+
+```sql
+insert into desk_profiles (id, role, display_name)
+values ('<auth-user-uuid>', 'principal', 'Editor in Chief');
+```
+
+Roles map to desk routes: `writer` → newsroom, `principal` → review desk + ticker, etc.
+
+## Tighten article policies (recommended)
+
+Replace anon write access with authenticated desk policies once profiles are in place:
+
+```sql
+create policy "Authenticated desk users can read editorial pipeline"
+  on articles for select
+  to authenticated
+  using (auth.uid() is not null);
+
+create policy "Authenticated desk users can insert articles"
+  on articles for insert
+  to authenticated
+  with check (auth.uid() is not null);
+
+create policy "Authenticated desk users can update articles"
+  on articles for update
+  to authenticated
+  using (auth.uid() is not null);
+```
+
 Example role-based policy (future):
 
 ```sql

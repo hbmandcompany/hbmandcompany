@@ -1,8 +1,14 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
+import {
+  isWriterRestrictedRole,
+  profileRoleToDeskRole,
+  routeForRole,
+  type DeskProfileRole,
+  type DeskRole,
+} from "@/lib/desk/desk-auth";
+import { createMiddlewareSupabaseClient } from "@/lib/supabase/middleware-client";
 import { getShopRedirectOrigin, isDeskHost, isShopHost } from "@/lib/site-urls";
-
-const DESK_ROLE_COOKIE = "desk-role";
 
 const WRITER_ALLOWED_PREFIXES = ["/desk/newsroom", "/desk/wallet", "/desk/settings"];
 
@@ -27,7 +33,47 @@ function deskLoginRedirectUrl(request: NextRequest, host: string | null): URL {
   return url;
 }
 
-export function middleware(request: NextRequest) {
+async function getDeskSession(request: NextRequest) {
+  const client = createMiddlewareSupabaseClient(request);
+  if (!client) {
+    return { user: null, role: null as DeskRole | null, response: NextResponse.next({ request }) };
+  }
+
+  const { supabase, getResponse } = client;
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) {
+    return { user: null, role: null, response: getResponse() };
+  }
+
+  const { data: profile } = await supabase
+    .from("desk_profiles")
+    .select("role")
+    .eq("id", user.id)
+    .maybeSingle();
+
+  const role = profile?.role ? profileRoleToDeskRole(profile.role as DeskProfileRole) : null;
+  return { user, role, response: getResponse() };
+}
+
+function copyCookies(from: NextResponse, to: NextResponse) {
+  from.cookies.getAll().forEach((cookie) => to.cookies.set(cookie));
+}
+
+function applyWriterGuard(pathname: string, role: DeskRole | null, request: NextRequest, response: NextResponse) {
+  if (role && isWriterRestrictedRole(role) && pathname.startsWith("/desk") && !isWriterAllowed(pathname)) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/desk/newsroom";
+    const redirect = NextResponse.redirect(url);
+    copyCookies(response, redirect);
+    return redirect;
+  }
+  return response;
+}
+
+export async function middleware(request: NextRequest) {
   const host = request.headers.get("host");
   const { pathname, search } = request.nextUrl;
 
@@ -48,7 +94,7 @@ export function middleware(request: NextRequest) {
   }
 
   if (isDeskHost(host)) {
-    if (pathname.startsWith("/_next") || pathname.startsWith("/api")) {
+    if (pathname.startsWith("/_next") || pathname.startsWith("/api") || pathname.startsWith("/auth")) {
       return NextResponse.next();
     }
 
@@ -65,22 +111,27 @@ export function middleware(request: NextRequest) {
     }
 
     if (pathname.startsWith("/desk")) {
-      const role = request.cookies.get(DESK_ROLE_COOKIE)?.value;
       const onLogin = isDeskLoginPath(pathname);
+      const session = await getDeskSession(request);
 
-      if (!role && !onLogin && pathname.startsWith("/desk")) {
+      if (!session.user && !onLogin) {
         const url = request.nextUrl.clone();
         url.pathname = "/";
-        return NextResponse.redirect(url);
+        const redirect = NextResponse.redirect(url);
+        copyCookies(session.response, redirect);
+        return redirect;
       }
 
-      if (role === "writer" && pathname.startsWith("/desk") && !isWriterAllowed(pathname)) {
+      if (session.user && !session.role && !onLogin) {
         const url = request.nextUrl.clone();
-        url.pathname = "/desk/newsroom";
-        return NextResponse.redirect(url);
+        url.pathname = "/";
+        url.searchParams.set("error", "no-profile");
+        const redirect = NextResponse.redirect(url);
+        copyCookies(session.response, redirect);
+        return redirect;
       }
 
-      return NextResponse.next();
+      return applyWriterGuard(pathname, session.role, request, session.response);
     }
 
     const url = request.nextUrl.clone();
@@ -89,18 +140,30 @@ export function middleware(request: NextRequest) {
   }
 
   if (pathname.startsWith("/desk")) {
-    const role = request.cookies.get(DESK_ROLE_COOKIE)?.value;
     const onLogin = isDeskLoginPath(pathname);
+    const session = await getDeskSession(request);
 
-    if (!role && !onLogin) {
-      return NextResponse.redirect(deskLoginRedirectUrl(request, host));
+    if (!session.user && !onLogin) {
+      const redirect = NextResponse.redirect(deskLoginRedirectUrl(request, host));
+      copyCookies(session.response, redirect);
+      return redirect;
     }
 
-    if (role === "writer" && !onLogin && !isWriterAllowed(pathname)) {
-      const url = request.nextUrl.clone();
-      url.pathname = "/desk/newsroom";
-      return NextResponse.redirect(url);
+    if (session.user && !session.role && !onLogin) {
+      const loginUrl = deskLoginRedirectUrl(request, host);
+      loginUrl.searchParams.set("error", "no-profile");
+      const redirect = NextResponse.redirect(loginUrl);
+      copyCookies(session.response, redirect);
+      return redirect;
     }
+
+    if (session.user && session.role && onLogin) {
+      const redirect = NextResponse.redirect(new URL(routeForRole(session.role), request.url));
+      copyCookies(session.response, redirect);
+      return redirect;
+    }
+
+    return applyWriterGuard(pathname, session.role, request, session.response);
   }
 
   if (pathname === "/shop" || pathname.startsWith("/shop/")) {

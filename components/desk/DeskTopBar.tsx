@@ -11,7 +11,6 @@ import { writerNav } from "./writer-routes";
 import { mailboxUnreadCount } from "./desk-inbox-data";
 import { isWriterShellPath } from "./writer-shell";
 import { getDeskLoginPath } from "@/lib/site-urls";
-import { clearDeskRoleCookie } from "./desk-auth-cookie";
 import { useDeskAuth } from "./DeskAuthContext";
 import { GlobalSearchTrigger } from "./global-search/GlobalSearchTrigger";
 import {
@@ -79,7 +78,7 @@ export function DeskTopBar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useDesk();
-  const { currentRole } = useDeskAuth();
+  const { currentRole, signOut } = useDeskAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -256,8 +255,10 @@ export function DeskTopBar() {
                           type="button"
                           onClick={() => {
                             setMenuOpen(false);
-                            clearDeskRoleCookie();
-                            router.push(getDeskLoginPath());
+                            void signOut().then(() => {
+                              router.push(getDeskLoginPath());
+                              router.refresh();
+                            });
                           }}
                           className={clsx(
                             "flex w-full items-center gap-3 rounded-md px-3 py-2 font-robinhood text-[13px] transition-colors duration-200",
