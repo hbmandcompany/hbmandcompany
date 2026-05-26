@@ -10,6 +10,7 @@ import { deskPaper } from "./desk-paper";
 import { writerNav } from "./writer-routes";
 import { mailboxUnreadCount } from "./desk-inbox-data";
 import { isWriterShellPath } from "./writer-shell";
+import { getDeskLoginPath } from "@/lib/site-urls";
 import { GlobalSearchTrigger } from "./global-search/GlobalSearchTrigger";
 import {
   IconAnalytics,
@@ -236,7 +237,7 @@ export function DeskTopBar() {
                           type="button"
                           onClick={() => {
                             setMenuOpen(false);
-                            router.push("/desk/login");
+                            router.push(getDeskLoginPath());
                           }}
                           className={clsx(
                             "flex w-full items-center gap-3 rounded-md px-3 py-2 font-robinhood text-[13px] transition-colors duration-200",

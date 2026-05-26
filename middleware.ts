@@ -1,12 +1,6 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { getShopRedirectOrigin, isShopHost } from "@/lib/site-urls";
-
-function isDeskHost(hostHeader: string | null): boolean {
-  if (!hostHeader) return false;
-  const host = hostHeader.split(":")[0].toLowerCase();
-  return host === "desk.hbmandcompany.com" || host === "desk.localhost" || host.startsWith("desk.");
-}
+import { getShopRedirectOrigin, isDeskHost, isShopHost } from "@/lib/site-urls";
 
 export function middleware(request: NextRequest) {
   const host = request.headers.get("host");
@@ -29,12 +23,28 @@ export function middleware(request: NextRequest) {
   }
 
   if (isDeskHost(host)) {
-    if (pathname.startsWith("/desk") || pathname.startsWith("/_next") || pathname.startsWith("/api")) {
+    if (pathname.startsWith("/_next") || pathname.startsWith("/api")) {
+      return NextResponse.next();
+    }
+
+    if (pathname === "/desk/login") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/";
+      return NextResponse.redirect(url);
+    }
+
+    if (pathname === "/" || pathname === "/login") {
+      const url = request.nextUrl.clone();
+      url.pathname = "/desk/login";
+      return NextResponse.rewrite(url);
+    }
+
+    if (pathname.startsWith("/desk")) {
       return NextResponse.next();
     }
 
     const url = request.nextUrl.clone();
-    url.pathname = "/desk/login";
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 

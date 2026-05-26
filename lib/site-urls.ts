@@ -40,3 +40,17 @@ export function isShopHost(hostHeader: string | null): boolean {
   const host = hostHeader.split(":")[0].toLowerCase();
   return host === "shop.hbmandcompany.com" || host === "shop.localhost" || host.startsWith("shop.");
 }
+
+export function isDeskHost(hostHeader: string | null): boolean {
+  if (!hostHeader) return false;
+  const host = hostHeader.split(":")[0].toLowerCase();
+  return host === "desk.hbmandcompany.com" || host === "desk.localhost" || host.startsWith("desk.");
+}
+
+/** Login path: clean `/` on desk subdomain, `/desk/login` on main site. */
+export function getDeskLoginPath(hostHeader?: string | null): string {
+  const host =
+    hostHeader ??
+    (typeof window !== "undefined" ? window.location.host : null);
+  return isDeskHost(host) ? "/" : "/desk/login";
+}
