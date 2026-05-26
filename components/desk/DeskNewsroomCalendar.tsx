@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "./desk-paper";
 import { PaperStatusPill } from "./PaperStatusPill";
-import { storyDeadlines, type CalendarDeadline } from "./desk-stories-data";
+import { storyDeadlines, type CalendarDeadline } from "./desk-story-types";
 
 export type CalendarEvent = {
   id: string;

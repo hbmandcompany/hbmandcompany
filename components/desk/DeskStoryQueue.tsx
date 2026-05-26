@@ -5,8 +5,9 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "./desk-paper";
 import { PaperStatusPill } from "./PaperStatusPill";
-import { storyTabs, type StoryRow, type StoryTab } from "./desk-stories-data";
-import { articleToStoryRow } from "@/lib/desk/article-utils";
+import { storyTabs, type StoryRow, type StoryTab } from "./desk-story-types";
+import { articleToStoryRow } from "./desk-article-mappers";
+import { DeskEmptyState } from "./DeskEmptyState";
 import { fetchDeskQueueArticlesClient } from "@/lib/supabase/queries/articles.client";
 
 function DocIcon({ tone }: { tone: StoryRow["tone"] }) {
@@ -196,7 +197,7 @@ export function DeskStoryQueue() {
                   {STORY_TYPES.map((type) => (
                     <Link
                       key={type}
-                      href="/desk/newsroom/editor"
+                      href="/desk/newsroom/editor?mode=write"
                       onClick={() => setNewMenuOpen(false)}
                       className={clsx(
                         "block w-full px-3 py-2 text-left font-robinhood text-[12px] transition-colors",
@@ -240,6 +241,20 @@ export function DeskStoryQueue() {
         ) : null}
 
         <div className={clsx(LIST_HEIGHT, "overflow-hidden")}>
+          {loading ? (
+            <div className="flex flex-col">
+              {Array.from({ length: PAGE_SIZE }).map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className={clsx("animate-pulse border-b px-3 py-2 last:border-b-0", ROW_HEIGHT, deskPaper.border, deskPaper.pageAlt)}
+                >
+                  <div className="h-3 w-2/3 rounded bg-[#dcd0b8]" />
+                </div>
+              ))}
+            </div>
+          ) : !loadError && filteredStories.length === 0 ? (
+            <DeskEmptyState title="No stories in the queue — start writing." subtitle="Create a new story from the + menu above." />
+          ) : (
           <div className="flex flex-col">
             {slots.map((story, index) => {
               if (!story) {
@@ -282,7 +297,7 @@ export function DeskStoryQueue() {
 
                   <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
                     <Link
-                      href={`/desk/newsroom/editor?story=${story.id}`}
+                      href={`/desk/newsroom/editor?mode=write&story=${story.id}`}
                       aria-label="Edit story"
                       className={clsx("rounded p-1", deskPaper.inkMeta, deskPaper.hover)}
                     >
@@ -325,6 +340,7 @@ export function DeskStoryQueue() {
               );
             })}
           </div>
+          )}
         </div>
 
         <div className={clsx("flex items-center justify-between border-t px-3 py-2", deskPaper.border, deskPaper.pageAlt)}>

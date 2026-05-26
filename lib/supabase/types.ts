@@ -6,6 +6,15 @@
 
 export type ArticleStatus = "draft" | "review" | "published" | "archived";
 
+export type ArticleWeight =
+  | "Informative"
+  | "Opinion"
+  | "Analysis"
+  | "Breaking"
+  | "Feature"
+  | "Interview"
+  | "Review";
+
 export type Article = {
   id: string;
   title: string;
@@ -16,6 +25,8 @@ export type Article = {
   published_at: string | null;
   author_id: string | null;
   hero_image_url: string | null;
+  weight: string | null;
+  rejection_notes: string | null;
   created_at: string;
   updated_at: string;
 };

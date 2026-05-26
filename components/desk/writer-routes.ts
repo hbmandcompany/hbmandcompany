@@ -1,6 +1,7 @@
 import type { DeskNavItem } from "./desk-routes";
 
 export const writerNav: DeskNavItem[] = [
+  { section: "NEWSROOM", href: "/desk/newsroom/editor?mode=write", label: "New Story", icon: "file" },
   { section: "NEWSROOM", href: "/desk/newsroom/archive", label: "Archive", icon: "files" },
   { section: "NEWSROOM", href: "/desk/newsroom/analytics", label: "Analytics", icon: "analytics" },
 

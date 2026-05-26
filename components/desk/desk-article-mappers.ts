@@ -1,7 +1,13 @@
 import type { Article, ArticleStatus } from "@/lib/supabase/types";
-import type { DeskStatusTone } from "@/components/desk/StatusPill";
-import type { ArchiveHistoryItem, ArchiveSubmissionItem } from "@/components/desk/desk-archive-types";
-import type { StoryRow } from "@/components/desk/desk-story-types";
+import type { ArchiveHistoryItem, ArchiveSubmissionItem } from "./desk-archive-types";
+import type { DeskSubmissionItem } from "./desk-submission-types";
+import type { StoryRow } from "./desk-story-types";
+import type { DeskStatusTone } from "./StatusPill";
+
+export function countWords(text: string | null | undefined): number {
+  if (!text?.trim()) return 0;
+  return text.trim().split(/\s+/).length;
+}
 
 export function slugifyTitle(title: string): string {
   const base = title
@@ -11,11 +17,6 @@ export function slugifyTitle(title: string): string {
     .replace(/^-|-$/g, "");
 
   return base || `article-${Date.now()}`;
-}
-
-export function countWords(text: string | null | undefined): number {
-  if (!text?.trim()) return 0;
-  return text.trim().split(/\s+/).length;
 }
 
 function formatRelativeTime(iso: string): string {
@@ -118,4 +119,25 @@ export function articleToArchiveSubmission(article: Article): ArchiveSubmissionI
     status: statusMap[article.status] ?? "Pending",
     tone: toneMap[article.status] ?? "amber",
   };
+}
+
+export function articleToDeskSubmission(article: Article): DeskSubmissionItem {
+  const submission = articleToArchiveSubmission(article);
+  return {
+    id: article.id,
+    storyId: article.id,
+    headline: submission.headline,
+    section: submission.section,
+    submitted: submission.submitted,
+    reviewer: submission.reviewer,
+    status: submission.status,
+    tone: submission.tone,
+    note:
+      article.rejection_notes?.trim() ||
+      (article.status === "review" ? "Awaiting editorial review." : "Draft in pipeline."),
+  };
+}
+
+export function formatRelativeTimestamp(iso: string): string {
+  return formatRelativeTime(iso).replace(/^Last edited /, "").replace(/^Updated /, "");
 }

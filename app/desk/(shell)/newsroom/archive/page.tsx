@@ -6,8 +6,10 @@ import { clsx } from "clsx";
 import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { IconSearch } from "@/components/desk/desk-icons";
-import type { ArchiveHistoryItem, ArchiveSubmissionItem } from "@/components/desk/desk-archive-data";
-import { articleToArchiveHistory, articleToArchiveSubmission } from "@/lib/desk/article-utils";
+import type { ArchiveHistoryItem, ArchiveSubmissionItem } from "@/components/desk/desk-archive-types";
+import { ArticleWeightBadge } from "@/components/desk/ArticleWeightBadge";
+import { articleToArchiveHistory, articleToArchiveSubmission } from "@/components/desk/desk-article-mappers";
+import { DeskEmptyState } from "@/components/desk/DeskEmptyState";
 import {
   fetchArchivePipelineClient,
   fetchArchivePublishedClient,
@@ -97,7 +99,7 @@ function Pagination({
 function matchesHistorySearch(row: ArchiveHistoryItem, query: string) {
   const q = query.trim().toLowerCase();
   if (!q) return true;
-  return [row.headline, row.section, row.published, row.views, row.words, row.status].join(" ").toLowerCase().includes(q);
+  return [row.headline, row.section, row.published, row.words, row.status, row.weight ?? ""].join(" ").toLowerCase().includes(q);
 }
 
 function matchesSubmissionSearch(row: ArchiveSubmissionItem, query: string) {
@@ -217,12 +219,12 @@ export default function NewsroomArchivePage() {
           <div className={clsx("overflow-hidden rounded-md border", deskPaper.border, "bg-[#f2e6d1]")}>
             <div
               className={clsx(
-                "hidden grid-cols-[1fr_0.7fr_0.7fr_0.6fr_90px] gap-2 border-b px-3 py-2 md:grid",
+                "hidden grid-cols-[1fr_0.7fr_0.6fr_0.6fr_90px] gap-2 border-b px-3 py-2 md:grid",
                 deskPaper.border,
                 deskPaper.pageAlt
               )}
             >
-              {["Article", "Published", "Views", "Words", "Status"].map((h) => (
+              {["Article", "Published", "Words", "Weight", "Status"].map((h) => (
                 <div key={h} className={clsx("font-robinhood text-[9px] uppercase tracking-[0.16em]", deskPaper.inkLabel)}>
                   {h}
                 </div>
@@ -233,15 +235,13 @@ export default function NewsroomArchivePage() {
                 Loading…
               </div>
             ) : pageHistory.length === 0 ? (
-              <div className={clsx("px-4 py-8 text-center font-robinhood text-[12px]", deskPaper.inkMeta)}>
-                No articles match your search.
-              </div>
+              <DeskEmptyState title="No published articles yet." subtitle="Published stories will appear in your archive." />
             ) : (
               pageHistory.map((row, index) => (
                 <div
                   key={row.id}
                   className={clsx(
-                    "grid grid-cols-1 gap-2 border-b px-3 py-3 last:border-b-0 md:grid-cols-[1fr_0.7fr_0.7fr_0.6fr_90px] md:items-center md:gap-2",
+                    "grid grid-cols-1 gap-2 border-b px-3 py-3 last:border-b-0 md:grid-cols-[1fr_0.7fr_0.6fr_0.6fr_90px] md:items-center md:gap-2",
                     index === pageHistory.length - 1 ? "border-b-0" : deskPaper.border,
                     "bg-[#f2e6d1] hover:bg-[#ebe0cc]"
                   )}
@@ -253,8 +253,10 @@ export default function NewsroomArchivePage() {
                     <div className={clsx("mt-0.5 font-robinhood text-[10px] uppercase tracking-wide", deskPaper.inkMeta)}>{row.section}</div>
                   </div>
                   <div className={clsx("font-robinhood text-[12px]", deskPaper.inkBody)}>{row.published}</div>
-                  <div className={clsx("font-robinhood text-[12px]", deskPaper.inkBody)}>{row.views}</div>
                   <div className={clsx("font-robinhood text-[12px]", deskPaper.inkMeta)}>{row.words}</div>
+                  <div>
+                    <ArticleWeightBadge weight={row.weight} />
+                  </div>
                   <div>
                     <PaperStatusPill label={row.status} tone={row.tone} className="scale-90" />
                   </div>
@@ -296,9 +298,7 @@ export default function NewsroomArchivePage() {
                 Loading…
               </div>
             ) : pageSubmissions.length === 0 ? (
-              <div className={clsx("px-4 py-8 text-center font-robinhood text-[12px]", deskPaper.inkMeta)}>
-                No submissions match your search.
-              </div>
+              <DeskEmptyState title="No submissions in the pipeline." subtitle="Draft and in-review stories will show here." />
             ) : (
               pageSubmissions.map((row, index) => (
                 <div

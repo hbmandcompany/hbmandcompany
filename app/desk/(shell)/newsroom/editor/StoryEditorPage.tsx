@@ -9,7 +9,9 @@ import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
 import { EditorSitePreview } from "@/components/desk/EditorSitePreview";
-import { countWords, deskStatusFromArticle, slugifyTitle } from "@/lib/desk/article-utils";
+import { EditorHomepageCardPreview } from "@/components/desk/EditorHomepageCardPreview";
+import { ARTICLE_WEIGHT_OPTIONS } from "@/components/desk/ArticleWeightBadge";
+import { countWords, deskStatusFromArticle, slugifyTitle } from "@/components/desk/desk-article-mappers";
 import {
   fetchArticleByIdClient,
   publishArticleClient,
@@ -45,6 +47,7 @@ export default function StoryEditorPage() {
   const [dek, setDek] = useState("");
   const [body, setBody] = useState("");
   const [section, setSection] = useState(defaultDraft.section);
+  const [weight, setWeight] = useState("");
   const [heroImage, setHeroImage] = useState<EditorImageState | null>(null);
 
   useEffect(() => {
@@ -78,6 +81,7 @@ export default function StoryEditorPage() {
         setHeadline(article.title);
         setDek(article.excerpt ?? "");
         setBody(article.body ?? "");
+        setWeight(article.weight ?? "");
         setArticleStatus(article.status);
         if (article.hero_image_url) {
           setHeroImage({
@@ -127,13 +131,17 @@ export default function StoryEditorPage() {
       status: articleStatus,
       hero_image_url: heroImage?.url && !heroImage.url.startsWith("blob:") ? heroImage.url : null,
       author_id: null,
+      weight: weight || null,
     }),
-    [headline, dek, body, articleStatus, heroImage]
+    [headline, dek, body, articleStatus, heroImage, weight],
   );
 
-  async function persist(
-    action: "draft" | "review" | "publish",
-  ): Promise<boolean> {
+  async function persist(action: "draft" | "review" | "publish"): Promise<boolean> {
+    if (!weight) {
+      setSaveError("Select a weight before saving.");
+      return false;
+    }
+
     setSaving(true);
     setSaveError(null);
 
@@ -161,7 +169,7 @@ export default function StoryEditorPage() {
       setLastSavedAt(new Date());
 
       if (!articleId) {
-        router.replace(`/desk/newsroom/editor?story=${result.data.id}`);
+        router.replace(`/desk/newsroom/editor?mode=write&story=${result.data.id}`);
       }
     }
 
@@ -193,7 +201,7 @@ export default function StoryEditorPage() {
               onClick={() => setView("write")}
               className={clsx(
                 "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
-                view === "write" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover)
+                view === "write" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover),
               )}
             >
               Write
@@ -203,7 +211,7 @@ export default function StoryEditorPage() {
               onClick={() => setView("preview")}
               className={clsx(
                 "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
-                view === "preview" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover)
+                view === "preview" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover),
               )}
             >
               Site preview
@@ -217,7 +225,7 @@ export default function StoryEditorPage() {
               "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50",
               deskPaper.border,
               deskPaper.inkMeta,
-              deskPaper.hover
+              deskPaper.hover,
             )}
           >
             {saving ? "Saving…" : "Save draft"}
@@ -230,7 +238,7 @@ export default function StoryEditorPage() {
               "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50",
               deskPaper.border,
               deskPaper.inkMeta,
-              deskPaper.hover
+              deskPaper.hover,
             )}
           >
             Submit for review
@@ -241,7 +249,7 @@ export default function StoryEditorPage() {
             onClick={() => void persist("publish")}
             className={clsx(
               "rounded-md border px-4 py-2 font-robinhood text-[10px] uppercase tracking-[0.18em] transition-colors disabled:opacity-50",
-              "border-[#6a5843] bg-[#8d6f4d] text-[#f2e6d1] hover:bg-[#6a5843]"
+              "border-[#6a5843] bg-[#8d6f4d] text-[#f2e6d1] hover:bg-[#6a5843]",
             )}
           >
             Publish
@@ -271,7 +279,7 @@ export default function StoryEditorPage() {
                 placeholder="Headline"
                 className={clsx(
                   "mb-4 w-full border-0 bg-transparent font-cormorant text-3xl outline-none placeholder:text-[#9a8262]/60",
-                  deskPaper.inkHeading
+                  deskPaper.inkHeading,
                 )}
               />
               <input
@@ -281,7 +289,7 @@ export default function StoryEditorPage() {
                 className={clsx(
                   "mb-6 w-full border-0 border-b bg-transparent pb-3 font-robinhood text-[15px] outline-none placeholder:text-[#9a8262]/60",
                   deskPaper.border,
-                  deskPaper.inkBody
+                  deskPaper.inkBody,
                 )}
               />
               <textarea
@@ -291,7 +299,7 @@ export default function StoryEditorPage() {
                 rows={18}
                 className={clsx(
                   "w-full resize-none border-0 bg-transparent font-robinhood text-[15px] leading-[1.75] outline-none placeholder:text-[#9a8262]/60",
-                  deskPaper.inkBody
+                  deskPaper.inkBody,
                 )}
               />
             </div>
@@ -303,6 +311,7 @@ export default function StoryEditorPage() {
               section={section}
               byline={user.name}
               image={heroImage}
+              weight={weight}
             />
           )}
         </div>
@@ -328,6 +337,22 @@ export default function StoryEditorPage() {
                 </select>
               </div>
               <div>
+                <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Weight</div>
+                <select
+                  value={weight}
+                  onChange={(e) => setWeight(e.target.value)}
+                  required
+                  className={clsx("h-9 w-full rounded-md border px-2 font-robinhood text-[12px] outline-none", deskPaper.input)}
+                >
+                  <option value="">Select weight…</option>
+                  {ARTICLE_WEIGHT_OPTIONS.map((w) => (
+                    <option key={w} value={w}>
+                      {w}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
                 <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Assigned editor</div>
                 <div className={clsx("font-robinhood text-[13px]", deskPaper.inkBody)}>Elena Vasquez</div>
               </div>
@@ -337,6 +362,8 @@ export default function StoryEditorPage() {
               </div>
             </div>
           </section>
+
+          <EditorHomepageCardPreview headline={headline} dek={dek} section={section} weight={weight} />
 
           <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Editor notes</div>

@@ -11,6 +11,7 @@ import { writerNav } from "./writer-routes";
 import { mailboxUnreadCount } from "./desk-inbox-data";
 import { isWriterShellPath } from "./writer-shell";
 import { getDeskLoginPath } from "@/lib/site-urls";
+import { clearDeskRoleCookie } from "./desk-auth-cookie";
 import { GlobalSearchTrigger } from "./global-search/GlobalSearchTrigger";
 import {
   IconAnalytics,
@@ -237,6 +238,7 @@ export function DeskTopBar() {
                           type="button"
                           onClick={() => {
                             setMenuOpen(false);
+                            clearDeskRoleCookie();
                             router.push(getDeskLoginPath());
                           }}
                           className={clsx(

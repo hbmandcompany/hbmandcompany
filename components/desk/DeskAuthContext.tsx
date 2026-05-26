@@ -1,6 +1,7 @@
 "use client";
 
-import React, { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { readDeskRoleCookie, setDeskRoleCookie, type DeskRoleCookie } from "./desk-auth-cookie";
 
 export type DeskRole =
   | "principal"
@@ -49,19 +50,35 @@ export function routeForRole(role: DeskRole): string {
 type DeskAuthContextValue = {
   currentRole: DeskRole;
   setRole: (role: DeskRole) => void;
+  signInAs: (role: DeskRoleCookie) => void;
 };
 
 const DeskAuthContext = createContext<DeskAuthContextValue | null>(null);
 
 export function DeskAuthProvider({ children }: { children: React.ReactNode }) {
-  const [currentRole, setRole] = useState<DeskRole>("writer");
+  const [currentRole, setCurrentRole] = useState<DeskRole>("writer");
+
+  useEffect(() => {
+    const cookieRole = readDeskRoleCookie();
+    if (cookieRole === "writer") setCurrentRole("writer");
+    if (cookieRole === "principal") setCurrentRole("principal");
+  }, []);
 
   const value = useMemo(
     () => ({
       currentRole,
-      setRole,
+      setRole: (role: DeskRole) => {
+        setCurrentRole(role);
+        if (role === "writer" || role === "principal") {
+          setDeskRoleCookie(role);
+        }
+      },
+      signInAs: (role: DeskRoleCookie) => {
+        setDeskRoleCookie(role);
+        setCurrentRole(role === "writer" ? "writer" : "principal");
+      },
     }),
-    [currentRole]
+    [currentRole],
   );
 
   return <DeskAuthContext.Provider value={value}>{children}</DeskAuthContext.Provider>;

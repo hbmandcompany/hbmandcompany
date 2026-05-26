@@ -3,13 +3,16 @@ import { wrapQueryError } from "./articles.shared";
 import type { ArticleUpsertPayload, ArticleResult, ArticlesResult } from "./articles.shared";
 import {
   createArticle,
+  deleteArticleById,
   getArticleById,
   queryArchivePipelineArticles,
   queryArchivePublishedArticles,
+  queryArticlesByStatus,
   queryDeskQueueArticles,
   queryPublishedArticles,
   updateArticleById,
 } from "./articles.shared";
+import type { ArticleStatus } from "../types";
 
 /** Client-side: fetch published articles for browser connection tests and interactive UI. */
 export async function fetchPublishedArticlesClient() {
@@ -18,6 +21,19 @@ export async function fetchPublishedArticlesClient() {
     return queryPublishedArticles(supabase);
   } catch (error) {
     return wrapQueryError("fetchPublishedArticlesClient", error);
+  }
+}
+
+export async function fetchArticlesByStatusClient(status: ArticleStatus): Promise<ArticlesResult> {
+  try {
+    const supabase = createClient();
+    return queryArticlesByStatus(supabase, status);
+  } catch (error) {
+    return {
+      data: null,
+      error: wrapQueryError("fetchArticlesByStatusClient", error).error,
+      count: 0,
+    };
   }
 }
 
@@ -90,6 +106,30 @@ export async function saveArticleDraftClient(
   }
 }
 
+export async function updateArticleClient(
+  id: string,
+  payload: Partial<ArticleUpsertPayload>,
+): Promise<ArticleResult> {
+  try {
+    const supabase = createClient();
+    return updateArticleById(supabase, id, payload);
+  } catch (error) {
+    return {
+      data: null,
+      error: wrapQueryError("updateArticleClient", error).error,
+    };
+  }
+}
+
+export async function deleteArticleClient(id: string): Promise<{ error: import("../errors").SupabaseQueryError | null }> {
+  try {
+    const supabase = createClient();
+    return deleteArticleById(supabase, id);
+  } catch (error) {
+    return { error: wrapQueryError("deleteArticleClient", error).error };
+  }
+}
+
 export async function publishArticleClient(
   id: string | null,
   payload: ArticleUpsertPayload,
@@ -98,6 +138,7 @@ export async function publishArticleClient(
     ...payload,
     status: "published",
     published_at: new Date().toISOString(),
+    rejection_notes: null,
   });
 }
 

@@ -1,176 +1,108 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { clsx } from "clsx";
-import { StatusPill } from "@/components/desk/StatusPill";
+import { deskPaper } from "@/components/desk/desk-paper";
+import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
+import { DeskEmptyState } from "@/components/desk/DeskEmptyState";
+import { articleToDeskSubmission } from "@/components/desk/desk-article-mappers";
+import type { DeskSubmissionItem } from "@/components/desk/desk-submission-types";
+import { fetchArchivePipelineClient } from "@/lib/supabase/queries/articles.client";
 
-type SubmissionRow = {
-  id: string;
-  document: string;
-  submittedBy: string;
-  status: "Pending" | "Review" | "Approved" | "Rejected";
-  reviewer: string;
-  date: string;
-};
-
-const rows: SubmissionRow[] = [
-  { id: "s1", document: "EtherBonds Series A term sheet", submittedBy: "Marcus Lin", status: "Review", reviewer: "Tomás Kessler", date: "May 11" },
-  { id: "s2", document: "Monthly compliance brief — APAC delta", submittedBy: "Elena Vasquez", status: "Pending", reviewer: "Sophie Maier", date: "May 10" },
-  { id: "s3", document: "Vendor custody exception memo", submittedBy: "Adaeze Obi", status: "Approved", reviewer: "John Mercer", date: "May 08" },
-];
-
-function statusTone(s: SubmissionRow["status"]) {
-  switch (s) {
+function statusTone(status: DeskSubmissionItem["status"]) {
+  switch (status) {
     case "Approved":
       return "green" as const;
-    case "Rejected":
+    case "Returned":
       return "red" as const;
-    case "Review":
+    case "In review":
       return "blue" as const;
-    case "Pending":
     default:
-      return "neutral" as const;
+      return "amber" as const;
   }
 }
 
 export default function DeskSubmissionsPage() {
-  const inputRef = useRef<HTMLInputElement | null>(null);
-  const [files, setFiles] = useState<File[]>([]);
-  const [dragging, setDragging] = useState(false);
+  const [rows, setRows] = useState<DeskSubmissionItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
 
-  const fileList = useMemo(
-    () =>
-      files.map((f) => ({
-        name: f.name,
-        sizeKb: Math.max(1, Math.round(f.size / 1024)),
-        type: f.type || "file",
-      })),
-    [files]
-  );
+  useEffect(() => {
+    let cancelled = false;
 
-  function addFiles(next: FileList | null) {
-    if (!next || next.length === 0) return;
-    setFiles((cur) => {
-      const merged = [...cur];
-      for (const f of Array.from(next)) merged.push(f);
-      return merged;
-    });
-  }
+    async function loadPipeline() {
+      setLoading(true);
+      setLoadError(null);
+      const result = await fetchArchivePipelineClient();
+
+      if (cancelled) return;
+
+      if (result.error) {
+        setLoadError(result.error.message);
+        setRows([]);
+      } else {
+        setRows((result.data ?? []).map(articleToDeskSubmission));
+      }
+
+      setLoading(false);
+    }
+
+    void loadPipeline();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const sortedRows = useMemo(() => rows, [rows]);
 
   return (
-    <div className="px-6 py-6">
+    <div className={clsx("desk-app min-h-[calc(100dvh-56px)] px-6 py-8", deskPaper.page, deskPaper.ink)}>
       <div className="mb-6">
-        <div className="font-cormorant text-2xl font-semibold text-cream">Submissions</div>
-        <div className="mt-1 font-robinhood text-[13px] text-silver-dim/50">
-          Document submissions pipeline. Uploads are stored client-side in this build.
-        </div>
+        <div className={clsx("font-cormorant text-3xl", deskPaper.inkHeading)}>Submissions</div>
+        <p className={clsx("mt-2 font-robinhood text-sm", deskPaper.inkBody)}>
+          Editorial pipeline — drafts and stories awaiting review.
+        </p>
+        {loadError ? (
+          <p className={clsx("mt-2 font-robinhood text-[12px] text-desk-red")}>{loadError}</p>
+        ) : null}
       </div>
 
-      {/* Upload */}
-      <section className="glass-panel-dark p-6">
-        <div className="mb-3 font-robinhood text-[11px] uppercase tracking-[0.24em] text-silver-dim/40">
-          Submit files
-        </div>
-
-        <div
-          className={clsx(
-            "rounded-lg border border-dashed p-6 transition-colors duration-300 ease-luxury",
-            dragging ? "border-gold/35 bg-gold/5" : "border-white/[0.08] bg-charcoal/20"
-          )}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
-          onDragLeave={() => setDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragging(false);
-            addFiles(e.dataTransfer.files);
-          }}
-        >
-          <div className="flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
-            <div>
-              <div className="font-robinhood text-[13px] text-cream/80">Drop files here</div>
-              <div className="mt-1 font-robinhood text-[11px] text-silver-dim/45">
-                PDF, DOCX, images, and archives. Multiple files supported.
-              </div>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                type="button"
-                onClick={() => inputRef.current?.click()}
-                className="garnet-btn px-6 py-2.5 font-robinhood text-[11px] uppercase tracking-[0.28em]"
-              >
-                Choose files
-              </button>
-              <button
-                type="button"
-                onClick={() => setFiles([])}
-                className="gold-outline-btn px-6 py-2.5 font-robinhood text-[11px] uppercase tracking-[0.28em]"
-              >
-                Clear
-              </button>
-            </div>
-          </div>
-
-          <input
-            ref={inputRef}
-            type="file"
-            multiple
-            className="hidden"
-            onChange={(e) => addFiles(e.target.files)}
-          />
-
-          {fileList.length ? (
-            <div className="mt-6 grid grid-cols-1 gap-2 md:grid-cols-2">
-              {fileList.map((f) => (
-                <div
-                  key={`${f.name}-${f.sizeKb}`}
-                  className="flex items-center justify-between rounded-lg border border-white/[0.06] bg-void/70 px-4 py-3"
-                >
-                  <div className="min-w-0">
-                    <div className="truncate font-robinhood text-[12px] text-cream/80">{f.name}</div>
-                    <div className="mt-1 font-robinhood text-[11px] text-silver-dim/45">
-                      {f.type} · {f.sizeKb} KB
-                    </div>
-                  </div>
-                  <div className="ml-4">
-                    <StatusPill label="Queued" tone="gold" />
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="mt-6 font-robinhood text-[12px] text-silver-dim/40">No files selected.</div>
-          )}
-        </div>
-      </section>
-
-      {/* Pipeline table */}
-      <section className="mt-6 overflow-hidden rounded-lg border border-white/[0.04]">
-        <div className="grid grid-cols-[minmax(260px,1fr)_160px_140px_160px_110px] border-b border-white/[0.04] bg-obsidian">
-          {["Document", "Submitted By", "Status", "Reviewer", "Date"].map((h) => (
-            <div key={h} className="flex h-9 items-center px-3 font-robinhood text-[11px] uppercase tracking-wider text-silver-dim/40">
+      <section className={clsx("overflow-hidden rounded-md border", deskPaper.border, deskPaper.card)}>
+        <div className={clsx("grid grid-cols-[minmax(260px,1fr)_140px_160px_110px] border-b px-3 py-2", deskPaper.border, deskPaper.pageAlt)}>
+          {["Article", "Status", "Reviewer", "Submitted"].map((h) => (
+            <div key={h} className={clsx("font-robinhood text-[10px] uppercase tracking-[0.16em]", deskPaper.inkLabel)}>
               {h}
             </div>
           ))}
         </div>
-        {rows.map((r) => (
-          <div
-            key={r.id}
-            className="grid grid-cols-[minmax(260px,1fr)_160px_140px_160px_110px] border-b border-white/[0.02] bg-void hover:bg-charcoal-light/50"
-          >
-            <div className="flex h-10 items-center px-3 font-robinhood text-[13px] text-cream/80">{r.document}</div>
-            <div className="flex h-10 items-center px-3 font-robinhood text-[12px] text-silver-dim/60">{r.submittedBy}</div>
-            <div className="flex h-10 items-center px-3">
-              <StatusPill label={r.status} tone={statusTone(r.status)} />
+
+        {loading ? (
+          <div className={clsx("px-4 py-10 font-robinhood text-[12px]", deskPaper.inkMeta)}>Loading submissions…</div>
+        ) : sortedRows.length === 0 ? (
+          <DeskEmptyState title="No submissions in the pipeline." subtitle="Stories will appear here when writers save or submit work." />
+        ) : (
+          sortedRows.map((row) => (
+            <div
+              key={row.id}
+              className={clsx(
+                "grid grid-cols-1 gap-2 border-b px-3 py-3 last:border-b-0 md:grid-cols-[minmax(260px,1fr)_140px_160px_110px] md:items-center",
+                deskPaper.border,
+                "bg-[#f2e6d1] hover:bg-[#ebe0cc]",
+              )}
+            >
+              <div>
+                <div className={clsx("font-robinhood text-[13px] font-medium leading-snug", deskPaper.inkHeading)}>{row.headline}</div>
+                <div className={clsx("mt-0.5 font-robinhood text-[10px] uppercase tracking-wide", deskPaper.inkMeta)}>{row.section}</div>
+              </div>
+              <div>
+                <PaperStatusPill label={row.status} tone={statusTone(row.status)} />
+              </div>
+              <div className={clsx("font-robinhood text-[12px]", deskPaper.inkBody)}>{row.reviewer}</div>
+              <div className={clsx("font-robinhood text-[11px] tabular-nums", deskPaper.inkMeta)}>{row.submitted}</div>
             </div>
-            <div className="flex h-10 items-center px-3 font-robinhood text-[12px] text-silver-dim/60">{r.reviewer}</div>
-            <div className="flex h-10 items-center px-3 font-robinhood text-[11px] text-silver-dim/40">{r.date}</div>
-          </div>
-        ))}
+          ))
+        )}
       </section>
     </div>
   );
 }
-

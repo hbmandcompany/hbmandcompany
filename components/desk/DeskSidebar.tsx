@@ -5,7 +5,9 @@ import { usePathname } from "next/navigation";
 import { useMemo, useState } from "react";
 import { clsx } from "clsx";
 import { useDesk } from "./DeskContext";
+import { useDeskAuth } from "./DeskAuthContext";
 import { deskNav } from "./desk-routes";
+import { writerNav } from "./writer-routes";
 import { deskPaper } from "./desk-paper";
 import {
   IconCalendar,
@@ -49,6 +51,8 @@ function iconFor(key: (typeof deskNav)[number]["icon"]) {
       return IconLandmark;
     case "file":
       return IconFileText;
+    case "analytics":
+      return IconSearch;
     case "search":
       return IconSearch;
     case "send":
@@ -67,16 +71,19 @@ function iconFor(key: (typeof deskNav)[number]["icon"]) {
 export function DeskSidebar() {
   const pathname = usePathname();
   const { user } = useDesk();
+  const { currentRole } = useDeskAuth();
   const [collapsed, setCollapsed] = useState(false);
 
+  const navItems = currentRole === "writer" ? writerNav : deskNav;
+
   const grouped = useMemo(() => {
-    const map = new Map<string, typeof deskNav>();
-    for (const item of deskNav) {
+    const map = new Map<string, typeof navItems>();
+    for (const item of navItems) {
       if (!map.has(item.section)) map.set(item.section, []);
       map.get(item.section)!.push(item);
     }
     return Array.from(map.entries());
-  }, []);
+  }, [navItems]);
 
   return (
     <aside
@@ -113,7 +120,7 @@ export function DeskSidebar() {
             </div>
             <div className="space-y-1">
               {items.map((item) => {
-                const active = pathname === item.href;
+                const active = pathname === item.href || (item.href.includes("?") && pathname.startsWith(item.href.split("?")[0]));
                 const Icon = iconFor(item.icon);
                 return (
                   <Link

@@ -29,6 +29,8 @@ export type ArticleUpsertPayload = {
   published_at?: string | null;
   hero_image_url?: string | null;
   author_id?: string | null;
+  weight?: string | null;
+  rejection_notes?: string | null;
 };
 
 function articlesError(message: string, pgError?: PostgrestError | null): ArticlesResult {
@@ -59,6 +61,27 @@ export async function queryPublishedArticles(
 
   if (error) {
     return articlesError("Failed to load published articles.", error);
+  }
+
+  return {
+    data: (data ?? []) as Article[],
+    error: null,
+    count: count ?? data?.length ?? 0,
+  };
+}
+
+export async function queryArticlesByStatus(
+  supabase: SupabaseClient<Database>,
+  status: ArticleStatus,
+): Promise<ArticlesResult> {
+  const { data, error, count } = await supabase
+    .from("articles")
+    .select(ARTICLE_SELECT, { count: "exact" })
+    .eq("status", status)
+    .order("updated_at", { ascending: false });
+
+  if (error) {
+    return articlesError(`Failed to load ${status} articles.`, error);
   }
 
   return {
@@ -166,6 +189,8 @@ export async function createArticle(
       published_at: payload.published_at ?? null,
       hero_image_url: payload.hero_image_url ?? null,
       author_id: payload.author_id ?? null,
+      weight: payload.weight ?? null,
+      rejection_notes: payload.rejection_notes ?? null,
       updated_at: new Date().toISOString(),
     })
     .select(ARTICLE_SELECT)
@@ -198,6 +223,20 @@ export async function updateArticleById(
   }
 
   return { data: data as Article, error: null };
+}
+
+export async function deleteArticleById(
+  supabase: SupabaseClient<Database>,
+  id: string,
+): Promise<{ error: SupabaseQueryError | null }> {
+  const { error } = await supabase.from("articles").delete().eq("id", id);
+
+  if (error) {
+    logSupabaseDiagnostic("deleteArticle", error);
+    return { error: new SupabaseQueryError("Failed to delete article.", error) };
+  }
+
+  return { error: null };
 }
 
 export function wrapQueryError(scope: string, error: unknown): PublishedArticlesResult {

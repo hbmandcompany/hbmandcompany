@@ -1,6 +1,7 @@
 "use client";
 
 import type { EditorImageState } from "./EditorImagePanel";
+import { ArticleWeightBadge } from "./ArticleWeightBadge";
 
 export function EditorSitePreview({
   headline,
@@ -9,6 +10,7 @@ export function EditorSitePreview({
   section,
   byline,
   image,
+  weight,
 }: {
   headline: string;
   dek: string;
@@ -16,6 +18,7 @@ export function EditorSitePreview({
   section: string;
   byline: string;
   image: EditorImageState | null;
+  weight?: string | null;
 }) {
   const paragraphs = body
     .split(/\n\n+/)
@@ -35,9 +38,12 @@ export function EditorSitePreview({
       </div>
 
       <article className="px-6 py-8 md:px-10 md:py-10">
-        <p className="font-mono-hbm text-[9px] uppercase tracking-[0.24em] text-[#8d6f4d]">
-          {section || "Section"} · Editorial Newsroom
-        </p>
+        <div className="flex flex-wrap items-center gap-2">
+          <p className="font-mono-hbm text-[9px] uppercase tracking-[0.24em] text-[#8d6f4d]">
+            {section || "Section"} · Editorial Newsroom
+          </p>
+          <ArticleWeightBadge weight={weight} />
+        </div>
         <h1 className="mt-3 font-cormorant text-[2rem] font-semibold leading-[0.98] tracking-[-0.03em] text-[#1f140c] md:text-[2.5rem]">
           {displayHeadline}
         </h1>
