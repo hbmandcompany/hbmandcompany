@@ -86,7 +86,7 @@ export default function HomePageClient({ heroBriefings = null }: HomePageClientP
           />
 
         <h1 className="sr-only">
-          The New Sound of Capital. HBM &amp; Company — culture, music, film, and the markets behind them.
+          Enterprise News &amp; Intelligence for Finance, Crypto &amp; Infrastructure — HBM &amp; Company
         </h1>
 
         <motion.div

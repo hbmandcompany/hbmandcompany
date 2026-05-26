@@ -1,14 +1,14 @@
 import type { MetadataRoute } from "next";
-
-const host = "https://hbmandcompany.com";
+import { SITE_URL } from "@/lib/seo/site";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
       userAgent: "*",
       allow: "/",
+      disallow: ["/admin", "/desk", "/desk/", "/api", "/api/"],
     },
-    sitemap: `${host}/sitemap.xml`,
-    host,
+    sitemap: `${SITE_URL}/sitemap.xml`,
+    host: SITE_URL,
   };
 }

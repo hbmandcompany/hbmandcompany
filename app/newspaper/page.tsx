@@ -2,16 +2,19 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import NavBar from "@/components/NavBar";
 import FooterDark from "@/components/FooterDark";
+import ArticleJsonLd from "@/components/seo/ArticleJsonLd";
+import BreadcrumbJsonLd from "@/components/seo/BreadcrumbJsonLd";
 import { getBriefingByIdFromList } from "@/lib/desk/article-to-briefing";
 import { getBriefingUpdatedLabel } from "@/lib/newsroomBriefings";
 import { getPublicBriefings } from "@/lib/supabase/queries/briefings.server";
+import { SITE_URL } from "@/lib/seo/site";
 
 export const metadata: Metadata = {
   title: "Newspaper",
   description:
-    "HBM Newspaper — a paper-of-record view into the desk briefings surfaced from the hero carousel: markets, governance, archival infrastructure, and adoption signals.",
+    "HBM Newspaper — finance, crypto, and infrastructure news, investigations, and market analysis from the editorial desk.",
   alternates: {
-    canonical: "https://hbmandcompany.com/newspaper",
+    canonical: `${SITE_URL}/newspaper`,
   },
   openGraph: {
     title: "Newspaper — HBM & Company",
@@ -62,9 +65,16 @@ export default async function NewspaperPage({ searchParams }: { searchParams: Se
   }
 
   const frontPage = briefings.filter((story) => story.id !== selected.id);
+  const breadcrumbItems = [
+    { name: "Home", path: "/" },
+    { name: "Newspaper", path: "/newspaper" },
+    { name: selected.headline, path: `/newspaper?story=${selected.id}` },
+  ];
 
   return (
     <div className="min-h-screen bg-void text-[#18130b]">
+      <BreadcrumbJsonLd items={breadcrumbItems} />
+      <ArticleJsonLd article={selected} />
       <NavBar />
 
       <main className="px-4 pb-20 pt-[max(6.25rem,env(safe-area-inset-top,0px)+4rem)] md:px-8 md:pb-28 md:pt-[max(7rem,env(safe-area-inset-top,0px)+4.5rem)]">
@@ -188,6 +198,33 @@ export default async function NewspaperPage({ searchParams }: { searchParams: Se
                   </ul>
                 </div>
               ) : null}
+
+              <div className="mt-6 rounded-2xl border border-[#c4ae89]/40 bg-[#eadbc1]/45 p-5">
+                <p className="font-mono-hbm text-[9px] uppercase tracking-[0.24em] text-[#8d6f4d]">Related</p>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  <Link
+                    href="/subscription"
+                    className="rounded-full border border-[#b38d61]/45 px-3 py-1.5 font-mono-hbm text-[9px] uppercase tracking-[0.16em] text-[#4f3a25] transition-colors hover:bg-[#dfcfb1]"
+                  >
+                    Subscription
+                  </Link>
+                  <Link
+                    href="/stake"
+                    className="rounded-full border border-[#b38d61]/45 px-3 py-1.5 font-mono-hbm text-[9px] uppercase tracking-[0.16em] text-[#4f3a25] transition-colors hover:bg-[#dfcfb1]"
+                  >
+                    Stake Membership
+                  </Link>
+                  {frontPage.slice(0, 3).map((story) => (
+                    <Link
+                      key={story.id}
+                      href={`/newspaper?story=${story.id}`}
+                      className="rounded-full border border-[#b38d61]/45 px-3 py-1.5 font-mono-hbm text-[9px] uppercase tracking-[0.16em] text-[#4f3a25] transition-colors hover:bg-[#dfcfb1]"
+                    >
+                      {story.headline.slice(0, 48)}{story.headline.length > 48 ? "…" : ""}
+                    </Link>
+                  ))}
+                </div>
+              </div>
 
               <div className="mt-6 rounded-2xl border border-[#c4ae89]/40 bg-[#eadbc1]/45 p-5">
                 <p className="font-mono-hbm text-[9px] uppercase tracking-[0.24em] text-[#8d6f4d]">Elsewhere in the house</p>

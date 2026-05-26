@@ -5,12 +5,12 @@ const footerColumns = [
   {
     heading: "Company",
     links: [
-      { label: "The Company", href: "/about" },
+      { label: "The Company", href: "/company" },
       { label: "Our Team", href: "/team" },
       { label: "Values & Thesis", href: "/values" },
       { label: "Careers", href: "/careers" },
       { label: "Press Kit", href: "/press-kit" },
-      { label: "Legal Entity", href: "/legal-entity" },
+      { label: "Subscription", href: "/subscription" },
     ],
   },
   {

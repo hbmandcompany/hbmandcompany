@@ -3,6 +3,7 @@ import { Cormorant_Garamond, DM_Sans, Plus_Jakarta_Sans, Raleway } from "next/fo
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import JsonLd from "@/components/JsonLd";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, OG_IMAGE, SITE_URL } from "@/lib/seo/site";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -38,54 +39,37 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://hbmandcompany.com"),
+  metadataBase: new URL(SITE_URL),
 
   title: {
-    default: "HBM & Company",
+    default: DEFAULT_TITLE,
     template: "%s | HBM & Company",
   },
 
-  description:
-    "A private holding company operating at the intersection of decentralized finance, digital asset infrastructure, and alternative capital formation.",
+  description: DEFAULT_DESCRIPTION,
 
   keywords: [
-    "web3 investment firm",
-    "crypto holding company",
-    "digital asset portfolio",
-    "DeFi infrastructure company",
-    "blockchain venture studio",
-    "tokenized asset management",
-    "on-chain capital",
-    "alternative asset formation",
-    "decentralized finance firm",
-    "crypto fund",
-    "web3 portfolio company",
-    "digital asset holding",
-    "USDC yield infrastructure",
-    "Ethereum venture",
-    "Solana ecosystem",
-    "Base network investments",
-    "DePIN portfolio",
-    "crypto venture capital",
-    "digital asset operator",
-    "on-chain treasury",
-    "private crypto firm",
-    "web3 operator",
-    "crypto studio",
-    "token infrastructure",
-    "decentralized portfolio",
-    "HBM Company",
+    "crypto news",
+    "finance news",
+    "infrastructure news",
+    "blockchain reporting",
+    "DeFi analysis",
+    "Texas finance",
+    "on-chain intelligence",
+    "digital asset reporting",
+    "enterprise news",
+    "HBM & Company",
     "HBM and Company",
-    "blockchain protocol",
-    "institutional DeFi",
-    "digital asset infrastructure",
+    "financial journalism",
+    "cryptocurrency news",
+    "markets desk",
   ],
 
-  authors: [{ name: "HBM & Company", url: "https://hbmandcompany.com" }],
+  authors: [{ name: "HBM & Company", url: SITE_URL }],
   creator: "HBM & Company",
   publisher: "HBM & Company",
-  category: "Finance",
-  classification: "Digital Asset Holdings / Decentralized Finance Infrastructure",
+  category: "News",
+  classification: "Finance / Cryptocurrency / Infrastructure News",
   referrer: "origin-when-cross-origin",
 
   robots: {
@@ -102,22 +86,21 @@ export const metadata: Metadata = {
     },
   },
 
-  alternates: { canonical: "https://hbmandcompany.com" },
+  alternates: { canonical: SITE_URL },
 
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://hbmandcompany.com",
+    url: SITE_URL,
     siteName: "HBM & Company",
-    title: "HBM & Company — Digital Asset Infrastructure & Private Holdings",
-    description:
-      "Private holding company building decentralized finance infrastructure, digital asset platforms, and on-chain capital systems.",
+    title: "HBM & Company | Finance & Crypto News",
+    description: DEFAULT_DESCRIPTION,
     images: [
       {
-        url: "/og-image.png",
+        url: OG_IMAGE,
         width: 1200,
         height: 630,
-        alt: "HBM & Company — Private Holdings",
+        alt: "HBM & Company",
         type: "image/png",
       },
     ],
@@ -125,10 +108,9 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "HBM & Company — Digital Asset Infrastructure & Private Holdings",
-    description:
-      "Private holding company building decentralized finance infrastructure, digital asset platforms, and on-chain capital systems.",
-    images: ["/og-image.png"],
+    title: "HBM & Company | Finance & Crypto News",
+    description: DEFAULT_DESCRIPTION,
+    images: [OG_IMAGE],
   },
 
   icons: {

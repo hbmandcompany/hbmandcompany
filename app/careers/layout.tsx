@@ -2,9 +2,9 @@ import type { ReactNode } from "react";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Careers",
+  title: "Careers at HBM & Company",
   description:
-    "Open roles at HBM & Company — engineering, design, research, product, and operations positions across our digital asset infrastructure and app portfolio.",
+    "Careers at HBM & Company — open roles in editorial, engineering, research, and operations for finance, crypto, and infrastructure news.",
   alternates: { canonical: "https://hbmandcompany.com/careers" },
   openGraph: {
     title: "Careers — HBM & Company",

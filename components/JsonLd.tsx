@@ -1,21 +1,30 @@
+import {
+  CONTACT_EMAIL,
+  DEFAULT_DESCRIPTION,
+  DEFAULT_TITLE,
+  LOGO_URL,
+  SITE_NAME,
+  SITE_URL,
+  SOCIAL_PROFILES,
+} from "@/lib/seo/site";
+
 export default function JsonLd() {
   const schema = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "Organization",
-        "@id": "https://hbmandcompany.com/#organization",
-        name: "HBM & Company",
+        "@id": `${SITE_URL}/#organization`,
+        name: SITE_NAME,
         alternateName: "HBM and Company",
-        url: "https://hbmandcompany.com",
+        url: SITE_URL,
         logo: {
           "@type": "ImageObject",
-          url: "https://hbmandcompany.com/logo.png",
-          width: 400,
-          height: 400,
+          url: LOGO_URL,
+          width: 512,
+          height: 512,
         },
-        description:
-          "A private holding company operating at the intersection of decentralized finance, digital asset infrastructure, and alternative capital formation.",
+        description: DEFAULT_DESCRIPTION,
         foundingDate: "2024",
         foundingLocation: {
           "@type": "Place",
@@ -23,91 +32,67 @@ export default function JsonLd() {
         },
         areaServed: "Worldwide",
         knowsAbout: [
-          "Decentralized Finance",
-          "Digital Asset Infrastructure",
-          "Blockchain Technology",
-          "Web3 Venture Development",
-          "On-Chain Capital Formation",
-          "Tokenized Asset Systems",
-          "DePIN Networks",
-          "Smart Contract Platforms",
-          "Layer-2 Protocol Engineering",
-          "Institutional Crypto Custody",
-          "DAO Governance Frameworks",
-          "Cross-Chain Bridge Infrastructure",
-          "Zero-Knowledge Proof Systems",
-          "Validator Node Operations",
-          "DeFi Treasury Management",
+          "Finance News",
+          "Cryptocurrency",
+          "Blockchain Infrastructure",
+          "DeFi Analysis",
+          "Digital Asset Reporting",
+          "Texas Business",
+          "On-Chain Intelligence",
+          "Market Analysis",
+          "Investigative Journalism",
         ],
-        sameAs: [
-          "https://twitter.com/hbmandcompany",
-          "https://t.me/hbmandcompany",
-          "https://linkedin.com/company/hbmandcompany",
-          "https://www.tiktok.com/@hbmandcompany",
-        ],
+        sameAs: [...SOCIAL_PROFILES],
         contactPoint: {
           "@type": "ContactPoint",
-          email: "hbmandcompany@gmail.com",
-          contactType: "General Inquiries",
+          email: CONTACT_EMAIL,
+          contactType: "Customer Service",
           availableLanguage: "English",
         },
       },
       {
         "@type": "WebSite",
-        "@id": "https://hbmandcompany.com/#website",
-        url: "https://hbmandcompany.com",
-        name: "HBM & Company",
-        description:
-          "Private holding company building decentralized finance infrastructure, digital asset platforms, and on-chain capital systems.",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: SITE_NAME,
+        description: DEFAULT_DESCRIPTION,
         publisher: {
-          "@id": "https://hbmandcompany.com/#organization",
+          "@id": `${SITE_URL}/#organization`,
         },
         inLanguage: "en-US",
+        potentialAction: {
+          "@type": "SearchAction",
+          target: {
+            "@type": "EntryPoint",
+            urlTemplate: `${SITE_URL}/search?q={search_term_string}`,
+          },
+          "query-input": "required name=search_term_string",
+        },
       },
       {
         "@type": "WebPage",
-        "@id": "https://hbmandcompany.com/#webpage",
-        url: "https://hbmandcompany.com",
-        name: "HBM & Company — Digital Asset Infrastructure & Private Holdings",
+        "@id": `${SITE_URL}/#webpage`,
+        url: SITE_URL,
+        name: DEFAULT_TITLE,
         isPartOf: {
-          "@id": "https://hbmandcompany.com/#website",
+          "@id": `${SITE_URL}/#website`,
         },
         about: {
-          "@id": "https://hbmandcompany.com/#organization",
+          "@id": `${SITE_URL}/#organization`,
         },
-        description:
-          "A private holding company operating at the intersection of decentralized finance, digital asset infrastructure, and alternative capital formation.",
+        description: DEFAULT_DESCRIPTION,
         inLanguage: "en-US",
-        breadcrumb: {
-          "@type": "BreadcrumbList",
-          itemListElement: [
-            {
-              "@type": "ListItem",
-              position: 1,
-              name: "Home",
-              item: "https://hbmandcompany.com",
-            },
-          ],
-        },
       },
       {
-        "@type": "FinancialService",
-        "@id": "https://hbmandcompany.com/#service",
-        name: "HBM & Company — Digital Asset Holdings",
-        provider: {
-          "@id": "https://hbmandcompany.com/#organization",
+        "@type": "NewsMediaOrganization",
+        "@id": `${SITE_URL}/#newsmedia`,
+        name: SITE_NAME,
+        url: SITE_URL,
+        logo: LOGO_URL,
+        description: DEFAULT_DESCRIPTION,
+        parentOrganization: {
+          "@id": `${SITE_URL}/#organization`,
         },
-        serviceType: [
-          "Digital Asset Management",
-          "Blockchain Protocol Development",
-          "DeFi Infrastructure",
-          "Institutional Crypto Custody",
-          "On-Chain Governance",
-          "Web3 Venture Operations",
-        ],
-        areaServed: "Worldwide",
-        description:
-          "Institutional-grade digital asset holdings, protocol infrastructure development, and on-chain capital formation services for sophisticated investors and protocols.",
       },
     ],
   };
@@ -115,7 +100,7 @@ export default function JsonLd() {
   return (
     <script
       type="application/ld+json"
-      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema, null, 0) }}
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
     />
   );
 }

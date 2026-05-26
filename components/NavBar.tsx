@@ -7,10 +7,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import clsx from "clsx";
 import { getShopUrl, isShopHost } from "@/lib/site-urls";
 
-const navLinks = [
-  { label: "Music", href: "/music" },
-  { label: "Film", href: "/film" },
-  { label: "Culture", href: "/culture" },
+const seoNavLinks = [
+  { label: "The Company", href: "/company", external: false },
+  { label: "Shop", href: getShopUrl(), external: true },
+  { label: "Contact Us", href: "/contact", external: false },
+  { label: "Careers", href: "/careers", external: false },
+  { label: "Stake", href: "/stake", external: false },
 ] as const;
 
 function subscribeToHostname() {
@@ -31,13 +33,13 @@ export default function NavBar() {
   const [menuOpen, setMenuOpen]   = useState(false);
   const lastScrollY               = useRef(0);
   const pathname                  = usePathname();
-  const isHome                    = pathname === "/";
+  const isDeskRoute               = pathname.startsWith("/desk");
   const isShopSubdomain           = useSyncExternalStore(
     subscribeToHostname,
     getShopSubdomainSnapshot,
     getShopSubdomainServerSnapshot,
   );
-  const showSiteNav               = isHome && !isShopSubdomain;
+  const showSiteNav               = !isDeskRoute && !isShopSubdomain;
 
   /* Smart scroll — hide on down, reveal on up */
   useEffect(() => {
@@ -108,24 +110,29 @@ export default function NavBar() {
 
           {/* ── Desktop nav (homepage only) ── */}
           {showSiteNav ? (
-          <div className="hidden md:flex items-center gap-9">
-            {navLinks.map((link) => (
-              <Link
-                key={link.label}
-                href={link.href}
-                className="group relative font-mono-hbm text-[11px] uppercase tracking-[0.25em] text-silver-dim/65 transition-all duration-300 hover:text-cream/85"
-              >
-                {link.label}
-                <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
-              </Link>
-            ))}
-            <a
-              href={getShopUrl()}
-              className="garnet-btn garnet-btn-soft font-mono-hbm text-[10px] uppercase tracking-[0.22em] text-void/88 px-5 py-1.5"
-            >
-              Shop
-            </a>
-          </div>
+          <nav className="hidden md:flex items-center gap-7" aria-label="Primary">
+            {seoNavLinks.map((link) =>
+              link.external ? (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="group relative font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-silver-dim/65 transition-all duration-300 hover:text-cream/85"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
+                </a>
+              ) : (
+                <Link
+                  key={link.label}
+                  href={link.href}
+                  className="group relative font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-silver-dim/65 transition-all duration-300 hover:text-cream/85"
+                >
+                  {link.label}
+                  <span className="absolute -bottom-0.5 left-0 h-px w-0 bg-gold transition-all duration-300 group-hover:w-full" />
+                </Link>
+              ),
+            )}
+          </nav>
           ) : null}
 
           {/* ── Mobile hamburger (homepage only — menu matches desktop) ── */}
@@ -183,8 +190,8 @@ export default function NavBar() {
               </span>
             </div>
 
-            <nav className="relative z-10 flex flex-col items-center gap-10">
-              {navLinks.map((link, i) => (
+            <nav className="relative z-10 flex flex-col items-center gap-10" aria-label="Primary">
+              {seoNavLinks.map((link, i) => (
                 <motion.div
                   key={link.label}
                   initial={{ opacity: 0, y: 32, filter: "blur(8px)" }}
@@ -192,28 +199,23 @@ export default function NavBar() {
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ delay: 0.07 + i * 0.08, duration: 0.5, ease: [0.16,1,0.3,1] }}
                 >
-                  <Link
-                    href={link.href}
-                    className="font-cormorant text-display-md font-light italic text-silver-dim/72 transition-colors duration-300 hover:text-gold"
-                  >
-                    {link.label}
-                  </Link>
+                  {link.external ? (
+                    <a
+                      href={link.href}
+                      className="font-cormorant text-display-md font-light italic text-silver-dim/72 transition-colors duration-300 hover:text-gold"
+                    >
+                      {link.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={link.href}
+                      className="font-cormorant text-display-md font-light italic text-silver-dim/72 transition-colors duration-300 hover:text-gold"
+                    >
+                      {link.label}
+                    </Link>
+                  )}
                 </motion.div>
               ))}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0  }}
-                exit={{ opacity: 0 }}
-                transition={{ delay: 0.4, duration: 0.5 }}
-                className="mt-4"
-              >
-                <a
-                  href={getShopUrl()}
-                  className="garnet-btn garnet-btn-soft font-mono-hbm text-[11px] uppercase tracking-[0.22em] text-void/88 px-8 py-2 inline-block"
-                >
-                  Shop
-                </a>
-              </motion.div>
             </nav>
 
             <div className="absolute bottom-[max(2rem,env(safe-area-inset-bottom,0px))] flex flex-col items-center gap-2">

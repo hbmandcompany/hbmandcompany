@@ -2,23 +2,23 @@ import type { Metadata } from "next";
 import ContactContent from "./ContactContent";
 
 export const metadata: Metadata = {
-  title: "Contact",
+  title: "Contact Us",
   description:
-    "Engage HBM & Company. We work with founders, institutions, and protocols operating at the frontier of decentralized finance and digital asset infrastructure.",
+    "Contact HBM & Company for finance, crypto, and infrastructure news inquiries, partnerships, and editorial correspondence at contact@hbmandcompany.com.",
   alternates: {
     canonical: "https://hbmandcompany.com/contact",
   },
   openGraph: {
-    title: "Contact — HBM & Company",
+    title: "Contact Us — HBM & Company",
     description:
-      "Engage HBM & Company. We work selectively with founders and institutions building critical DeFi infrastructure.",
+      "Contact HBM & Company for editorial, partnership, and newsroom inquiries across finance, crypto, and infrastructure.",
     url: "https://hbmandcompany.com/contact",
     images: [{ url: "/og-image.png", width: 1200, height: 630, alt: "HBM & Company — Contact" }],
   },
   twitter: {
-    title: "Contact — HBM & Company",
+    title: "Contact Us — HBM & Company",
     description:
-      "Engage HBM & Company. Selective partnerships with DeFi founders and institutions.",
+      "Contact HBM & Company for finance, crypto, and infrastructure news and partnership inquiries.",
     images: ["/og-image.png"],
   },
 };

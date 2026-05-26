@@ -13,7 +13,7 @@ const THESIS_ACCESS_LINKS = [
   { label: "Whitepaper", href: "/documentation" },
   { label: "Governance", href: "/governance" },
   { label: "Investor Relations", href: "/investor-relations" },
-  { label: "Legal Entity", href: "/legal-entity" },
+  { label: "Subscription", href: "/subscription" },
 ] as const;
 
 function ThesisAccessTiles({ uiFont }: { uiFont: string }) {
