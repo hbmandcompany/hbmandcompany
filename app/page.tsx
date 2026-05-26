@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import HomePageClient from "@/components/HomePageClient";
 import { getPublicBriefings } from "@/lib/supabase/queries/briefings.server";
+import { getPublicTickerHeadlines } from "@/lib/supabase/queries/ticker.server";
 import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, OG_IMAGE, SITE_URL } from "@/lib/seo/site";
 
 export const metadata: Metadata = {
@@ -22,9 +23,15 @@ export const metadata: Metadata = {
 };
 
 export default async function Page() {
-  const { briefings, source } = await getPublicBriefings();
+  const [{ briefings, source }, tickerHeadlines] = await Promise.all([
+    getPublicBriefings(),
+    getPublicTickerHeadlines(),
+  ]);
 
   return (
-    <HomePageClient heroBriefings={source === "supabase" ? briefings : null} />
+    <HomePageClient
+      heroBriefings={source === "supabase" ? briefings : null}
+      tickerHeadlines={tickerHeadlines}
+    />
   );
 }

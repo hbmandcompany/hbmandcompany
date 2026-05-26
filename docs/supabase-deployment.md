@@ -95,6 +95,8 @@ create table articles (
   published_at timestamptz,
   author_id uuid,
   hero_image_url text,
+  weight text,
+  rejection_notes text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now()
 );
@@ -126,6 +128,34 @@ create policy "Desk can update articles"
 ```
 
 > **Note:** The public read policy above only exposes `published` rows to anonymous users. The desk read policy allows the editorial UI to load drafts and in-review stories. Replace anon write access with role-based policies when Supabase Auth is wired in Phase 3.
+
+## Database: `ticker_items` table
+
+Homepage hero live ticker headlines (editable by Editor in Chief at `/desk/newsroom/ticker`):
+
+```sql
+create table ticker_items (
+  id uuid primary key default gen_random_uuid(),
+  headline text not null,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+
+alter table ticker_items enable row level security;
+
+create policy "Public can read ticker items"
+  on ticker_items for select
+  using (true);
+
+create policy "Desk can manage ticker items"
+  on ticker_items for all
+  to anon, authenticated
+  using (true)
+  with check (true);
+```
+
+When `ticker_items` has rows, the homepage uses them instead of auto-generated article headlines.
 
 Example role-based policy (future):
 

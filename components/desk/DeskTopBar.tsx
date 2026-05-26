@@ -12,6 +12,7 @@ import { mailboxUnreadCount } from "./desk-inbox-data";
 import { isWriterShellPath } from "./writer-shell";
 import { getDeskLoginPath } from "@/lib/site-urls";
 import { clearDeskRoleCookie } from "./desk-auth-cookie";
+import { useDeskAuth } from "./DeskAuthContext";
 import { GlobalSearchTrigger } from "./global-search/GlobalSearchTrigger";
 import {
   IconAnalytics,
@@ -78,19 +79,31 @@ export function DeskTopBar() {
   const pathname = usePathname();
   const router = useRouter();
   const { user } = useDesk();
+  const { currentRole } = useDeskAuth();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
   const mailboxUnread = useMemo(() => mailboxUnreadCount(), []);
 
+  const navItems = useMemo(() => {
+    if (currentRole === "principal") {
+      return [
+        ...writerNav,
+        { section: "NEWSROOM", href: "/desk/newsroom/editor", label: "Review Desk", icon: "file" as const },
+        { section: "NEWSROOM", href: "/desk/newsroom/ticker", label: "Live Ticker", icon: "scroll" as const },
+      ];
+    }
+    return writerNav;
+  }, [currentRole]);
+
   const grouped = useMemo(() => {
     const map = new Map<string, DeskNavItem[]>();
-    for (const item of writerNav) {
+    for (const item of navItems) {
       if (!map.has(item.section)) map.set(item.section, []);
       map.get(item.section)!.push(item);
     }
     return Array.from(map.entries());
-  }, []);
+  }, [navItems]);
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -214,7 +227,12 @@ export function DeskTopBar() {
                     </div>
                     <div className="space-y-0.5">
                       {items.map((item) => {
-                        const active = pathname === item.href;
+                        const active =
+                          pathname === item.href ||
+                          (item.href.includes("?") && pathname.startsWith(item.href.split("?")[0])) ||
+                          (item.href === "/desk/newsroom/editor" &&
+                            pathname === "/desk/newsroom/editor" &&
+                            currentRole === "principal");
                         const Icon = iconFor(item.icon);
                         return (
                           <Link

@@ -23,11 +23,12 @@ const heroEase = [0.16, 1, 0.3, 1] as const;
 
 type HomePageClientProps = {
   heroBriefings?: PublicArticleBriefing[] | null;
+  tickerHeadlines?: string[] | null;
 };
 
-export default function HomePageClient({ heroBriefings = null }: HomePageClientProps) {
+export default function HomePageClient({ heroBriefings = null, tickerHeadlines = null }: HomePageClientProps) {
   const sections = buildHomepageSections(heroBriefings);
-  const hero = buildHeroProps(sections);
+  const hero = buildHeroProps(sections, tickerHeadlines);
 
   const reduceMotion = useReducedMotion() === true;
 

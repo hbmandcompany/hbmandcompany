@@ -446,7 +446,7 @@ export function buildHomepageSections(live: PublicArticleBriefing[] | null): Hom
 }
 
 /** Hero-specific derivations (kept here so HomePageClient stays thin). */
-export function buildHeroProps(sections: HomepageSections) {
+export function buildHeroProps(sections: HomepageSections, tickerOverride?: string[] | null) {
   const live = sections.heroBriefings;
   const fallback = buildFallbackSections();
 
@@ -494,7 +494,12 @@ export function buildHeroProps(sections: HomepageSections) {
           { storyId: FALLBACK_WIRE[0].storyId, category: FALLBACK_WIRE[0].category, headline: FALLBACK_WIRE[0].headline, dateline: FALLBACK_WIRE[0].dateline },
           { storyId: FALLBACK_WIRE[1].storyId, category: FALLBACK_WIRE[1].category, headline: FALLBACK_WIRE[1].headline, dateline: FALLBACK_WIRE[1].dateline },
         ],
-    heroTicker: live ? live.map((b) => b.headline) : FALLBACK_WIRE.slice(0, 4).map((w) => w.headline),
+    heroTicker:
+      tickerOverride && tickerOverride.length > 0
+        ? tickerOverride
+        : live
+          ? live.map((b) => b.headline)
+          : FALLBACK_WIRE.slice(0, 4).map((w) => w.headline),
     heroImage: live?.[0]?.heroImageUrl ?? "https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=1200&q=85",
     heroRightTopBriefs: live
       ? live.slice(1, 3).map(briefingToWireBrief)

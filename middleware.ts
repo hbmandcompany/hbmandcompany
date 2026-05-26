@@ -11,6 +11,7 @@ function isDeskLoginPath(pathname: string): boolean {
 }
 
 function isWriterAllowed(pathname: string): boolean {
+  if (pathname.startsWith("/desk/newsroom/ticker")) return false;
   return WRITER_ALLOWED_PREFIXES.some(
     (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
   );

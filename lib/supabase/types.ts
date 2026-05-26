@@ -31,6 +31,14 @@ export type Article = {
   updated_at: string;
 };
 
+export type TickerItem = {
+  id: string;
+  headline: string;
+  sort_order: number;
+  created_at: string;
+  updated_at: string;
+};
+
 export type Database = {
   public: {
     Tables: {
@@ -42,6 +50,16 @@ export type Database = {
           updated_at?: string;
         };
         Update: Partial<Article>;
+        Relationships: [];
+      };
+      ticker_items: {
+        Row: TickerItem;
+        Insert: Omit<TickerItem, "id" | "created_at" | "updated_at"> & {
+          id?: string;
+          created_at?: string;
+          updated_at?: string;
+        };
+        Update: Partial<TickerItem>;
         Relationships: [];
       };
     };

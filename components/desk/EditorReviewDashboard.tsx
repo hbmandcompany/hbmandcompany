@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { clsx } from "clsx";
 import type { Article } from "@/lib/supabase/types";
 import { ArticleWeightBadge } from "./ArticleWeightBadge";
@@ -62,10 +63,25 @@ export function EditorReviewDashboard({
   return (
     <div className="flex min-h-[calc(100dvh-56px)] flex-col">
       <div className={clsx("border-b px-6 py-4", deskPaper.border, deskPaper.pageAlt)}>
-        <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.28em]", deskPaper.inkLabel)}>
-          Editor in Chief
+        <div className="flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.28em]", deskPaper.inkLabel)}>
+              Editor in Chief
+            </div>
+            <h1 className={clsx("mt-1 font-cormorant text-3xl", deskPaper.inkHeading)}>Review Dashboard</h1>
+          </div>
+          <Link
+            href="/desk/newsroom/ticker"
+            className={clsx(
+              "rounded border px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider",
+              deskPaper.border,
+              deskPaper.accent,
+              deskPaper.hover,
+            )}
+          >
+            Edit live ticker →
+          </Link>
         </div>
-        <h1 className={clsx("mt-1 font-cormorant text-3xl", deskPaper.inkHeading)}>Review Dashboard</h1>
       </div>
 
       {loadError ? (
