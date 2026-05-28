@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "@/components/desk/desk-paper";
 import {
@@ -7,6 +8,22 @@ import {
   HOMEPAGE_STUDIO_SLOT_LABELS,
   type HomepageStudioSlot,
 } from "@/lib/desk/homepage-studio";
+
+function scrollSlotIntoPanel(container: HTMLElement, button: HTMLElement) {
+  const containerRect = container.getBoundingClientRect();
+  const buttonRect = button.getBoundingClientRect();
+  const pad = 8;
+
+  if (buttonRect.top >= containerRect.top + pad && buttonRect.bottom <= containerRect.bottom - pad) {
+    return;
+  }
+
+  if (buttonRect.top < containerRect.top + pad) {
+    container.scrollTop -= containerRect.top - buttonRect.top + pad;
+  } else if (buttonRect.bottom > containerRect.bottom - pad) {
+    container.scrollTop += buttonRect.bottom - containerRect.bottom + pad;
+  }
+}
 
 export function StudioPlacementPanel({
   placementSlot,
@@ -21,6 +38,18 @@ export function StudioPlacementPanel({
   onSelectSlot: (slot: HomepageStudioSlot) => void;
   onHoverSlot: (slot: HomepageStudioSlot | null) => void;
 }) {
+  const listRef = useRef<HTMLDivElement>(null);
+  const slotRefs = useRef<Map<HomepageStudioSlot, HTMLButtonElement>>(new Map());
+
+  useEffect(() => {
+    if (!hoveredSlot) return;
+    const container = listRef.current;
+    const button = slotRefs.current.get(hoveredSlot);
+    if (!container || !button) return;
+
+    scrollSlotIntoPanel(container, button);
+  }, [hoveredSlot]);
+
   return (
     <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)} data-studio-placement-panel>
       <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Placement</div>
@@ -28,7 +57,7 @@ export function StudioPlacementPanel({
         Hover a slot to illuminate it on the preview — and vice versa.
       </p>
 
-      <div className="mt-3 max-h-[min(52vh,520px)] space-y-4 overflow-y-auto pr-1">
+      <div ref={listRef} className="mt-3 max-h-[min(52vh,520px)] space-y-4 overflow-y-auto pr-1">
         {HOMEPAGE_STUDIO_SLOT_GROUPS.map((group) => {
           const groupHovered = hoveredSlot ? group.slots.includes(hoveredSlot) : false;
           return (
@@ -49,6 +78,10 @@ export function StudioPlacementPanel({
                   return (
                     <button
                       key={slot}
+                      ref={(el) => {
+                        if (el) slotRefs.current.set(slot, el);
+                        else slotRefs.current.delete(slot);
+                      }}
                       type="button"
                       onClick={() => onSelectSlot(slot)}
                       onMouseEnter={() => onHoverSlot(slot)}

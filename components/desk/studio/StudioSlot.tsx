@@ -82,15 +82,16 @@ export function StudioSlot({
             )}
             aria-hidden
           />
-          <span
-            className={clsx(
-              "pointer-events-none absolute left-2 top-2 z-30 rounded px-2 py-0.5 font-mono-hbm text-[8px] uppercase tracking-[0.18em] transition-colors",
-              isDraft ? "bg-gold/90 text-void" : "bg-obsidian/85 text-silver-dim/80 ring-1 ring-white/10",
-              isHovered && !isDraft && "bg-gold/80 text-void ring-gold/40",
-            )}
-          >
-            {isDraft ? "Your story" : HOMEPAGE_STUDIO_SLOT_LABELS[slotId]}
-          </span>
+          {isHovered ? (
+            <span
+              className={clsx(
+                "pointer-events-none absolute left-2 top-2 z-30 rounded px-2 py-0.5 font-mono-hbm text-[8px] uppercase tracking-[0.18em]",
+                isDraft ? "bg-gold/90 text-void" : "bg-gold/80 text-void ring-1 ring-gold/40",
+              )}
+            >
+              {isDraft ? "Your story" : HOMEPAGE_STUDIO_SLOT_LABELS[slotId]}
+            </span>
+          ) : null}
         </>
       ) : null}
     </div>
