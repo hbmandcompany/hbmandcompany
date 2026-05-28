@@ -2361,6 +2361,7 @@
 .home-studio-canvas[data-studio-section="hero"] .hero-dmn-edition--studio-preview .hero-front-page {
   min-height: 0 !important;
   background: rgba(2, 2, 5, 0.55);
+  align-items: stretch;
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__left,
@@ -2369,50 +2370,179 @@
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__headline {
-  font-size: clamp(1.25rem, 1.7vw, 1.5rem);
-  line-height: 1.1;
+  font-size: clamp(1.32rem, 1.75vw, 1.74rem);
+  line-height: 1.12;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__lead-follow {
+  margin-top: 0.6rem;
+  padding-top: 0.6rem;
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__lead-follow-headline {
-  font-size: 1rem;
+  font-size: 1.03rem;
   line-height: 1.15;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__dek,
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__dek {
+  font-size: 0.84rem;
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__lead-follow-dek {
   font-size: 0.8rem;
-  line-height: 1.45;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__rule {
+  margin-block: 0.55rem;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__briefs {
+  display: flex;
+  flex-direction: column;
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__brief-link {
-  padding-block: 0.2rem;
+  padding-block: 0.18rem;
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__brief-link span {
-  font-size: 0.78rem !important;
-  line-height: 1.3;
+  font-size: 0.72rem !important;
+  line-height: 1.28;
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__right-headline {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   line-height: 1.2;
 }
 
+/* Center column: lead image on top, AD placement below, filling the column height */
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__center,
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__center--split {
+  min-height: 0 !important;
+  height: 100%;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__center--split {
+  grid-template-rows: minmax(0, 1.4fr) 1px minmax(0, 1fr) !important;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__center-half {
+  min-height: 0;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__center-img {
+  height: 100% !important;
+  object-position: center center;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__ad-slot {
+  height: 100%;
+}
+
+/* Right featured media: compact so the right column doesn't tower over left/center */
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__right-media {
-  aspect-ratio: 16 / 9 !important;
+  aspect-ratio: auto !important;
+  height: 150px !important;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__right-block--text .hero-front-page__briefs {
+  max-height: 4.5rem;
+  overflow: hidden;
+}
+
+/* Left column: stack naturally to avoid large empty gaps */
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  min-height: 0;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__rule {
+  margin-block: 0.45rem;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__briefs {
+  min-height: 0;
+  overflow: visible;
 }
 
 @media (min-width: 1024px) {
   .home-studio-canvas[data-studio-section="hero"] .hero-dmn-edition--studio-preview .hero-front-page {
-    grid-template-columns: minmax(0, 1fr) minmax(0, 1.12fr) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 1.16fr) minmax(0, 1.28fr) minmax(0, 1.16fr);
     grid-template-areas: "left center right";
-    min-height: 420px !important;
+    min-height: 390px !important;
   }
+}
 
-  .home-studio-canvas[data-studio-section="hero"] .hero-front-page__center,
-  .home-studio-canvas[data-studio-section="hero"] .hero-front-page__center--split {
-    min-height: 0 !important;
-  }
+/* Hero footer editorial band — compact density when revealed in studio preview */
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial--embedded {
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__section-title {
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__divider {
+  margin-top: 1rem !important;
+  margin-bottom: 1rem !important;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__four-up {
+  grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+  gap: 0.85rem !important;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business {
+  grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.55fr) minmax(0, 0.85fr) !important;
+  gap: 0.85rem !important;
+  margin-top: 0.85rem;
+  padding-top: 0.85rem;
+  align-items: stretch;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-lead .relative {
+  min-height: 0 !important;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-lead .card-3d {
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) !important;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-ad .ad-placement-slot,
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-promo .relative {
+  min-height: 0 !important;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-ad {
+  min-height: 0;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-lead h3,
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-promo h3 {
+  font-size: 1.05rem;
+  line-height: 1.2;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .dmn-editorial__business-lead p {
+  font-size: 0.78rem;
+  line-height: 1.4;
 }
 
 /* Lifestyle — compact band to match Markets density */
