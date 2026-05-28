@@ -10,21 +10,125 @@ import { briefingToMagazineStory } from "@/lib/desk/article-to-briefing";
 
 export type HomepageStudioSlot =
   | "hero-lead"
+  | "hero-follow-up"
+  | "hero-right-featured"
+  | "hero-right-secondary"
+  | "hero-left-0"
+  | "hero-left-1"
+  | "hero-left-2"
+  | "hero-left-3"
+  | "hero-left-4"
+  | "hero-left-5"
+  | "hero-right-top-0"
+  | "hero-right-top-1"
+  | "hero-culture-0"
+  | "hero-culture-1"
   | "editorial-top-0"
   | "editorial-top-1"
   | "editorial-top-2"
   | "editorial-top-3"
+  | "business-list-0"
+  | "business-list-1"
+  | "business-list-2"
   | "business-lead"
-  | "markets-lead";
+  | "markets-lead"
+  | "markets-wire-0"
+  | "markets-wire-1"
+  | "markets-wire-2"
+  | "lifestyle-food-lead"
+  | "lifestyle-food-secondary-0"
+  | "lifestyle-food-secondary-1"
+  | "lifestyle-food-col2-0"
+  | "lifestyle-food-col2-1"
+  | "lifestyle-food-thumb-0"
+  | "lifestyle-arts-0"
+  | "lifestyle-arts-1"
+  | "lifestyle-arts-2"
+  | "column-0-lead"
+  | "column-1-lead"
+  | "column-2-lead"
+  | "column-3-lead"
+  | "column-0-more-0"
+  | "column-0-more-1"
+  | "column-0-more-2"
+  | "column-0-more-3"
+  | "column-0-more-4"
+  | "column-1-more-0"
+  | "column-1-more-1"
+  | "column-1-more-2"
+  | "column-1-more-3"
+  | "column-1-more-4"
+  | "column-2-more-0"
+  | "column-2-more-1"
+  | "column-2-more-2"
+  | "column-2-more-3"
+  | "column-2-more-4"
+  | "column-3-more-0"
+  | "column-3-more-1"
+  | "column-3-more-2"
+  | "column-3-more-3"
+  | "column-3-more-4";
 
 export const HOMEPAGE_STUDIO_SLOT_LABELS: Record<HomepageStudioSlot, string> = {
   "hero-lead": "Hero lead",
+  "hero-follow-up": "Hero follow up",
+  "hero-right-featured": "Hero featured right",
+  "hero-right-secondary": "Hero secondary right",
+  "hero-left-0": "Left brief 1",
+  "hero-left-1": "Left brief 2",
+  "hero-left-2": "Left brief 3",
+  "hero-left-3": "Left brief 4",
+  "hero-left-4": "Left brief 5",
+  "hero-left-5": "Left brief 6",
+  "hero-right-top-0": "Right brief 1",
+  "hero-right-top-1": "Right brief 2",
+  "hero-culture-0": "Culture brief 1",
+  "hero-culture-1": "Culture brief 2",
   "editorial-top-0": "Grid · 1",
   "editorial-top-1": "Grid · 2",
   "editorial-top-2": "Grid · 3",
   "editorial-top-3": "Grid · 4",
+  "business-list-0": "Markets list 1",
+  "business-list-1": "Markets list 2",
+  "business-list-2": "Markets list 3",
   "business-lead": "Markets lead",
   "markets-lead": "Wire lead",
+  "markets-wire-0": "Wire item 1",
+  "markets-wire-1": "Wire item 2",
+  "markets-wire-2": "Wire item 3",
+  "lifestyle-food-lead": "Culture lead",
+  "lifestyle-food-secondary-0": "Culture text 1",
+  "lifestyle-food-secondary-1": "Culture text 2",
+  "lifestyle-food-col2-0": "Culture feature 1",
+  "lifestyle-food-col2-1": "Culture feature 2",
+  "lifestyle-food-thumb-0": "Culture thumb",
+  "lifestyle-arts-0": "Arts item 1",
+  "lifestyle-arts-1": "Arts item 2",
+  "lifestyle-arts-2": "Arts item 3",
+  "column-0-lead": "Music lead",
+  "column-1-lead": "Culture lead",
+  "column-2-lead": "Markets lead",
+  "column-3-lead": "Film lead",
+  "column-0-more-0": "Music more 1",
+  "column-0-more-1": "Music more 2",
+  "column-0-more-2": "Music more 3",
+  "column-0-more-3": "Music more 4",
+  "column-0-more-4": "Music more 5",
+  "column-1-more-0": "Culture more 1",
+  "column-1-more-1": "Culture more 2",
+  "column-1-more-2": "Culture more 3",
+  "column-1-more-3": "Culture more 4",
+  "column-1-more-4": "Culture more 5",
+  "column-2-more-0": "Markets more 1",
+  "column-2-more-1": "Markets more 2",
+  "column-2-more-2": "Markets more 3",
+  "column-2-more-3": "Markets more 4",
+  "column-2-more-4": "Markets more 5",
+  "column-3-more-0": "Film more 1",
+  "column-3-more-1": "Film more 2",
+  "column-3-more-2": "Film more 3",
+  "column-3-more-3": "Film more 4",
+  "column-3-more-4": "Film more 5",
 };
 
 export const HOMEPAGE_STUDIO_SLOT_GROUPS: {
@@ -32,8 +136,58 @@ export const HOMEPAGE_STUDIO_SLOT_GROUPS: {
   slots: HomepageStudioSlot[];
 }[] = [
   { label: "Hero", slots: ["hero-lead"] },
+  {
+    label: "Hero stories",
+    slots: ["hero-follow-up", "hero-right-featured", "hero-right-secondary"],
+  },
+  {
+    label: "Hero briefs",
+    slots: [
+      "hero-left-0",
+      "hero-left-1",
+      "hero-left-2",
+      "hero-left-3",
+      "hero-left-4",
+      "hero-left-5",
+      "hero-right-top-0",
+      "hero-right-top-1",
+      "hero-culture-0",
+      "hero-culture-1",
+    ],
+  },
   { label: "Editorial grid", slots: ["editorial-top-0", "editorial-top-1", "editorial-top-2", "editorial-top-3"] },
-  { label: "Markets", slots: ["business-lead", "markets-lead"] },
+  { label: "Culture/Markets block", slots: ["business-list-0", "business-list-1", "business-list-2", "business-lead"] },
+  { label: "Lifestyle band", slots: ["lifestyle-food-lead", "lifestyle-food-secondary-0", "lifestyle-food-secondary-1", "lifestyle-food-col2-0", "lifestyle-food-col2-1", "lifestyle-food-thumb-0", "lifestyle-arts-0", "lifestyle-arts-1", "lifestyle-arts-2"] },
+  { label: "Markets wire", slots: ["markets-lead", "markets-wire-0", "markets-wire-1", "markets-wire-2"] },
+  {
+    label: "Columns",
+    slots: [
+      "column-0-lead",
+      "column-0-more-0",
+      "column-0-more-1",
+      "column-0-more-2",
+      "column-0-more-3",
+      "column-0-more-4",
+      "column-1-lead",
+      "column-1-more-0",
+      "column-1-more-1",
+      "column-1-more-2",
+      "column-1-more-3",
+      "column-1-more-4",
+      "column-2-lead",
+      "column-2-more-0",
+      "column-2-more-1",
+      "column-2-more-2",
+      "column-2-more-3",
+      "column-2-more-4",
+      "column-3-lead",
+      "column-3-more-0",
+      "column-3-more-1",
+      "column-3-more-2",
+      "column-3-more-3",
+      "column-3-more-4",
+    ],
+  },
 ];
 
 /** Approximate height of compact studio homepage (hero + culture band only). */
@@ -85,13 +239,39 @@ export function buildStudioHomepageSections(
   const sections = buildHomepageSections(live);
   const wire = draftWire(draft);
   const lead = draftLead(draft);
+  const studioLead = { storyId: lead.storyId, headline: lead.headline, imageSrc: lead.imageSrc ?? "", imageAlt: lead.imageAlt };
+
+  let heroBriefings = sections.heroBriefings;
+  if (placementSlot === "hero-lead") {
+    heroBriefings = [
+      {
+        id: draft.storyId,
+        desk: "Desk",
+        section: draft.category,
+        headline: draft.headline.trim() || "Untitled story",
+        dek: draft.dek.trim(),
+        byline: "HBM Editorial",
+        publishedAt: "Preview",
+        lede: draft.dek.trim(),
+        body: [],
+        metrics: [],
+        related: [],
+        heroImageUrl: draft.imageSrc ?? null,
+      },
+      ...(sections.heroBriefings ?? []),
+    ];
+  }
 
   const editorialTopRow = [...sections.editorialTopRow];
   if (placementSlot.startsWith("editorial-top-")) {
     const index = Number(placementSlot.split("-").pop());
     if (index >= 0 && index < 4) editorialTopRow[index] = wire;
-  } else {
-    editorialTopRow[0] = wire;
+  }
+
+  const editorialBusinessList = [...sections.editorialBusinessList];
+  if (placementSlot.startsWith("business-list-")) {
+    const index = Number(placementSlot.split("-").pop());
+    if (index >= 0 && index < editorialBusinessList.length) editorialBusinessList[index] = wire;
   }
 
   let editorialBusinessLead = sections.editorialBusinessLead;
@@ -104,11 +284,65 @@ export function buildStudioHomepageSections(
     marketsLead = lead;
   }
 
+  const marketsWire = [...sections.marketsWire];
+  if (placementSlot.startsWith("markets-wire-")) {
+    const index = Number(placementSlot.split("-").pop());
+    if (index >= 0 && index < marketsWire.length) marketsWire[index] = wire;
+  }
+
+  const lifestyle = {
+    ...sections.lifestyle,
+    foodSecondary: [...sections.lifestyle.foodSecondary],
+    foodColTwo: [...sections.lifestyle.foodColTwo],
+    foodThumbs: [...sections.lifestyle.foodThumbs],
+    artsStories: [...sections.lifestyle.artsStories],
+  };
+  if (placementSlot === "lifestyle-food-lead") lifestyle.foodLead = draftWire(draft);
+  if (placementSlot.startsWith("lifestyle-food-secondary-")) {
+    const index = Number(placementSlot.split("-").pop());
+    if (index >= 0 && index < lifestyle.foodSecondary.length) lifestyle.foodSecondary[index] = draftWire(draft);
+  }
+  if (placementSlot.startsWith("lifestyle-food-col2-")) {
+    const index = Number(placementSlot.split("-").pop());
+    if (index >= 0 && index < lifestyle.foodColTwo.length) lifestyle.foodColTwo[index] = draftWire(draft);
+  }
+  if (placementSlot === "lifestyle-food-thumb-0" && lifestyle.foodThumbs.length > 0) lifestyle.foodThumbs[0] = draftWire(draft);
+  if (placementSlot.startsWith("lifestyle-arts-")) {
+    const index = Number(placementSlot.split("-").pop());
+    if (index >= 0 && index < lifestyle.artsStories.length) lifestyle.artsStories[index] = draftWire(draft);
+  }
+
+  const broadsheetColumns = sections.broadsheetColumns.map((column) => ({ ...column, more: [...column.more] }));
+  if (placementSlot.startsWith("column-") && placementSlot.endsWith("-lead")) {
+    const columnIndex = Number(placementSlot.split("-")[1]);
+    if (columnIndex >= 0 && columnIndex < broadsheetColumns.length) {
+      broadsheetColumns[columnIndex].lead = studioLead;
+    }
+  }
+  if (placementSlot.startsWith("column-") && placementSlot.includes("-more-")) {
+    const [, columnToken, , moreToken] = placementSlot.split("-");
+    const columnIndex = Number(columnToken);
+    const moreIndex = Number(moreToken);
+    if (
+      columnIndex >= 0 &&
+      columnIndex < broadsheetColumns.length &&
+      moreIndex >= 0 &&
+      moreIndex < broadsheetColumns[columnIndex].more.length
+    ) {
+      broadsheetColumns[columnIndex].more[moreIndex] = { storyId: draft.storyId, headline: draft.headline.trim() || "Untitled story" };
+    }
+  }
+
   return {
     ...sections,
+    heroBriefings,
     editorialTopRow,
+    editorialBusinessList,
     editorialBusinessLead,
+    lifestyle,
+    marketsWire,
     marketsLead,
+    broadsheetColumns,
   };
 }
 
@@ -119,11 +353,6 @@ export function buildStudioHeroProps(
   tickerOverride?: string[] | null,
 ) {
   const hero = buildHeroProps(sections, tickerOverride);
-
-  if (placementSlot !== "hero-lead") {
-    return hero;
-  }
-
   const briefing: PublicArticleBriefing = {
     id: draft.storyId,
     desk: "Desk",
@@ -139,9 +368,49 @@ export function buildStudioHeroProps(
     heroImageUrl: draft.imageSrc ?? null,
   };
 
+  const story = briefingToMagazineStory(briefing, draft.imageSrc);
+  const wire = draftWire(draft);
+
+  if (placementSlot === "hero-follow-up") {
+    return { ...hero, heroFollowUp: story };
+  }
+  if (placementSlot === "hero-right-featured") {
+    return { ...hero, heroRightFeatured: story };
+  }
+  if (placementSlot === "hero-right-secondary") {
+    return { ...hero, heroRightSecondary: story };
+  }
+  if (placementSlot.startsWith("hero-left-")) {
+    const idx = Number(placementSlot.split("-").pop());
+    if (idx >= 0 && idx < hero.heroLeft.length) {
+      const heroLeft = [...hero.heroLeft];
+      heroLeft[idx] = wire;
+      return { ...hero, heroLeft };
+    }
+  }
+  if (placementSlot.startsWith("hero-right-top-")) {
+    const idx = Number(placementSlot.split("-").pop());
+    if (idx >= 0 && idx < hero.heroRightTopBriefs.length) {
+      const heroRightTopBriefs = [...hero.heroRightTopBriefs];
+      heroRightTopBriefs[idx] = wire;
+      return { ...hero, heroRightTopBriefs };
+    }
+  }
+  if (placementSlot.startsWith("hero-culture-")) {
+    const idx = Number(placementSlot.split("-").pop());
+    if (idx >= 0 && idx < hero.heroCulture.length) {
+      const heroCulture = [...hero.heroCulture];
+      heroCulture[idx] = wire;
+      return { ...hero, heroCulture };
+    }
+  }
+  if (placementSlot !== "hero-lead") {
+    return hero;
+  }
+
   return {
     ...hero,
-    heroLead: briefingToMagazineStory(briefing, draft.imageSrc),
+    heroLead: story,
     heroImage: draft.imageSrc ?? hero.heroImage,
   };
 }

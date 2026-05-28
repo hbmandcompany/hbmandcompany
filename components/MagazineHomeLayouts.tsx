@@ -59,16 +59,19 @@ function RecordThumbCard({ item, className }: { item: WireBrief; className?: str
   );
 }
 
-function RecordHeadlineRow({ item }: { item: WireBrief }) {
-  return (
-    <Link
-      href={`/newspaper?story=${item.storyId}`}
-      className="group grid grid-cols-[72px_1fr] gap-3 border-b border-white/[0.06] py-3 last:border-b-0 hover:bg-white/[0.02]"
-    >
+function RecordHeadlineRow({
+  item,
+  studio,
+  slotId,
+}: {
+  item: WireBrief;
+  studio?: HomepageGridStudioConfig;
+  slotId?: HomepageStudioSlot;
+}) {
+  const row = (
+    <>
       <div className="relative aspect-square overflow-hidden bg-midnight">
-        {item.imageSrc ? (
-          <Image src={item.imageSrc} alt="" fill className="object-cover" unoptimized />
-        ) : null}
+        {item.imageSrc ? <Image src={item.imageSrc} alt="" fill className="object-cover" unoptimized /> : null}
       </div>
       <div className="min-w-0">
         <span className="font-mono-hbm text-[7px] uppercase tracking-[0.22em] text-garnet/55">{item.category}</span>
@@ -77,6 +80,28 @@ function RecordHeadlineRow({ item }: { item: WireBrief }) {
         </p>
         <span className="font-mono-hbm mt-1 block text-[7px] text-silver-dim/42">{item.dateline}</span>
       </div>
+    </>
+  );
+
+  if (studio && slotId) {
+    return (
+      <StudioSlot
+        slotId={slotId}
+        selected={studio.selectedSlot === slotId}
+        isDraft={item.storyId === studio.draftStoryId}
+        onSelect={studio.onSelectSlot}
+      >
+        <div className="group grid grid-cols-[72px_1fr] gap-3 border-b border-white/[0.06] py-3 last:border-b-0">{row}</div>
+      </StudioSlot>
+    );
+  }
+
+  return (
+    <Link
+      href={`/newspaper?story=${item.storyId}`}
+      className="group grid grid-cols-[72px_1fr] gap-3 border-b border-white/[0.06] py-3 last:border-b-0 hover:bg-white/[0.02]"
+    >
+      {row}
     </Link>
   );
 }
@@ -153,16 +178,43 @@ function DmnTopCard({
   );
 }
 
-function DmnTextStory({ item }: { item: WireBrief }) {
+function DmnTextStory({
+  item,
+  studio,
+  slotId,
+}: {
+  item: WireBrief;
+  studio?: HomepageGridStudioConfig;
+  slotId?: HomepageStudioSlot;
+}) {
+  const story = (
+    <>
+      <DmnCategoryLabel>{item.category}</DmnCategoryLabel>
+      <p className="mt-1 font-cormorant text-sm font-light leading-snug text-cream/85 group-hover:text-gold line-clamp-3 md:text-[15px]">
+        {item.headline}
+      </p>
+    </>
+  );
+
+  if (studio && slotId) {
+    return (
+      <StudioSlot
+        slotId={slotId}
+        selected={studio.selectedSlot === slotId}
+        isDraft={item.storyId === studio.draftStoryId}
+        onSelect={studio.onSelectSlot}
+      >
+        <div className="dmn-editorial__text-story group block border-b border-white/[0.06] py-3.5 last:border-b-0">{story}</div>
+      </StudioSlot>
+    );
+  }
+
   return (
     <Link
       href={`/newspaper?story=${item.storyId}`}
       className="dmn-editorial__text-story group block border-b border-white/[0.06] py-3.5 last:border-b-0 hover:bg-white/[0.02]"
     >
-      <DmnCategoryLabel>{item.category}</DmnCategoryLabel>
-      <p className="mt-1 font-cormorant text-sm font-light leading-snug text-cream/85 group-hover:text-gold line-clamp-3 md:text-[15px]">
-        {item.headline}
-      </p>
+      {story}
     </Link>
   );
 }
@@ -243,8 +295,8 @@ export function DmnEditorialGrid({
             className="dmn-editorial__business-list rounded-lg border border-white/[0.08] bg-obsidian/80 px-4 md:px-5"
             aria-label={`${businessHeading} headlines`}
           >
-            {businessList.map((item) => (
-              <DmnTextStory key={item.storyId} item={item} />
+            {businessList.map((item, index) => (
+              <DmnTextStory key={item.storyId} item={item} studio={studio} slotId={`business-list-${index}` as HomepageStudioSlot} />
             ))}
           </nav>
 
@@ -498,12 +550,44 @@ export type BroadsheetColumn = {
   more: { storyId: string; headline: string }[];
 };
 
-function BroadsheetColumnBlock({ column }: { column: BroadsheetColumn }) {
+function BroadsheetColumnBlock({
+  column,
+  studio,
+  columnIndex,
+}: {
+  column: BroadsheetColumn;
+  studio?: HomepageGridStudioConfig;
+  columnIndex: number;
+}) {
   return (
     <div className="broadsheet-four-col__column">
       <div className="broadsheet-four-col__column-header">
         <h3 className="broadsheet-four-col__column-title font-robinhood">{column.title}</h3>
       </div>
+      {studio ? (
+        <StudioSlot
+          slotId={`column-${columnIndex}-lead` as HomepageStudioSlot}
+          selected={studio.selectedSlot === (`column-${columnIndex}-lead` as HomepageStudioSlot)}
+          isDraft={column.lead.storyId === studio.draftStoryId}
+          onSelect={studio.onSelectSlot}
+        >
+          <div className="broadsheet-four-col__lead group block">
+            <figure className="broadsheet-four-col__lead-media relative aspect-[16/10] w-full overflow-hidden bg-midnight">
+              <Image
+                src={column.lead.imageSrc}
+                alt={column.lead.imageAlt ?? column.lead.headline}
+                fill
+                className="object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+                sizes="(max-width: 768px) 100vw, 25vw"
+                unoptimized
+              />
+            </figure>
+            <h4 className="broadsheet-four-col__lead-headline font-robinhood group-hover:text-gold">
+              {column.lead.headline}
+            </h4>
+          </div>
+        </StudioSlot>
+      ) : (
       <Link
         href={`/newspaper?story=${column.lead.storyId}`}
         className="broadsheet-four-col__lead group block"
@@ -522,15 +606,27 @@ function BroadsheetColumnBlock({ column }: { column: BroadsheetColumn }) {
           {column.lead.headline}
         </h4>
       </Link>
+      )}
       <ul className="broadsheet-four-col__list">
-        {column.more.map((item) => (
+        {column.more.map((item, moreIndex) => (
           <li key={item.storyId} className="broadsheet-four-col__list-item">
-            <Link
-              href={`/newspaper?story=${item.storyId}`}
-              className="broadsheet-four-col__list-link font-robinhood group"
-            >
-              {item.headline}
-            </Link>
+            {studio ? (
+              <StudioSlot
+                slotId={`column-${columnIndex}-more-${moreIndex}` as HomepageStudioSlot}
+                selected={studio.selectedSlot === (`column-${columnIndex}-more-${moreIndex}` as HomepageStudioSlot)}
+                isDraft={item.storyId === studio.draftStoryId}
+                onSelect={studio.onSelectSlot}
+              >
+                <div className="broadsheet-four-col__list-link font-robinhood group">{item.headline}</div>
+              </StudioSlot>
+            ) : (
+              <Link
+                href={`/newspaper?story=${item.storyId}`}
+                className="broadsheet-four-col__list-link font-robinhood group"
+              >
+                {item.headline}
+              </Link>
+            )}
           </li>
         ))}
       </ul>
@@ -539,12 +635,18 @@ function BroadsheetColumnBlock({ column }: { column: BroadsheetColumn }) {
 }
 
 /** Four-column broadsheet wire with lead image + headline stack per column. */
-export function BroadsheetFourColumnGrid({ columns }: { columns: BroadsheetColumn[] }) {
+export function BroadsheetFourColumnGrid({
+  columns,
+  studio,
+}: {
+  columns: BroadsheetColumn[];
+  studio?: HomepageGridStudioConfig;
+}) {
   return (
     <div className="broadsheet-four-col">
       <div className="broadsheet-four-col__grid">
-        {columns.slice(0, 4).map((column) => (
-          <BroadsheetColumnBlock key={column.title} column={column} />
+        {columns.slice(0, 4).map((column, index) => (
+          <BroadsheetColumnBlock key={column.title} column={column} studio={studio} columnIndex={index} />
         ))}
       </div>
     </div>
@@ -674,8 +776,8 @@ export function DeskWireNewsGrid({
       )}
 
       <div className="desk-wire-grid__list border border-white/[0.08] bg-obsidian/90">
-        {stories.map((w) => (
-          <RecordHeadlineRow key={w.storyId} item={w} />
+        {stories.map((w, index) => (
+          <RecordHeadlineRow key={w.storyId} item={w} studio={studio} slotId={`markets-wire-${index}` as HomepageStudioSlot} />
         ))}
       </div>
 

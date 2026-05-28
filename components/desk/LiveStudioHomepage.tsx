@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { clsx } from "clsx";
 import HomePageClient from "@/components/HomePageClient";
+import type { StudioSectionView } from "@/components/HomePageClient";
 import { deskPaper } from "@/components/desk/desk-paper";
 import { articleToBriefing } from "@/lib/desk/article-to-briefing";
 import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
@@ -15,6 +16,13 @@ import type { EditorImageState } from "./EditorImagePanel";
 
 /** Matches the write editor card content height (headline + dek + ~18-row body). */
 export const STUDIO_CARD_VIEWPORT_HEIGHT = 520;
+
+const STUDIO_SECTION_OPTIONS: { id: StudioSectionView; label: string }[] = [
+  { id: "hero", label: "Hero" },
+  { id: "lifestyle", label: "Lifestyle" },
+  { id: "markets", label: "Markets" },
+  { id: "columns", label: "Columns" },
+];
 
 export function LiveStudioHomepage({
   storyId,
@@ -43,6 +51,7 @@ export function LiveStudioHomepage({
   const viewportRef = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(0.32);
   const [pageHeight, setPageHeight] = useState(STUDIO_COMPACT_PAGE_HEIGHT);
+  const [sectionView, setSectionView] = useState<StudioSectionView>("hero");
   const [publishedBriefings, setPublishedBriefings] = useState<ReturnType<typeof articleToBriefing>[] | null>(null);
 
   useEffect(() => {
@@ -78,7 +87,7 @@ export function LiveStudioHomepage({
     ro.observe(viewport);
     ro.observe(canvas);
     return () => ro.disconnect();
-  }, [publishedBriefings, headline, dek, section, heroImage?.url, placementSlot]);
+  }, [publishedBriefings, headline, dek, section, heroImage?.url, placementSlot, sectionView]);
 
   const draftStoryId = storyId ?? "studio-draft";
 
@@ -126,6 +135,23 @@ export function LiveStudioHomepage({
             deskPaper.inkBody,
           )}
         />
+        <div className={clsx("mt-3 flex flex-wrap items-center gap-1 rounded-md border p-0.5", deskPaper.border)}>
+          {STUDIO_SECTION_OPTIONS.map((option) => (
+            <button
+              key={option.id}
+              type="button"
+              onClick={() => setSectionView(option.id)}
+              className={clsx(
+                "rounded px-2.5 py-1 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
+                sectionView === option.id
+                  ? clsx(deskPaper.activeNav, deskPaper.inkHeading)
+                  : clsx(deskPaper.inkMeta, deskPaper.hover),
+              )}
+            >
+              {option.label}
+            </button>
+          ))}
+        </div>
       </div>
 
       <div
@@ -149,7 +175,12 @@ export function LiveStudioHomepage({
               transformOrigin: "top left",
             }}
           >
-            <HomePageClient heroBriefings={publishedBriefings} studio={studio} studioCompact />
+            <HomePageClient
+              heroBriefings={publishedBriefings}
+              studio={studio}
+              studioCompact={false}
+              studioSection={sectionView}
+            />
           </div>
         </div>
         <div className="pointer-events-none absolute bottom-2 right-2 rounded bg-obsidian/80 px-2 py-0.5 font-robinhood text-[9px] tabular-nums text-silver-dim/50 ring-1 ring-white/10">

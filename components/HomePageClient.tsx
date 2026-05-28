@@ -34,12 +34,15 @@ type HomePageStudioProps = {
   onSelectSlot: (slot: HomepageStudioSlot) => void;
 };
 
+export type StudioSectionView = "hero" | "lifestyle" | "markets" | "columns" | "all";
+
 type HomePageClientProps = {
   heroBriefings?: PublicArticleBriefing[] | null;
   tickerHeadlines?: string[] | null;
   studio?: HomePageStudioProps;
   /** Desk Live Studio: hero + culture band only (fits write-card viewport). */
   studioCompact?: boolean;
+  studioSection?: StudioSectionView;
 };
 
 export default function HomePageClient({
@@ -47,6 +50,7 @@ export default function HomePageClient({
   tickerHeadlines = null,
   studio,
   studioCompact = false,
+  studioSection = "all",
 }: HomePageClientProps) {
   const sections = studio
     ? buildStudioHomepageSections(heroBriefings, studio.draft, studio.placementSlot)
@@ -86,9 +90,15 @@ export default function HomePageClient({
     },
   };
 
+  const showHero = studioSection === "all" || studioSection === "hero";
+  const showLifestyle = studioSection === "all" || studioSection === "lifestyle";
+  const showMarkets = studioSection === "all" || studioSection === "markets";
+  const showColumns = studioSection === "all" || studioSection === "columns";
+
   return (
     <>
       <div className="font-robinhood font-normal tracking-normal antialiased home-robinhood">
+      {showHero ? (
       <section
         className="home-front-unified relative flex flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+0.35rem)] pb-10 md:pt-[calc(env(safe-area-inset-top,0px)+0.5rem)] md:pb-12"
         aria-label="Front page"
@@ -159,9 +169,11 @@ export default function HomePageClient({
           </motion.div>
         </motion.div>
       </section>
+      ) : null}
 
       {studioCompact ? null : (
         <>
+      {showHero ? (
       <section className="relative overflow-x-hidden bg-void py-4 md:py-5" aria-label="Thesis">
         <motion.div
           className="pointer-events-none absolute inset-0 opacity-[0.14]"
@@ -177,15 +189,19 @@ export default function HomePageClient({
           </SectionReveal>
         </div>
       </section>
+      ) : null}
 
+      {showLifestyle ? (
       <section className="relative bg-void py-10 md:py-12" aria-label="Music and culture wire">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
-            <MagazineLifestyleGrid data={sections.lifestyle} />
+            <MagazineLifestyleGrid data={sections.lifestyle} studio={studioGrid} />
           </SectionReveal>
         </div>
       </section>
+      ) : null}
 
+      {showMarkets ? (
       <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
@@ -197,7 +213,9 @@ export default function HomePageClient({
           </SectionReveal>
         </div>
       </section>
+      ) : null}
 
+      {showMarkets ? (
       <section className="relative bg-void pb-10 md:pb-12" aria-label="Advertisement">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
@@ -207,14 +225,17 @@ export default function HomePageClient({
           </SectionReveal>
         </div>
       </section>
+      ) : null}
 
+      {showColumns ? (
       <section className="relative bg-void py-10 md:py-12" aria-label="Section fronts">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
-            <BroadsheetFourColumnGrid columns={sections.broadsheetColumns} />
+            <BroadsheetFourColumnGrid columns={sections.broadsheetColumns} studio={studioGrid} />
           </SectionReveal>
         </div>
       </section>
+      ) : null}
 
       <FooterDark typography="robinhood" showUpperBrandVoting={false} />
         </>

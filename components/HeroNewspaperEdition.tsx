@@ -26,18 +26,43 @@ const heroNavLinks = [
   { label: "Culture", href: "/culture" },
 ] as const;
 
-function HeroBriefLink({ item }: { item: WireBrief }) {
+function HeroBriefLink({
+  item,
+  studio,
+  slotId,
+}: {
+  item: WireBrief;
+  studio?: HeroStudioConfig;
+  slotId?: HomepageStudioSlot;
+}) {
+  const content = (
+    <span className="font-robinhood text-[13px] leading-snug text-silver-dim/72 transition-colors group-hover:text-gold md:text-sm">
+      <span className="mr-2 text-gold/45" aria-hidden>
+        –
+      </span>
+      {item.headline}
+    </span>
+  );
+
+  if (studio && slotId) {
+    return (
+      <StudioSlot
+        slotId={slotId}
+        selected={studio.selectedSlot === slotId}
+        isDraft={item.storyId === studio.draftStoryId}
+        onSelect={studio.onSelectSlot}
+      >
+        <div className="hero-front-page__brief-link group block py-2">{content}</div>
+      </StudioSlot>
+    );
+  }
+
   return (
     <Link
       href={`/newspaper?story=${item.storyId}`}
       className="hero-front-page__brief-link group block py-2 outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
     >
-      <span className="font-robinhood text-[13px] leading-snug text-silver-dim/72 transition-colors group-hover:text-gold md:text-sm">
-        <span className="mr-2 text-gold/45" aria-hidden>
-          –
-        </span>
-        {item.headline}
-      </span>
+      {content}
     </Link>
   );
 }
@@ -205,21 +230,34 @@ export function HeroNewspaperEdition({
             {leadFollowUp ? (
               <article className="hero-front-page__lead-follow">
                 <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>
-                <Link
-                  href={`/newspaper?story=${leadFollowUp.storyId}`}
-                  className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
-                >
-                  <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88 transition-colors group-hover:text-gold">
-                    {leadFollowUp.headline}
-                  </h3>
-                </Link>
+                {studio ? (
+                  <StudioSlot
+                    slotId="hero-follow-up"
+                    selected={studio.selectedSlot === "hero-follow-up"}
+                    isDraft={leadFollowUp.storyId === studio.draftStoryId}
+                    onSelect={studio.onSelectSlot}
+                  >
+                    <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88">
+                      {leadFollowUp.headline}
+                    </h3>
+                  </StudioSlot>
+                ) : (
+                  <Link
+                    href={`/newspaper?story=${leadFollowUp.storyId}`}
+                    className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
+                  >
+                    <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88 transition-colors group-hover:text-gold">
+                      {leadFollowUp.headline}
+                    </h3>
+                  </Link>
+                )}
                 <p className="hero-front-page__lead-follow-dek font-robinhood text-silver-dim/68">{leadFollowUp.dek}</p>
               </article>
             ) : null}
             <div className="hero-front-page__rule" aria-hidden />
             <nav className="hero-front-page__briefs" aria-label="More headlines">
-              {leftBriefs.slice(0, 6).map((item) => (
-                <HeroBriefLink key={item.storyId} item={item} />
+              {leftBriefs.slice(0, 6).map((item, index) => (
+                <HeroBriefLink key={item.storyId} item={item} studio={studio} slotId={`hero-left-${index}` as HomepageStudioSlot} />
               ))}
             </nav>
           </div>
@@ -238,6 +276,32 @@ export function HeroNewspaperEdition({
 
           <aside className="hero-front-page__right">
             <div className="hero-front-page__right-block">
+              {studio ? (
+                <StudioSlot
+                  slotId="hero-right-featured"
+                  selected={studio.selectedSlot === "hero-right-featured"}
+                  isDraft={rightFeatured.storyId === studio.draftStoryId}
+                  onSelect={studio.onSelectSlot}
+                >
+                  <div className="group block">
+                    {rightFeatured.imageSrc ? (
+                      <figure className="hero-front-page__right-media relative m-0 aspect-video w-full overflow-hidden bg-midnight">
+                        <Image
+                          src={rightFeatured.imageSrc}
+                          alt={rightFeatured.imageAlt ?? rightFeatured.headline}
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 767px) 100vw, 28vw"
+                        />
+                      </figure>
+                    ) : null}
+                    <span className="hero-front-page__category mt-3 font-mono-hbm">{rightFeatured.category}</span>
+                    <h3 className="hero-front-page__right-headline font-cormorant font-semibold text-cream/90">
+                      {rightFeatured.headline}
+                    </h3>
+                  </div>
+                </StudioSlot>
+              ) : (
               <Link
                 href={`/newspaper?story=${rightFeatured.storyId}`}
                 className="group block outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
@@ -258,14 +322,33 @@ export function HeroNewspaperEdition({
                   {rightFeatured.headline}
                 </h3>
               </Link>
+              )}
               <div className="mt-2">
-                {rightTopBriefs.map((item) => (
-                  <HeroBriefLink key={item.storyId} item={item} />
+                {rightTopBriefs.map((item, index) => (
+                  <HeroBriefLink key={item.storyId} item={item} studio={studio} slotId={`hero-right-top-${index}` as HomepageStudioSlot} />
                 ))}
               </div>
             </div>
             <div className="hero-front-page__rule hero-front-page__rule--horizontal" aria-hidden />
             <div className="hero-front-page__right-block hero-front-page__right-block--text">
+              {studio ? (
+                <StudioSlot
+                  slotId="hero-right-secondary"
+                  selected={studio.selectedSlot === "hero-right-secondary"}
+                  isDraft={rightSecondary.storyId === studio.draftStoryId}
+                  onSelect={studio.onSelectSlot}
+                >
+                  <div className="group block">
+                    <span className="hero-front-page__category font-mono-hbm">{rightSecondary.category}</span>
+                    <h3 className="hero-front-page__right-headline font-cormorant font-semibold text-cream/90">
+                      {rightSecondary.headline}
+                    </h3>
+                    <p className="mt-2 font-robinhood text-[13px] leading-snug text-silver-dim/68 line-clamp-3">
+                      {rightSecondary.dek}
+                    </p>
+                  </div>
+                </StudioSlot>
+              ) : (
               <Link
                 href={`/newspaper?story=${rightSecondary.storyId}`}
                 className="group block outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
@@ -278,10 +361,11 @@ export function HeroNewspaperEdition({
                   {rightSecondary.dek}
                 </p>
               </Link>
+              )}
               {rightSecondaryBriefs && rightSecondaryBriefs.length > 0 ? (
                 <nav className="hero-front-page__briefs mt-3" aria-label="Related culture headlines">
-                  {rightSecondaryBriefs.map((item) => (
-                    <HeroBriefLink key={item.storyId} item={item} />
+                  {rightSecondaryBriefs.map((item, index) => (
+                    <HeroBriefLink key={item.storyId} item={item} studio={studio} slotId={`hero-culture-${index}` as HomepageStudioSlot} />
                   ))}
                 </nav>
               ) : null}
