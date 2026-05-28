@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { StudioSlot } from "@/components/desk/studio/StudioSlot";
-import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
+import type { HomepageStudioCanvasConfig, HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 import { getShopUrl } from "@/lib/site-urls";
 import type { MagazineStory } from "@/components/MagazineStoryCards";
 import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
@@ -32,7 +32,7 @@ function HeroBriefLink({
   slotId,
 }: {
   item: WireBrief;
-  studio?: HeroStudioConfig;
+  studio?: HomepageStudioCanvasConfig;
   slotId?: HomepageStudioSlot;
 }) {
   const content = (
@@ -46,12 +46,7 @@ function HeroBriefLink({
 
   if (studio && slotId) {
     return (
-      <StudioSlot
-        slotId={slotId}
-        selected={studio.selectedSlot === slotId}
-        isDraft={item.storyId === studio.draftStoryId}
-        onSelect={studio.onSelectSlot}
-      >
+      <StudioSlot slotId={slotId} studio={studio} isDraft={item.storyId === studio.draftStoryId}>
         <div className="hero-front-page__brief-link group block py-2">{content}</div>
       </StudioSlot>
     );
@@ -150,11 +145,7 @@ function HeroSplitCenterImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
-export type HeroStudioConfig = {
-  draftStoryId: string;
-  selectedSlot: HomepageStudioSlot | null;
-  onSelectSlot: (slot: HomepageStudioSlot) => void;
-};
+export type HeroStudioConfig = HomepageStudioCanvasConfig;
 
 /** DMN-style 3-column broadsheet hero with banner, masthead, and live ticker. */
 export function HeroNewspaperEdition({
@@ -185,7 +176,7 @@ export function HeroNewspaperEdition({
   tickerHeadlines: string[];
   /** Culture desk and below — rendered inside the same edition shell. */
   footer?: ReactNode;
-  studio?: HeroStudioConfig;
+  studio?: HomepageStudioCanvasConfig;
 }) {
   const leadCopy = (
     <article className="hero-front-page__lead-copy">
@@ -216,12 +207,7 @@ export function HeroNewspaperEdition({
         <div className="hero-front-page" role="region" aria-label="Front page">
           <div className="hero-front-page__left">
             {studio ? (
-              <StudioSlot
-                slotId="hero-lead"
-                selected={studio.selectedSlot === "hero-lead"}
-                isDraft={lead.storyId === studio.draftStoryId}
-                onSelect={studio.onSelectSlot}
-              >
+              <StudioSlot slotId="hero-lead" studio={studio} isDraft={lead.storyId === studio.draftStoryId}>
                 {leadCopy}
               </StudioSlot>
             ) : (
@@ -231,12 +217,7 @@ export function HeroNewspaperEdition({
               <article className="hero-front-page__lead-follow">
                 <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>
                 {studio ? (
-                  <StudioSlot
-                    slotId="hero-follow-up"
-                    selected={studio.selectedSlot === "hero-follow-up"}
-                    isDraft={leadFollowUp.storyId === studio.draftStoryId}
-                    onSelect={studio.onSelectSlot}
-                  >
+                  <StudioSlot slotId="hero-follow-up" studio={studio} isDraft={leadFollowUp.storyId === studio.draftStoryId}>
                     <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88">
                       {leadFollowUp.headline}
                     </h3>
@@ -277,12 +258,7 @@ export function HeroNewspaperEdition({
           <aside className="hero-front-page__right">
             <div className="hero-front-page__right-block">
               {studio ? (
-                <StudioSlot
-                  slotId="hero-right-featured"
-                  selected={studio.selectedSlot === "hero-right-featured"}
-                  isDraft={rightFeatured.storyId === studio.draftStoryId}
-                  onSelect={studio.onSelectSlot}
-                >
+                <StudioSlot slotId="hero-right-featured" studio={studio} isDraft={rightFeatured.storyId === studio.draftStoryId}>
                   <div className="group block">
                     {rightFeatured.imageSrc ? (
                       <figure className="hero-front-page__right-media relative m-0 aspect-video w-full overflow-hidden bg-midnight">
@@ -332,12 +308,7 @@ export function HeroNewspaperEdition({
             <div className="hero-front-page__rule hero-front-page__rule--horizontal" aria-hidden />
             <div className="hero-front-page__right-block hero-front-page__right-block--text">
               {studio ? (
-                <StudioSlot
-                  slotId="hero-right-secondary"
-                  selected={studio.selectedSlot === "hero-right-secondary"}
-                  isDraft={rightSecondary.storyId === studio.draftStoryId}
-                  onSelect={studio.onSelectSlot}
-                >
+                <StudioSlot slotId="hero-right-secondary" studio={studio} isDraft={rightSecondary.storyId === studio.draftStoryId}>
                   <div className="group block">
                     <span className="hero-front-page__category font-mono-hbm">{rightSecondary.category}</span>
                     <h3 className="hero-front-page__right-headline font-cormorant font-semibold text-cream/90">

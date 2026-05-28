@@ -202,6 +202,29 @@ export type DraftStudioStory = {
   imageSrc?: string;
 };
 
+export type HomepageStudioCanvasConfig = {
+  draftStoryId: string;
+  selectedSlot: HomepageStudioSlot | null;
+  hoveredSlot: HomepageStudioSlot | null;
+  onSelectSlot: (slot: HomepageStudioSlot) => void;
+  onHoverSlot: (slot: HomepageStudioSlot | null) => void;
+};
+
+export type StudioSectionView = "hero" | "lifestyle" | "markets" | "columns";
+
+/** Maps a placement slot to the homepage section tab that contains it. */
+export function studioSectionForSlot(slot: HomepageStudioSlot): StudioSectionView {
+  if (slot.startsWith("lifestyle-")) return "lifestyle";
+  if (slot.startsWith("markets-")) return "markets";
+  if (slot.startsWith("column-")) return "columns";
+  return "hero";
+}
+
+/** Editorial grid + culture/markets block live in the hero footer band. */
+export function slotRequiresHeroFooter(slot: HomepageStudioSlot): boolean {
+  return slot.startsWith("editorial-top-") || slot.startsWith("business-list-") || slot === "business-lead";
+}
+
 export type HomepageStudioConfig = {
   draft: DraftStudioStory;
   selectedSlot: HomepageStudioSlot | null;

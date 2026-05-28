@@ -14,7 +14,7 @@ export { MagazineLifestyleGrid } from "@/components/MagazineLifestyleGrid";
 export { FeaturedStoriesFourUp } from "@/components/FeaturedStoriesFourUp";
 import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
 import { StudioSlot } from "@/components/desk/studio/StudioSlot";
-import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
+import type { HomepageStudioCanvasConfig, HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 
 const goldOutlineCta =
   "gold-outline-btn inline-block px-3 py-1 text-[10px] uppercase tracking-[0.18em] sm:px-4 sm:py-1.5 sm:text-label-xs sm:tracking-[0.2em]";
@@ -85,12 +85,7 @@ function RecordHeadlineRow({
 
   if (studio && slotId) {
     return (
-      <StudioSlot
-        slotId={slotId}
-        selected={studio.selectedSlot === slotId}
-        isDraft={item.storyId === studio.draftStoryId}
-        onSelect={studio.onSelectSlot}
-      >
+      <StudioSlot slotId={slotId} studio={studio} isDraft={item.storyId === studio.draftStoryId}>
         <div className="group grid grid-cols-[72px_1fr] gap-3 border-b border-white/[0.06] py-3 last:border-b-0">{row}</div>
       </StudioSlot>
     );
@@ -114,11 +109,7 @@ function DmnCategoryLabel({ children }: { children: string }) {
   );
 }
 
-export type HomepageGridStudioConfig = {
-  draftStoryId: string;
-  selectedSlot: HomepageStudioSlot | null;
-  onSelectSlot: (slot: HomepageStudioSlot) => void;
-};
+export type HomepageGridStudioConfig = HomepageStudioCanvasConfig;
 
 function DmnTopCard({
   item,
@@ -160,12 +151,7 @@ function DmnTopCard({
 
   if (studio && slotId) {
     return (
-      <StudioSlot
-        slotId={slotId}
-        selected={studio.selectedSlot === slotId}
-        isDraft={item.storyId === studio.draftStoryId}
-        onSelect={studio.onSelectSlot}
-      >
+      <StudioSlot slotId={slotId} studio={studio} isDraft={item.storyId === studio.draftStoryId}>
         {card}
       </StudioSlot>
     );
@@ -198,12 +184,7 @@ function DmnTextStory({
 
   if (studio && slotId) {
     return (
-      <StudioSlot
-        slotId={slotId}
-        selected={studio.selectedSlot === slotId}
-        isDraft={item.storyId === studio.draftStoryId}
-        onSelect={studio.onSelectSlot}
-      >
+      <StudioSlot slotId={slotId} studio={studio} isDraft={item.storyId === studio.draftStoryId}>
         <div className="dmn-editorial__text-story group block border-b border-white/[0.06] py-3.5 last:border-b-0">{story}</div>
       </StudioSlot>
     );
@@ -302,12 +283,7 @@ export function DmnEditorialGrid({
 
           <article className="dmn-editorial__business-lead">
             {studio ? (
-              <StudioSlot
-                slotId="business-lead"
-                selected={studio.selectedSlot === "business-lead"}
-                isDraft={businessLead.storyId === studio.draftStoryId}
-                onSelect={studio.onSelectSlot}
-              >
+              <StudioSlot slotId="business-lead" studio={studio} isDraft={businessLead.storyId === studio.draftStoryId}>
                 <div className="card-3d group grid h-full grid-cols-1 overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
                   <div className="relative min-h-[200px] md:min-h-[260px]">
                     {businessLead.imageSrc ? (
@@ -567,9 +543,8 @@ function BroadsheetColumnBlock({
       {studio ? (
         <StudioSlot
           slotId={`column-${columnIndex}-lead` as HomepageStudioSlot}
-          selected={studio.selectedSlot === (`column-${columnIndex}-lead` as HomepageStudioSlot)}
+          studio={studio}
           isDraft={column.lead.storyId === studio.draftStoryId}
-          onSelect={studio.onSelectSlot}
         >
           <div className="broadsheet-four-col__lead group block">
             <figure className="broadsheet-four-col__lead-media relative aspect-[16/10] w-full overflow-hidden bg-midnight">
@@ -613,9 +588,8 @@ function BroadsheetColumnBlock({
             {studio ? (
               <StudioSlot
                 slotId={`column-${columnIndex}-more-${moreIndex}` as HomepageStudioSlot}
-                selected={studio.selectedSlot === (`column-${columnIndex}-more-${moreIndex}` as HomepageStudioSlot)}
+                studio={studio}
                 isDraft={item.storyId === studio.draftStoryId}
-                onSelect={studio.onSelectSlot}
               >
                 <div className="broadsheet-four-col__list-link font-robinhood group">{item.headline}</div>
               </StudioSlot>
@@ -710,12 +684,7 @@ export function DeskWireNewsGrid({
       </div>
 
       {studio && useLiveLead && lead ? (
-        <StudioSlot
-          slotId="markets-lead"
-          selected={studio.selectedSlot === "markets-lead"}
-          isDraft={lead.storyId === studio.draftStoryId}
-          onSelect={studio.onSelectSlot}
-        >
+        <StudioSlot slotId="markets-lead" studio={studio} isDraft={lead.storyId === studio.draftStoryId}>
           <article className="desk-wire-grid__lead card-3d overflow-hidden border border-white/[0.09] bg-obsidian">
             <div className="grid md:grid-cols-2">
               <div className="relative min-h-[200px] md:min-h-full">

@@ -2288,3 +2288,53 @@
   min-height: 0;
   padding-bottom: 0 !important;
 }
+
+/* Increase readability in desk studio preview */
+.home-studio-canvas,
+.home-studio-canvas .font-robinhood,
+.home-studio-canvas .font-cormorant,
+.home-studio-canvas .font-mono-hbm,
+.home-studio-canvas h1,
+.home-studio-canvas h2,
+.home-studio-canvas h3,
+.home-studio-canvas h4,
+.home-studio-canvas p,
+.home-studio-canvas span,
+.home-studio-canvas a {
+  color: #f4f6fb !important;
+}
+
+.home-studio-canvas .text-silver-dim\/75,
+.home-studio-canvas .text-silver-dim\/68,
+.home-studio-canvas .text-silver-dim\/65,
+.home-studio-canvas .text-silver-dim\/60,
+.home-studio-canvas .text-silver-dim\/55,
+.home-studio-canvas .text-silver-dim\/50,
+.home-studio-canvas .text-silver-dim\/48,
+.home-studio-canvas .text-silver-dim\/45,
+.home-studio-canvas .text-silver-dim\/42,
+.home-studio-canvas .text-silver-dim\/40 {
+  color: rgba(244, 246, 251, 0.92) !important;
+}
+
+.home-studio-canvas[data-studio-section="lifestyle"],
+.home-studio-canvas[data-studio-section="markets"],
+.home-studio-canvas[data-studio-section="columns"] {
+  min-height: 0;
+}
+
+.home-studio-canvas[data-studio-section="lifestyle"] section,
+.home-studio-canvas[data-studio-section="markets"] section,
+.home-studio-canvas[data-studio-section="columns"] section {
+  min-height: 0;
+}
+
+.home-studio-canvas[data-slot-focus="true"] .studio-slot {
+  opacity: 0.38;
+  transition: opacity 0.2s ease;
+}
+
+.home-studio-canvas[data-slot-focus="true"] .studio-slot[data-hovered="true"],
+.home-studio-canvas[data-slot-focus="true"] .studio-slot[data-selected="true"] {
+  opacity: 1;
+}

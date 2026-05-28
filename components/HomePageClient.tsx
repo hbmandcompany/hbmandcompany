@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { clsx } from "clsx";
 import { motion, useReducedMotion } from "framer-motion";
 import FooterDark from "@/components/FooterDark";
 import FooterBrandVotingGrid from "@/components/FooterBrandVotingGrid";
@@ -31,7 +32,11 @@ type HomePageStudioProps = {
   draft: DraftStudioStory;
   placementSlot: HomepageStudioSlot;
   selectedSlot: HomepageStudioSlot | null;
+  hoveredSlot: HomepageStudioSlot | null;
   onSelectSlot: (slot: HomepageStudioSlot) => void;
+  onHoverSlot: (slot: HomepageStudioSlot | null) => void;
+  /** When hovering editorial/business slots, reveal the hero footer band. */
+  revealHeroFooter?: boolean;
 };
 
 export type StudioSectionView = "hero" | "lifestyle" | "markets" | "columns" | "all";
@@ -63,7 +68,9 @@ export default function HomePageClient({
     ? {
         draftStoryId: studio.draft.storyId,
         selectedSlot: studio.selectedSlot,
+        hoveredSlot: studio.hoveredSlot,
         onSelectSlot: studio.onSelectSlot,
+        onHoverSlot: studio.onHoverSlot,
       }
     : undefined;
 
@@ -94,7 +101,10 @@ export default function HomePageClient({
   const showLifestyle = studioSection === "all" || studioSection === "lifestyle";
   const showMarkets = studioSection === "all" || studioSection === "markets";
   const showColumns = studioSection === "all" || studioSection === "columns";
-  const showHeroFooter = !(studio && studioSection === "hero");
+  const showHeroFooter = !(studio && studioSection === "hero" && !studio.revealHeroFooter);
+  const studioFocused = Boolean(studio && studioSection !== "all");
+  const showMarketsAd = showMarkets && !studioFocused;
+  const sectionBandClass = studioFocused ? "py-4 md:py-5" : "py-10 md:py-12";
 
   return (
     <>
@@ -195,7 +205,7 @@ export default function HomePageClient({
       ) : null}
 
       {showLifestyle ? (
-      <section className="relative bg-void py-10 md:py-12" aria-label="Music and culture wire">
+      <section className={clsx("relative bg-void", sectionBandClass)} aria-label="Music and culture wire">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
             <MagazineLifestyleGrid data={sections.lifestyle} studio={studioGrid} />
@@ -205,7 +215,7 @@ export default function HomePageClient({
       ) : null}
 
       {showMarkets ? (
-      <section className="relative overflow-x-hidden bg-void py-10 md:py-12" aria-label="Markets desk and treasury wire">
+      <section className={clsx("relative overflow-x-hidden bg-void", sectionBandClass)} aria-label="Markets desk and treasury wire">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
             <DeskWireNewsGrid
@@ -218,7 +228,7 @@ export default function HomePageClient({
       </section>
       ) : null}
 
-      {showMarkets ? (
+      {showMarketsAd ? (
       <section className="relative bg-void pb-10 md:pb-12" aria-label="Advertisement">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
@@ -231,7 +241,7 @@ export default function HomePageClient({
       ) : null}
 
       {showColumns ? (
-      <section className="relative bg-void py-10 md:py-12" aria-label="Section fronts">
+      <section className={clsx("relative bg-void", sectionBandClass)} aria-label="Section fronts">
         <div className="relative z-10 mx-auto w-full max-w-[1440px] px-6 md:px-12">
           <SectionReveal>
             <BroadsheetFourColumnGrid columns={sections.broadsheetColumns} studio={studioGrid} />

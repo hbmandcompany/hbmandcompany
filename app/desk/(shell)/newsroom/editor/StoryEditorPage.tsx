@@ -9,6 +9,7 @@ import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
 import { EditorSitePreview } from "@/components/desk/EditorSitePreview";
+import { LiveArticleEditor } from "@/components/desk/LiveArticleEditor";
 import { LiveStudioHomepage } from "@/components/desk/LiveStudioHomepage";
 import { StudioPlacementPanel } from "@/components/desk/StudioPlacementPanel";
 import { ARTICLE_WEIGHT_OPTIONS } from "@/components/desk/ArticleWeightBadge";
@@ -97,6 +98,7 @@ export default function StoryEditorPage() {
   const [studioTab, setStudioTab] = useState<StudioTab>("homepage");
   const [placementSlot, setPlacementSlot] = useState<HomepageStudioSlot>("editorial-top-0");
   const [selectedSlot, setSelectedSlot] = useState<HomepageStudioSlot | null>("editorial-top-0");
+  const [hoveredSlot, setHoveredSlot] = useState<HomepageStudioSlot | null>(null);
 
   const [headline, setHeadline] = useState("");
   const [dek, setDek] = useState("");
@@ -330,41 +332,23 @@ export default function StoryEditorPage() {
               onDekChange={setDek}
               selectedSlot={selectedSlot}
               placementSlot={placementSlot}
+              hoveredSlot={hoveredSlot}
               onSelectSlot={handleCanvasSlot}
+              onHoverSlot={setHoveredSlot}
             />
           ) : studioTab === "write" ? (
-            <div className={clsx("rounded-md border p-6", deskPaper.card, deskPaper.border)}>
-              <p className={clsx("mb-4 font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Article body</p>
-              <input
-                value={headline}
-                onChange={(e) => setHeadline(e.target.value)}
-                placeholder="Headline"
-                className={clsx(
-                  "mb-4 w-full border-0 bg-transparent font-cormorant text-3xl outline-none placeholder:text-[#9a8262]/60",
-                  deskPaper.inkHeading,
-                )}
-              />
-              <input
-                value={dek}
-                onChange={(e) => setDek(e.target.value)}
-                placeholder="Dek — one-line summary for the homepage card"
-                className={clsx(
-                  "mb-6 w-full border-0 border-b bg-transparent pb-3 font-robinhood text-[15px] outline-none placeholder:text-[#9a8262]/60",
-                  deskPaper.border,
-                  deskPaper.inkBody,
-                )}
-              />
-              <textarea
-                value={body}
-                onChange={(e) => setBody(e.target.value)}
-                placeholder="Start writing…"
-                rows={18}
-                className={clsx(
-                  "w-full resize-none border-0 bg-transparent font-robinhood text-[15px] leading-[1.75] outline-none placeholder:text-[#9a8262]/60",
-                  deskPaper.inkBody,
-                )}
-              />
-            </div>
+            <LiveArticleEditor
+              headline={headline}
+              dek={dek}
+              body={body}
+              section={section}
+              byline={user.name}
+              image={heroImage}
+              weight={weight}
+              onHeadlineChange={setHeadline}
+              onDekChange={setDek}
+              onBodyChange={setBody}
+            />
           ) : (
             <EditorSitePreview
               headline={headline}
@@ -385,7 +369,9 @@ export default function StoryEditorPage() {
             <StudioPlacementPanel
               placementSlot={placementSlot}
               selectedSlot={selectedSlot}
+              hoveredSlot={hoveredSlot}
               onSelectSlot={selectPlacement}
+              onHoverSlot={setHoveredSlot}
               onEditFields={() => setStudioTab("write")}
             />
           ) : null}

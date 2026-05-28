@@ -3,16 +3,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import { StudioSlot } from "@/components/desk/studio/StudioSlot";
-import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
+import type { HomepageStudioCanvasConfig, HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 import type { LifestyleGridData } from "@/lib/desk/homepage-sections";
 import { buildHomepageSections } from "@/lib/desk/homepage-sections";
 
 type LifestyleStory = LifestyleGridData["foodLead"];
-type LifestyleStudioConfig = {
-  draftStoryId: string;
-  selectedSlot: HomepageStudioSlot | null;
-  onSelectSlot: (slot: HomepageStudioSlot) => void;
-};
+type LifestyleStudioConfig = HomepageStudioCanvasConfig;
 
 const fallbackData = buildHomepageSections(null).lifestyle;
 
@@ -43,12 +39,7 @@ function LifestyleHeadline({
 
   if (studio && slotId) {
     return (
-      <StudioSlot
-        slotId={slotId}
-        selected={studio.selectedSlot === slotId}
-        isDraft={story.storyId === studio.draftStoryId}
-        onSelect={studio.onSelectSlot}
-      >
+      <StudioSlot slotId={slotId} studio={studio} isDraft={story.storyId === studio.draftStoryId}>
         <div className="lifestyle-wire__story-link group block">{content}</div>
       </StudioSlot>
     );
@@ -86,12 +77,7 @@ function ThumbStory({
 
   if (studio && slotId) {
     return (
-      <StudioSlot
-        slotId={slotId}
-        selected={studio.selectedSlot === slotId}
-        isDraft={story.storyId === studio.draftStoryId}
-        onSelect={studio.onSelectSlot}
-      >
+      <StudioSlot slotId={slotId} studio={studio} isDraft={story.storyId === studio.draftStoryId}>
         <div className="lifestyle-wire__thumb-story group">{content}</div>
       </StudioSlot>
     );
@@ -124,12 +110,7 @@ export function MagazineLifestyleGrid({
       <div className="lifestyle-wire__grid">
         <div className="lifestyle-wire__food-main">
           {studio ? (
-            <StudioSlot
-              slotId="lifestyle-food-lead"
-              selected={studio.selectedSlot === "lifestyle-food-lead"}
-              isDraft={foodLead.storyId === studio.draftStoryId}
-              onSelect={studio.onSelectSlot}
-            >
+            <StudioSlot slotId="lifestyle-food-lead" studio={studio} isDraft={foodLead.storyId === studio.draftStoryId}>
               <div className="lifestyle-wire__lead group block">
                 {foodLead.imageSrc ? (
                   <figure className="lifestyle-wire__lead-media relative aspect-[16/10] overflow-hidden bg-midnight">

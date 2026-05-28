@@ -8,14 +8,17 @@ import { deskPaper } from "@/components/desk/desk-paper";
 import { articleToBriefing } from "@/lib/desk/article-to-briefing";
 import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 import {
+  slotRequiresHeroFooter,
   STUDIO_COMPACT_PAGE_HEIGHT,
   STUDIO_PAGE_WIDTH,
+  studioSectionForSlot,
 } from "@/lib/desk/homepage-studio";
 import { fetchPublishedArticlesClient } from "@/lib/supabase/queries/articles.client";
 import type { EditorImageState } from "./EditorImagePanel";
 
 /** Matches the write editor card content height (headline + dek + ~18-row body). */
 export const STUDIO_CARD_VIEWPORT_HEIGHT = 520;
+const STUDIO_ZOOM_MULTIPLIER = 1.14;
 
 const STUDIO_SECTION_OPTIONS: { id: StudioSectionView; label: string }[] = [
   { id: "hero", label: "Hero" },
@@ -34,7 +37,9 @@ export function LiveStudioHomepage({
   onDekChange,
   selectedSlot,
   placementSlot,
+  hoveredSlot,
   onSelectSlot,
+  onHoverSlot,
 }: {
   storyId: string | null;
   headline: string;
@@ -45,7 +50,9 @@ export function LiveStudioHomepage({
   onDekChange: (value: string) => void;
   selectedSlot: HomepageStudioSlot | null;
   placementSlot: HomepageStudioSlot;
+  hoveredSlot: HomepageStudioSlot | null;
   onSelectSlot: (slot: HomepageStudioSlot) => void;
+  onHoverSlot: (slot: HomepageStudioSlot | null) => void;
 }) {
   const measureRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -79,7 +86,9 @@ export function LiveStudioHomepage({
       const pad = 16;
       const scaleW = (viewportWidth - pad) / STUDIO_PAGE_WIDTH;
       const scaleH = (viewportHeight - pad) / contentHeight;
-      setScale(Math.min(scaleW, scaleH, 1));
+      const fitted = Math.min(scaleW, scaleH, 1);
+      const zoom = sectionView === "hero" ? STUDIO_ZOOM_MULTIPLIER : 1;
+      setScale(Math.min(fitted * zoom, scaleW, scaleH, 1.25));
     }
 
     measure();
@@ -87,9 +96,15 @@ export function LiveStudioHomepage({
     ro.observe(viewport);
     ro.observe(canvas);
     return () => ro.disconnect();
-  }, [publishedBriefings, headline, dek, section, heroImage?.url, placementSlot, sectionView]);
+  }, [publishedBriefings, headline, dek, section, heroImage?.url, placementSlot, sectionView, hoveredSlot]);
+
+  useEffect(() => {
+    if (!hoveredSlot) return;
+    setSectionView(studioSectionForSlot(hoveredSlot));
+  }, [hoveredSlot]);
 
   const draftStoryId = storyId ?? "studio-draft";
+  const revealHeroFooter = hoveredSlot ? slotRequiresHeroFooter(hoveredSlot) : false;
 
   const studio = useMemo(
     () => ({
@@ -102,9 +117,12 @@ export function LiveStudioHomepage({
       },
       placementSlot,
       selectedSlot,
+      hoveredSlot,
       onSelectSlot,
+      onHoverSlot,
+      revealHeroFooter,
     }),
-    [draftStoryId, headline, dek, section, heroImage?.url, placementSlot, selectedSlot, onSelectSlot],
+    [draftStoryId, headline, dek, section, heroImage?.url, placementSlot, selectedSlot, hoveredSlot, onSelectSlot, onHoverSlot, revealHeroFooter],
   );
 
   const scaledHeight = pageHeight * scale;
@@ -156,11 +174,11 @@ export function LiveStudioHomepage({
 
       <div
         ref={viewportRef}
-        className="relative flex items-start justify-center overflow-hidden bg-[#020203]"
+        className="relative overflow-hidden bg-[#020203]"
         style={{ height: STUDIO_CARD_VIEWPORT_HEIGHT }}
       >
         <div
-          className="overflow-hidden"
+          className="mx-auto min-w-max"
           style={{
             width: STUDIO_PAGE_WIDTH * scale,
             height: scaledHeight,
@@ -169,6 +187,8 @@ export function LiveStudioHomepage({
           <div
             ref={measureRef}
             className="home-studio-canvas origin-top-left"
+            data-studio-section={sectionView}
+            data-slot-focus={hoveredSlot ? "true" : undefined}
             style={{
               width: STUDIO_PAGE_WIDTH,
               transform: `scale(${scale})`,
