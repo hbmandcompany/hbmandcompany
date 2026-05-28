@@ -67,6 +67,7 @@ export default function StoryEditorPage() {
   const [section, setSection] = useState(defaultDraft.section);
   const [weight, setWeight] = useState("");
   const [heroImage, setHeroImage] = useState<EditorImageState | null>(null);
+  const [slotImage, setSlotImage] = useState<EditorImageState | null>(null);
 
   const [cardHeadline, setCardHeadline] = useState("");
   const [cardDek, setCardDek] = useState("");
@@ -220,6 +221,17 @@ export default function StoryEditorPage() {
   const displayHeadline = focusedSlot ? cardHeadline : previewFields?.headline ?? "";
   const displayDek = focusedSlot ? cardDek : previewFields?.dek ?? "";
   const cardEditable = focusedSlot !== null;
+  const imageIlluminated = Boolean(previewSlot);
+
+  function imageStateFromSrc(url: string, headline: string): EditorImageState {
+    return { url, alt: headline, caption: "", fileName: "Homepage image" };
+  }
+
+  const panelImage: EditorImageState | null = focusedSlot
+    ? slotImage
+    : previewFields?.imageSrc
+      ? imageStateFromSrc(previewFields.imageSrc, previewFields.headline)
+      : heroImage;
 
   function updateHeroImage(next: EditorImageState | null) {
     setHeroImage((prev) => {
@@ -228,8 +240,19 @@ export default function StoryEditorPage() {
     });
   }
 
+  function updateSlotImage(next: EditorImageState | null) {
+    setSlotImage((prev) => {
+      if (prev?.url.startsWith("blob:") && prev.url !== next?.url) URL.revokeObjectURL(prev.url);
+      return next;
+    });
+    if (cardStoryId === draftStoryId || cardStoryId === articleId) {
+      updateHeroImage(next);
+    }
+  }
+
   const clearCardEdit = useCallback(() => {
     setFocusedSlot(null);
+    setSlotImage(null);
   }, []);
 
   function focusSlot(slot: HomepageStudioSlot) {
@@ -246,9 +269,17 @@ export default function StoryEditorPage() {
       setCardDek(fields.dek);
       setCardStoryId(fields.storyId);
       setCardBaseline({ ...fields, slot });
+      if (fields.imageSrc) {
+        setSlotImage(imageStateFromSrc(fields.imageSrc, fields.headline));
+      } else {
+        setSlotImage(null);
+      }
       if (fields.storyId === draftStoryId || fields.storyId === articleId) {
         setHeadline(fields.headline);
         setDek(fields.dek);
+        if (fields.imageSrc) {
+          setHeroImage(imageStateFromSrc(fields.imageSrc, fields.headline));
+        }
       }
     }
   }
@@ -284,7 +315,9 @@ export default function StoryEditorPage() {
   const cardDirty = Boolean(
     focusedSlot &&
       cardBaseline &&
-      (cardHeadline !== cardBaseline.headline || cardDek !== cardBaseline.dek),
+      (cardHeadline !== cardBaseline.headline ||
+        cardDek !== cardBaseline.dek ||
+        (slotImage?.url ?? null) !== (cardBaseline.imageSrc ?? null)),
   );
 
   const draftDirty = Boolean(
@@ -318,6 +351,7 @@ export default function StoryEditorPage() {
     const title = cardHeadline.trim() || "Untitled draft";
     const excerpt = cardDek.trim() || null;
     const isCurrentDraft = cardStoryId === draftStoryId || cardStoryId === articleId;
+    const heroUrl = slotImage?.url && !slotImage.url.startsWith("blob:") ? slotImage.url : null;
 
     let result;
     if (isCurrentDraft) {
@@ -327,11 +361,12 @@ export default function StoryEditorPage() {
         ...buildPayload(),
         title,
         excerpt,
+        hero_image_url: heroUrl,
         status: "draft",
         published_at: null,
       });
     } else {
-      result = await updateArticleClient(cardStoryId, { title, excerpt });
+      result = await updateArticleClient(cardStoryId, { title, excerpt, hero_image_url: heroUrl });
     }
 
     setSaving(false);
@@ -342,7 +377,13 @@ export default function StoryEditorPage() {
     }
 
     if (result.data) {
-      setCardBaseline({ slot: focusedSlot, storyId: cardStoryId, headline: title, dek: excerpt ?? "" });
+      setCardBaseline({
+        slot: focusedSlot,
+        storyId: cardStoryId,
+        headline: title,
+        dek: excerpt ?? "",
+        imageSrc: heroUrl ?? undefined,
+      });
       if (isCurrentDraft) {
         setArticleId(result.data.id);
         setArticleStatus(result.data.status);
@@ -531,7 +572,12 @@ export default function StoryEditorPage() {
         </div>
 
         <aside className="space-y-4">
-          <EditorImagePanel image={heroImage} onImageChange={updateHeroImage} />
+          <EditorImagePanel
+            image={studioView === "write" ? heroImage : panelImage}
+            illuminated={studioView === "homepage" && imageIlluminated}
+            editable={studioView === "write" || cardEditable}
+            onImageChange={studioView === "write" ? updateHeroImage : updateSlotImage}
+          />
 
           {studioView === "homepage" ? (
             <StudioPlacementPanel

@@ -220,7 +220,7 @@ export default function HomePageClient({
           <SectionReveal>
             <DeskWireNewsGrid
               wireStories={sections.marketsWire}
-              lead={hero.liveHero ? sections.marketsLead : undefined}
+              lead={studio ? sections.marketsLead : hero.liveHero ? sections.marketsLead : undefined}
               studio={studioGrid}
             />
           </SectionReveal>

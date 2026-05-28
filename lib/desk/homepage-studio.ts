@@ -453,20 +453,21 @@ export type SlotCardFields = {
   storyId: string;
   headline: string;
   dek: string;
+  imageSrc?: string;
 };
 
 type HeroProps = ReturnType<typeof buildHeroProps>;
 
-function fromWire(item: { storyId: string; headline: string; dek?: string }): SlotCardFields {
-  return { storyId: item.storyId, headline: item.headline, dek: item.dek ?? "" };
+function fromWire(item: { storyId: string; headline: string; dek?: string; imageSrc?: string }): SlotCardFields {
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek ?? "", imageSrc: item.imageSrc };
 }
 
-function fromLead(item: { storyId: string; headline: string; dek: string }): SlotCardFields {
-  return { storyId: item.storyId, headline: item.headline, dek: item.dek };
+function fromLead(item: { storyId: string; headline: string; dek: string; imageSrc?: string }): SlotCardFields {
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek, imageSrc: item.imageSrc };
 }
 
-function fromMagazine(item: { storyId: string; headline: string; dek: string }): SlotCardFields {
-  return { storyId: item.storyId, headline: item.headline, dek: item.dek };
+function fromMagazine(item: { storyId: string; headline: string; dek: string; imageSrc?: string }): SlotCardFields {
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek, imageSrc: item.imageSrc };
 }
 
 /** Read headline + dek for any homepage placement slot from built section data. */
@@ -475,7 +476,12 @@ export function resolveSlotCardFields(
   hero: HeroProps,
   slot: HomepageStudioSlot,
 ): SlotCardFields | null {
-  if (slot === "hero-lead") return fromMagazine(hero.heroLead);
+  if (slot === "hero-lead") {
+    return {
+      ...fromMagazine(hero.heroLead),
+      imageSrc: hero.heroImage || hero.heroLead.imageSrc,
+    };
+  }
   if (slot === "hero-follow-up") return fromMagazine(hero.heroFollowUp);
   if (slot === "hero-right-featured") return fromMagazine(hero.heroRightFeatured);
   if (slot === "hero-right-secondary") return fromMagazine(hero.heroRightSecondary);
@@ -540,7 +546,7 @@ export function resolveSlotCardFields(
   if (slot.startsWith("column-") && slot.endsWith("-lead")) {
     const columnIndex = Number(slot.split("-")[1]);
     const lead = sections.broadsheetColumns[columnIndex]?.lead;
-    return lead ? { storyId: lead.storyId, headline: lead.headline, dek: "" } : null;
+    return lead ? { storyId: lead.storyId, headline: lead.headline, dek: "", imageSrc: lead.imageSrc } : null;
   }
   if (slot.startsWith("column-") && slot.includes("-more-")) {
     const [, columnToken, , moreToken] = slot.split("-");

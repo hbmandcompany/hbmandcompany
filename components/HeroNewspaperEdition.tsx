@@ -248,7 +248,13 @@ export function HeroNewspaperEdition({
           </div>
 
           {heroImageSrc ? (
-            <HeroSplitCenterImage src={heroImageSrc} alt={heroImageAlt ?? lead.headline} />
+            studio ? (
+              <StudioSlot slotId="hero-lead" studio={studio} isDraft={lead.storyId === studio.draftStoryId}>
+                <HeroSplitCenterImage src={heroImageSrc} alt={heroImageAlt ?? lead.headline} />
+              </StudioSlot>
+            ) : (
+              <HeroSplitCenterImage src={heroImageSrc} alt={heroImageAlt ?? lead.headline} />
+            )
           ) : (
             <figure className="hero-front-page__center hero-front-page__center--split">
               <div className="hero-front-page__center-half bg-midnight" />

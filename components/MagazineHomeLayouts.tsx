@@ -683,8 +683,8 @@ export function DeskWireNewsGrid({
         />
       </div>
 
-      {studio && useLiveLead && lead ? (
-        <StudioSlot slotId="markets-lead" studio={studio} isDraft={lead.storyId === studio.draftStoryId}>
+      {(() => {
+        const leadArticle = (
           <article className="desk-wire-grid__lead card-3d overflow-hidden border border-white/[0.09] bg-obsidian">
             <div className="grid md:grid-cols-2">
               <div className="relative min-h-[200px] md:min-h-full">
@@ -692,57 +692,49 @@ export function DeskWireNewsGrid({
                 <div className="absolute inset-0 bg-gradient-to-r from-transparent to-obsidian/40 md:bg-gradient-to-l md:from-obsidian/30" />
               </div>
               <div className="flex flex-col gap-4 p-6 md:p-7">
-                <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">{lead.category}</span>
-                <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">{lead.headline}</h3>
-                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">{lead.dek}</p>
+                {useLiveLead && lead ? (
+                  <>
+                    <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">{lead.category}</span>
+                    <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">{lead.headline}</h3>
+                    <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">{lead.dek}</p>
+                    <Link href={`/newspaper?story=${lead.storyId}`} className={clsx(goldOutlineCta, "w-fit")}>
+                      Read full brief →
+                    </Link>
+                  </>
+                ) : (
+                  <>
+                    <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">Lead Brief</span>
+                    <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">
+                      Institutional <span className="text-gradient-gold font-medium italic">Reserve</span>
+                    </h3>
+                    <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">
+                      An enterprise holdings company committed to the infrastructure of decentralized finance and digital
+                      assets—organizing capital around rails you can verify and durable governance.
+                    </p>
+                    <Link href="/treasury" className={clsx(goldOutlineCta, "w-fit")}>
+                      Read Treasury Desk →
+                    </Link>
+                  </>
+                )}
               </div>
             </div>
           </article>
-        </StudioSlot>
-      ) : (
-      <article className="desk-wire-grid__lead card-3d overflow-hidden border border-white/[0.09] bg-obsidian">
-        <div className="grid md:grid-cols-2">
-          <div className="relative min-h-[200px] md:min-h-full">
-            <Image
-              src={leadImage}
-              alt=""
-              fill
-              className="object-cover"
-              unoptimized
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent to-obsidian/40 md:bg-gradient-to-l md:from-obsidian/30" />
-          </div>
-          <div className="flex flex-col gap-4 p-6 md:p-7">
-            {useLiveLead && lead ? (
-              <>
-                <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">{lead.category}</span>
-                <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">
-                  {lead.headline}
-                </h3>
-                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">{lead.dek}</p>
-                <Link href={`/newspaper?story=${lead.storyId}`} className={clsx(goldOutlineCta, "w-fit")}>
-                  Read full brief →
-                </Link>
-              </>
-            ) : (
-              <>
-                <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">Lead Brief</span>
-                <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">
-                  Institutional <span className="text-gradient-gold font-medium italic">Reserve</span>
-                </h3>
-                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">
-                  An enterprise holdings company committed to the infrastructure of decentralized finance and digital
-                  assets—organizing capital around rails you can verify and durable governance.
-                </p>
-                <Link href="/treasury" className={clsx(goldOutlineCta, "w-fit")}>
-                  Read Treasury Desk →
-                </Link>
-              </>
-            )}
-          </div>
-        </div>
-      </article>
-      )}
+        );
+
+        if (studio) {
+          return (
+            <StudioSlot
+              slotId="markets-lead"
+              studio={studio}
+              isDraft={Boolean(lead && lead.storyId === studio.draftStoryId)}
+            >
+              {leadArticle}
+            </StudioSlot>
+          );
+        }
+
+        return leadArticle;
+      })()}
 
       <div className="desk-wire-grid__list border border-white/[0.08] bg-obsidian/90">
         {stories.map((w, index) => (
