@@ -94,6 +94,7 @@ export default function HomePageClient({
   const showLifestyle = studioSection === "all" || studioSection === "lifestyle";
   const showMarkets = studioSection === "all" || studioSection === "markets";
   const showColumns = studioSection === "all" || studioSection === "columns";
+  const showHeroFooter = !(studio && studioSection === "hero");
 
   return (
     <>
@@ -154,6 +155,7 @@ export default function HomePageClient({
               tickerHeadlines={hero.heroTicker}
               studio={studioGrid}
               footer={
+                showHeroFooter ? (
                 <DmnEditorialGrid
                   embedded
                   studio={studioGrid}
@@ -164,6 +166,7 @@ export default function HomePageClient({
                   businessLead={sections.editorialBusinessLead}
                   businessPromoAd
                 />
+                ) : undefined
               }
             />
           </motion.div>
@@ -173,7 +176,7 @@ export default function HomePageClient({
 
       {studioCompact ? null : (
         <>
-      {showHero ? (
+      {showHero && !studio ? (
       <section className="relative overflow-x-hidden bg-void py-4 md:py-5" aria-label="Thesis">
         <motion.div
           className="pointer-events-none absolute inset-0 opacity-[0.14]"
