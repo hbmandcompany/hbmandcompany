@@ -138,7 +138,7 @@ export function DeskSubmissions() {
                     <div className={clsx("mt-1 font-robinhood text-[12px]", deskPaper.inkBody)}>{active.note}</div>
                   </div>
                   <Link
-                    href={`/desk/newsroom/editor?mode=write&story=${active.storyId}`}
+                    href={`/desk/newsroom/editor?story=${active.storyId}`}
                     className={clsx("shrink-0 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.accent)}
                   >
                     Open article →
