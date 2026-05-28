@@ -197,7 +197,7 @@ export function DeskStoryQueue() {
                   {STORY_TYPES.map((type) => (
                     <Link
                       key={type}
-                      href="/desk/newsroom/editor?mode=write"
+                      href="/desk/newsroom/editor"
                       onClick={() => setNewMenuOpen(false)}
                       className={clsx(
                         "block w-full px-3 py-2 text-left font-robinhood text-[12px] transition-colors",
@@ -297,7 +297,7 @@ export function DeskStoryQueue() {
 
                   <div className="flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
                     <Link
-                      href={`/desk/newsroom/editor?mode=write&story=${story.id}`}
+                      href={`/desk/newsroom/editor?story=${story.id}`}
                       aria-label="Edit story"
                       className={clsx("rounded p-1", deskPaper.inkMeta, deskPaper.hover)}
                     >

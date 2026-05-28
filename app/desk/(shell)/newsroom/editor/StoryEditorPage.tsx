@@ -113,9 +113,24 @@ export default function StoryEditorPage() {
   }, [storyId]);
 
   useEffect(() => {
-    const mode = searchParams.get("mode");
-    if (mode === "write") setStudioView("write");
+    setStudioView(searchParams.get("mode") === "write" ? "write" : "homepage");
   }, [searchParams]);
+
+  function editorHref(next: { mode?: StudioView; story?: string | null }) {
+    const params = new URLSearchParams(searchParams.toString());
+    const story = next.story ?? articleId;
+    if (story) params.set("story", story);
+    else params.delete("story");
+    if (next.mode === "write") params.set("mode", "write");
+    else params.delete("mode");
+    const query = params.toString();
+    return query ? `/desk/newsroom/editor?${query}` : "/desk/newsroom/editor";
+  }
+
+  function openStudioView(mode: StudioView, story?: string | null) {
+    setStudioView(mode);
+    router.push(editorHref({ mode, story }));
+  }
 
   useEffect(() => {
     if (!storyId) {
@@ -297,10 +312,10 @@ export default function StoryEditorPage() {
   function handleWriteClick() {
     const targetStoryId = cardStoryId ?? articleId;
     if (targetStoryId && targetStoryId !== articleId) {
-      router.push(`/desk/newsroom/editor?story=${targetStoryId}&mode=write`);
+      router.push(editorHref({ mode: "write", story: targetStoryId }));
       return;
     }
-    setStudioView("write");
+    openStudioView("write");
   }
 
   const wordCount = useMemo(() => countWords([headline, dek, body].join(" ")), [headline, dek, body]);
@@ -474,7 +489,7 @@ export default function StoryEditorPage() {
           {studioView === "write" ? (
             <button
               type="button"
-              onClick={() => setStudioView("homepage")}
+              onClick={() => openStudioView("homepage")}
               className={clsx(
                 "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
                 deskPaper.border,
@@ -589,57 +604,61 @@ export default function StoryEditorPage() {
             />
           ) : null}
 
-          <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
-            <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Filing</div>
-            <div className="mt-3 space-y-3">
-              <div>
-                <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Section</div>
-                <select
-                  value={section}
-                  onChange={(e) => setSection(e.target.value)}
-                  className={clsx("h-9 w-full rounded-md border px-2 font-robinhood text-[12px] outline-none", deskPaper.input)}
-                >
-                  {["Finance", "Markets", "Investigations", "Technology", "Texas Business", "Infrastructure"].map((s) => (
-                    <option key={s} value={s}>
-                      {s}
-                    </option>
-                  ))}
-                </select>
-              </div>
-              <div>
-                <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Weight</div>
-                <select
-                  value={weight}
-                  onChange={(e) => setWeight(e.target.value)}
-                  required
-                  className={clsx("h-9 w-full rounded-md border px-2 font-robinhood text-[12px] outline-none", deskPaper.input)}
-                >
-                  <option value="">Select weight…</option>
-                  {ARTICLE_WEIGHT_OPTIONS.map((w) => (
-                    <option key={w} value={w}>
-                      {w}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          </section>
+          {studioView === "homepage" ? (
+            <>
+              <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
+                <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Filing</div>
+                <div className="mt-3 space-y-3">
+                  <div>
+                    <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Section</div>
+                    <select
+                      value={section}
+                      onChange={(e) => setSection(e.target.value)}
+                      className={clsx("h-9 w-full rounded-md border px-2 font-robinhood text-[12px] outline-none", deskPaper.input)}
+                    >
+                      {["Finance", "Markets", "Investigations", "Technology", "Texas Business", "Infrastructure"].map((s) => (
+                        <option key={s} value={s}>
+                          {s}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <div>
+                    <div className={clsx("mb-1 font-robinhood text-[10px] uppercase tracking-wider", deskPaper.inkLabel)}>Weight</div>
+                    <select
+                      value={weight}
+                      onChange={(e) => setWeight(e.target.value)}
+                      required
+                      className={clsx("h-9 w-full rounded-md border px-2 font-robinhood text-[12px] outline-none", deskPaper.input)}
+                    >
+                      <option value="">Select weight…</option>
+                      {ARTICLE_WEIGHT_OPTIONS.map((w) => (
+                        <option key={w} value={w}>
+                          {w}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+              </section>
 
-          <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
-            <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Editor notes</div>
-            <p className={clsx("mt-3 font-robinhood text-[12px] leading-relaxed", deskPaper.inkMeta)}>
-              {articleStatus === "review"
-                ? "Awaiting editor review. You will be notified when notes are returned."
-                : "No open notes. Submit when ready for editorial review."}
-            </p>
-          </section>
+              <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
+                <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Editor notes</div>
+                <p className={clsx("mt-3 font-robinhood text-[12px] leading-relaxed", deskPaper.inkMeta)}>
+                  {articleStatus === "review"
+                    ? "Awaiting editor review. You will be notified when notes are returned."
+                    : "No open notes. Submit when ready for editorial review."}
+                </p>
+              </section>
 
-          <section className={clsx("rounded-md border p-4", deskPaper.border, "bg-[#f2e6d1]")}>
-            <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Auto-save</div>
-            <div className={clsx("mt-2 font-robinhood text-[12px]", lastSavedAt ? "text-desk-green" : deskPaper.inkMeta)}>
-              {lastSavedAt ? `Saved ${lastSavedAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}` : "Not saved yet"}
-            </div>
-          </section>
+              <section className={clsx("rounded-md border p-4", deskPaper.border, "bg-[#f2e6d1]")}>
+                <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Auto-save</div>
+                <div className={clsx("mt-2 font-robinhood text-[12px]", lastSavedAt ? "text-desk-green" : deskPaper.inkMeta)}>
+                  {lastSavedAt ? `Saved ${lastSavedAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}` : "Not saved yet"}
+                </div>
+              </section>
+            </>
+          ) : null}
         </aside>
       </div>
     </div>
