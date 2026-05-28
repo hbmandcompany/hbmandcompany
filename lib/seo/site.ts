@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 /** Canonical public site URL for metadata, schema, and sitemaps. */
 export const SITE_URL = "https://hbmandcompany.com";
 
@@ -9,14 +11,14 @@ export const DEFAULT_DESCRIPTION =
   "Culture news and intelligence for music, film, and the arts. Original reviews, industry reporting, and editorial coverage from the HBM desk.";
 
 /** Shared favicon config — relative paths so icons resolve on all subdomains. */
-export const SITE_ICONS = {
+export const SITE_ICONS: Metadata["icons"] = {
   icon: [
     { url: "/icon.svg", type: "image/svg+xml" },
     { url: "/apple-icon.png", type: "image/png", sizes: "180x180" },
   ],
   apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
   shortcut: "/icon.svg",
-} as const;
+};
 
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 
