@@ -141,7 +141,7 @@ export default function HomePageClient({
           />
 
         <h1 className="sr-only">
-          Enterprise News &amp; Intelligence for Finance, Crypto &amp; Infrastructure — HBM &amp; Company
+          Music, Film &amp; Culture News — HBM &amp; Company
         </h1>
 
         <motion.div

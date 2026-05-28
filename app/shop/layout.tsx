@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { getShopOrigin } from "@/lib/site-urls";
+import { SITE_ICONS } from "@/lib/seo/site";
 
 const shopOrigin = getShopOrigin();
 
@@ -8,6 +9,7 @@ export const metadata: Metadata = {
   title: "Shop",
   description:
     "Luxury streetwear and HBM & Company apparel — curated drops, apparel, tech, and accessories with same institutional rigor as our digital infrastructure.",
+  icons: SITE_ICONS,
   alternates: { canonical: shopOrigin },
   openGraph: {
     title: "Shop — HBM & Company",

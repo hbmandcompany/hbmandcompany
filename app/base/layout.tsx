@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Mono, Inter } from "next/font/google";
 import { baseCopy } from "@/lib/base-copy";
+import { SITE_ICONS } from "@/lib/seo/site";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -27,6 +28,7 @@ const plexMono = IBM_Plex_Mono({
 export const metadata: Metadata = {
   title: baseCopy.metadata.title,
   description: baseCopy.metadata.description,
+  icons: SITE_ICONS,
   alternates: {
     canonical: "https://hbmandcompany.com/base",
   },

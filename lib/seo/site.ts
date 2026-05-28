@@ -3,10 +3,20 @@ export const SITE_URL = "https://hbmandcompany.com";
 
 export const SITE_NAME = "HBM & Company";
 
-export const DEFAULT_TITLE = "HBM & Company | Finance, Crypto & Infrastructure News";
+export const DEFAULT_TITLE = "HBM & Company | Music, Film & Culture News";
 
 export const DEFAULT_DESCRIPTION =
-  "Enterprise news and intelligence for finance, crypto, and infrastructure. Original investigations, market analysis, and reportage.";
+  "Culture news and intelligence for music, film, and the arts. Original reviews, industry reporting, and editorial coverage from the HBM desk.";
+
+/** Shared favicon config — relative paths so icons resolve on all subdomains. */
+export const SITE_ICONS = {
+  icon: [
+    { url: "/icon.svg", type: "image/svg+xml" },
+    { url: "/apple-icon.png", type: "image/png", sizes: "180x180" },
+  ],
+  apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
+  shortcut: "/icon.svg",
+} as const;
 
 export const OG_IMAGE = `${SITE_URL}/og-image.png`;
 

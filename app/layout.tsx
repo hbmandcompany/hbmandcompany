@@ -3,7 +3,7 @@ import { Cormorant_Garamond, DM_Sans, Plus_Jakarta_Sans, Raleway } from "next/fo
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import JsonLd from "@/components/JsonLd";
-import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, OG_IMAGE, SITE_URL } from "@/lib/seo/site";
+import { DEFAULT_DESCRIPTION, DEFAULT_TITLE, OG_IMAGE, SITE_ICONS, SITE_URL } from "@/lib/seo/site";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -49,27 +49,27 @@ export const metadata: Metadata = {
   description: DEFAULT_DESCRIPTION,
 
   keywords: [
-    "crypto news",
-    "finance news",
-    "infrastructure news",
-    "blockchain reporting",
-    "DeFi analysis",
-    "Texas finance",
-    "on-chain intelligence",
-    "digital asset reporting",
-    "enterprise news",
+    "music news",
+    "film news",
+    "culture news",
+    "entertainment journalism",
+    "arts reporting",
+    "cinema coverage",
+    "music industry",
+    "film industry",
+    "culture desk",
     "HBM & Company",
     "HBM and Company",
-    "financial journalism",
-    "cryptocurrency news",
-    "markets desk",
+    "editorial coverage",
+    "reviews",
+    "arts and culture",
   ],
 
   authors: [{ name: "HBM & Company", url: SITE_URL }],
   creator: "HBM & Company",
   publisher: "HBM & Company",
   category: "News",
-  classification: "Finance / Cryptocurrency / Infrastructure News",
+  classification: "Music / Film / Culture News",
   referrer: "origin-when-cross-origin",
 
   robots: {
@@ -93,7 +93,7 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: SITE_URL,
     siteName: "HBM & Company",
-    title: "HBM & Company | Finance & Crypto News",
+    title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [
       {
@@ -108,18 +108,12 @@ export const metadata: Metadata = {
 
   twitter: {
     card: "summary_large_image",
-    title: "HBM & Company | Finance & Crypto News",
+    title: DEFAULT_TITLE,
     description: DEFAULT_DESCRIPTION,
     images: [OG_IMAGE],
   },
 
-  icons: {
-    icon: [
-      { url: "/icon.svg", type: "image/svg+xml" },
-      { url: "/apple-icon.png", type: "image/png", sizes: "180x180" },
-    ],
-    apple: [{ url: "/apple-icon.png", type: "image/png", sizes: "180x180" }],
-  },
+  icons: SITE_ICONS,
 
   manifest: "/site.webmanifest",
   formatDetection: {
@@ -158,6 +152,9 @@ export default function RootLayout({
       className={`${cormorant.variable} ${raleway.variable} ${robinhoodSans.variable} ${plusJakarta.variable}`}
     >
       <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="icon" href="/apple-icon.png" type="image/png" sizes="180x180" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" sizes="180x180" />
         <JsonLd />
       </head>
       <body className="bg-void text-cream antialiased overflow-x-hidden min-h-screen min-h-[100dvh]">
