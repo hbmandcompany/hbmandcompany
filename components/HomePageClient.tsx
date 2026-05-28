@@ -237,7 +237,7 @@ export default function HomePageClient({
       </section>
       ) : null}
 
-      <FooterDark typography="robinhood" showUpperBrandVoting={false} />
+      {studio ? null : <FooterDark typography="robinhood" showUpperBrandVoting={false} />}
         </>
       )}
     </div>

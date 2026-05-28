@@ -72,14 +72,12 @@ export function LiveStudioHomepage({
 
     function measure() {
       const viewportWidth = viewport!.clientWidth;
-      const viewportHeight = STUDIO_CARD_VIEWPORT_HEIGHT;
       const contentHeight = canvas!.scrollHeight || STUDIO_COMPACT_PAGE_HEIGHT;
       setPageHeight(contentHeight);
 
       const pad = 16;
       const scaleW = (viewportWidth - pad) / STUDIO_PAGE_WIDTH;
-      const scaleH = (viewportHeight - pad) / contentHeight;
-      setScale(Math.min(scaleW, scaleH, 1));
+      setScale(Math.min(scaleW, 1));
     }
 
     measure();
@@ -154,16 +152,12 @@ export function LiveStudioHomepage({
         </div>
       </div>
 
-      <div
-        ref={viewportRef}
-        className="relative overflow-hidden bg-[#020203]"
-        style={{ height: STUDIO_CARD_VIEWPORT_HEIGHT }}
-      >
+      <div ref={viewportRef} className="relative overflow-auto bg-[#020203]" style={{ height: STUDIO_CARD_VIEWPORT_HEIGHT }}>
         <div
-          className="absolute left-0 top-0 overflow-hidden"
+          className="mx-auto overflow-hidden"
           style={{
             width: STUDIO_PAGE_WIDTH * scale,
-            height: scaledHeight,
+            minHeight: scaledHeight,
           }}
         >
           <div
