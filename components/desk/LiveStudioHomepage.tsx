@@ -17,7 +17,6 @@ import type { EditorImageState } from "./EditorImagePanel";
 
 /** Matches the write editor card content height (headline + dek + ~18-row body). */
 export const STUDIO_CARD_VIEWPORT_HEIGHT = 520;
-const STUDIO_ZOOM_MULTIPLIER = 1.14;
 
 const STUDIO_SECTION_OPTIONS: { id: StudioSectionView; label: string }[] = [
   { id: "hero", label: "Hero" },
@@ -91,8 +90,7 @@ export function LiveStudioHomepage({
         const scaleW = (viewportWidth - pad) / STUDIO_PAGE_WIDTH;
         const scaleH = (viewportHeight - pad) / contentHeight;
         const fitted = Math.min(scaleW, scaleH, 1);
-        const zoom = sectionView === "hero" ? STUDIO_ZOOM_MULTIPLIER : 1;
-        setScale(Math.min(fitted * zoom, scaleW, scaleH, 1.25));
+        setScale(Math.min(fitted, scaleW, scaleH, 1.25));
       });
     }
 
