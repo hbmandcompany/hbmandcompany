@@ -2273,3 +2273,18 @@
 .featured-four-up__media {
   border-radius: 6px;
 }
+
+/* Desk Live Studio — scaled homepage canvas inside write-card viewport */
+.home-studio-canvas a,
+.home-studio-canvas button:not(.studio-slot *) {
+  pointer-events: none;
+}
+
+.home-studio-canvas .studio-slot {
+  pointer-events: auto;
+}
+
+.home-studio-canvas.home-front-unified {
+  min-height: 0;
+  padding-bottom: 0 !important;
+}

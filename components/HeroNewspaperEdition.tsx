@@ -3,6 +3,8 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { StudioSlot } from "@/components/desk/studio/StudioSlot";
+import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 import { getShopUrl } from "@/lib/site-urls";
 import type { MagazineStory } from "@/components/MagazineStoryCards";
 import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
@@ -123,6 +125,12 @@ function HeroSplitCenterImage({ src, alt }: { src: string; alt: string }) {
   );
 }
 
+export type HeroStudioConfig = {
+  draftStoryId: string;
+  selectedSlot: HomepageStudioSlot | null;
+  onSelectSlot: (slot: HomepageStudioSlot) => void;
+};
+
 /** DMN-style 3-column broadsheet hero with banner, masthead, and live ticker. */
 export function HeroNewspaperEdition({
   lead,
@@ -136,6 +144,7 @@ export function HeroNewspaperEdition({
   rightSecondaryBriefs,
   tickerHeadlines,
   footer,
+  studio,
 }: {
   lead: MagazineStory;
   /** Second story stacked under the left-column lead. */
@@ -151,7 +160,27 @@ export function HeroNewspaperEdition({
   tickerHeadlines: string[];
   /** Culture desk and below — rendered inside the same edition shell. */
   footer?: ReactNode;
+  studio?: HeroStudioConfig;
 }) {
+  const leadCopy = (
+    <article className="hero-front-page__lead-copy">
+      <span className="hero-front-page__category font-mono-hbm">{lead.category}</span>
+      {studio ? (
+        <h2 className="hero-front-page__headline font-cormorant font-semibold text-cream/92">{lead.headline}</h2>
+      ) : (
+        <Link
+          href={`/newspaper?story=${lead.storyId}`}
+          className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
+        >
+          <h2 className="hero-front-page__headline font-cormorant font-semibold text-cream/92 transition-colors group-hover:text-gold">
+            {lead.headline}
+          </h2>
+        </Link>
+      )}
+      <p className="hero-front-page__dek font-robinhood text-silver-dim/76">{lead.dek}</p>
+    </article>
+  );
+
   return (
     <div className="hero-dmn-shell mx-auto w-full max-w-[1440px]">
       <HeroEditionBanner />
@@ -161,18 +190,18 @@ export function HeroNewspaperEdition({
 
         <div className="hero-front-page" role="region" aria-label="Front page">
           <div className="hero-front-page__left">
-            <article className="hero-front-page__lead-copy">
-              <span className="hero-front-page__category font-mono-hbm">{lead.category}</span>
-              <Link
-                href={`/newspaper?story=${lead.storyId}`}
-                className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
+            {studio ? (
+              <StudioSlot
+                slotId="hero-lead"
+                selected={studio.selectedSlot === "hero-lead"}
+                isDraft={lead.storyId === studio.draftStoryId}
+                onSelect={studio.onSelectSlot}
               >
-                <h2 className="hero-front-page__headline font-cormorant font-semibold text-cream/92 transition-colors group-hover:text-gold">
-                  {lead.headline}
-                </h2>
-              </Link>
-              <p className="hero-front-page__dek font-robinhood text-silver-dim/76">{lead.dek}</p>
-            </article>
+                {leadCopy}
+              </StudioSlot>
+            ) : (
+              leadCopy
+            )}
             {leadFollowUp ? (
               <article className="hero-front-page__lead-follow">
                 <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>

@@ -17,18 +17,51 @@ import {
   buildHeroProps,
   buildHomepageSections,
 } from "@/lib/desk/homepage-sections";
+import {
+  buildStudioHeroProps,
+  buildStudioHomepageSections,
+  type HomepageStudioSlot,
+} from "@/lib/desk/homepage-studio";
 import type { PublicArticleBriefing } from "@/lib/desk/article-to-briefing";
+import type { DraftStudioStory } from "@/lib/desk/homepage-studio";
 
 const heroEase = [0.16, 1, 0.3, 1] as const;
+
+type HomePageStudioProps = {
+  draft: DraftStudioStory;
+  placementSlot: HomepageStudioSlot;
+  selectedSlot: HomepageStudioSlot | null;
+  onSelectSlot: (slot: HomepageStudioSlot) => void;
+};
 
 type HomePageClientProps = {
   heroBriefings?: PublicArticleBriefing[] | null;
   tickerHeadlines?: string[] | null;
+  studio?: HomePageStudioProps;
+  /** Desk Live Studio: hero + culture band only (fits write-card viewport). */
+  studioCompact?: boolean;
 };
 
-export default function HomePageClient({ heroBriefings = null, tickerHeadlines = null }: HomePageClientProps) {
-  const sections = buildHomepageSections(heroBriefings);
-  const hero = buildHeroProps(sections, tickerHeadlines);
+export default function HomePageClient({
+  heroBriefings = null,
+  tickerHeadlines = null,
+  studio,
+  studioCompact = false,
+}: HomePageClientProps) {
+  const sections = studio
+    ? buildStudioHomepageSections(heroBriefings, studio.draft, studio.placementSlot)
+    : buildHomepageSections(heroBriefings);
+  const hero = studio
+    ? buildStudioHeroProps(sections, studio.draft, studio.placementSlot, tickerHeadlines)
+    : buildHeroProps(sections, tickerHeadlines);
+
+  const studioGrid = studio
+    ? {
+        draftStoryId: studio.draft.storyId,
+        selectedSlot: studio.selectedSlot,
+        onSelectSlot: studio.onSelectSlot,
+      }
+    : undefined;
 
   const reduceMotion = useReducedMotion() === true;
 
@@ -109,9 +142,11 @@ export default function HomePageClient({ heroBriefings = null, tickerHeadlines =
               rightTopBriefs={hero.heroRightTopBriefs}
               rightSecondaryBriefs={hero.heroCulture}
               tickerHeadlines={hero.heroTicker}
+              studio={studioGrid}
               footer={
                 <DmnEditorialGrid
                   embedded
+                  studio={studioGrid}
                   columnistHeading="From HBM & Company · Culture Desk"
                   topRow={sections.editorialTopRow}
                   businessHeading="Markets"
@@ -125,6 +160,8 @@ export default function HomePageClient({ heroBriefings = null, tickerHeadlines =
         </motion.div>
       </section>
 
+      {studioCompact ? null : (
+        <>
       <section className="relative overflow-x-hidden bg-void py-4 md:py-5" aria-label="Thesis">
         <motion.div
           className="pointer-events-none absolute inset-0 opacity-[0.14]"
@@ -155,6 +192,7 @@ export default function HomePageClient({ heroBriefings = null, tickerHeadlines =
             <DeskWireNewsGrid
               wireStories={sections.marketsWire}
               lead={hero.liveHero ? sections.marketsLead : undefined}
+              studio={studioGrid}
             />
           </SectionReveal>
         </div>
@@ -179,6 +217,8 @@ export default function HomePageClient({ heroBriefings = null, tickerHeadlines =
       </section>
 
       <FooterDark typography="robinhood" showUpperBrandVoting={false} />
+        </>
+      )}
     </div>
     </>
   );

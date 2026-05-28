@@ -13,6 +13,8 @@ export { ConsequenceRadioDeck } from "@/components/ConsequenceRadioDeck";
 export { MagazineLifestyleGrid } from "@/components/MagazineLifestyleGrid";
 export { FeaturedStoriesFourUp } from "@/components/FeaturedStoriesFourUp";
 import { AdPlacementPlaceholder } from "@/components/AdPlacementPlaceholder";
+import { StudioSlot } from "@/components/desk/studio/StudioSlot";
+import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 
 const goldOutlineCta =
   "gold-outline-btn inline-block px-3 py-1 text-[10px] uppercase tracking-[0.18em] sm:px-4 sm:py-1.5 sm:text-label-xs sm:tracking-[0.2em]";
@@ -87,12 +89,23 @@ function DmnCategoryLabel({ children }: { children: string }) {
   );
 }
 
-function DmnTopCard({ item }: { item: WireBrief }) {
-  return (
-    <Link
-      href={`/newspaper?story=${item.storyId}`}
-      className="dmn-editorial__top-card group flex min-h-0 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-obsidian transition-colors hover:border-gold/22"
-    >
+export type HomepageGridStudioConfig = {
+  draftStoryId: string;
+  selectedSlot: HomepageStudioSlot | null;
+  onSelectSlot: (slot: HomepageStudioSlot) => void;
+};
+
+function DmnTopCard({
+  item,
+  studio,
+  slotId,
+}: {
+  item: WireBrief;
+  studio?: HomepageGridStudioConfig;
+  slotId?: HomepageStudioSlot;
+}) {
+  const card = (
+    <div className="dmn-editorial__top-card group flex min-h-0 flex-col overflow-hidden rounded-lg border border-white/[0.08] bg-obsidian transition-colors hover:border-gold/22">
       <div className="relative aspect-[4/3] w-full shrink-0 overflow-hidden bg-midnight">
         {item.imageSrc ? (
           <Image
@@ -113,7 +126,29 @@ function DmnTopCard({ item }: { item: WireBrief }) {
         <h3 className="font-cormorant text-base font-light leading-tight text-cream/88 line-clamp-3 group-hover:text-gold md:text-[1.05rem]">
           {item.headline}
         </h3>
+        {item.dek ? (
+          <p className="font-robinhood line-clamp-2 text-[11px] leading-snug text-silver-dim/65">{item.dek}</p>
+        ) : null}
       </div>
+    </div>
+  );
+
+  if (studio && slotId) {
+    return (
+      <StudioSlot
+        slotId={slotId}
+        selected={studio.selectedSlot === slotId}
+        isDraft={item.storyId === studio.draftStoryId}
+        onSelect={studio.onSelectSlot}
+      >
+        {card}
+      </StudioSlot>
+    );
+  }
+
+  return (
+    <Link href={`/newspaper?story=${item.storyId}`} className="block">
+      {card}
     </Link>
   );
 }
@@ -159,6 +194,7 @@ export function DmnEditorialGrid({
   businessPromo,
   businessPromoAd = false,
   embedded = false,
+  studio,
 }: {
   columnistHeading: string;
   topRow: WireBrief[];
@@ -169,6 +205,7 @@ export function DmnEditorialGrid({
   businessPromoAd?: boolean;
   /** Inside hero edition shell — no separate card border. */
   embedded?: boolean;
+  studio?: HomepageGridStudioConfig;
 }) {
   const promoHref = businessPromo?.href ?? `/newspaper?story=${businessPromo?.storyId ?? ""}`;
 
@@ -184,8 +221,13 @@ export function DmnEditorialGrid({
             embedded ? "pt-0" : "border-t border-white/[0.08] pt-5 md:pt-6",
           )}
         >
-          {topRow.slice(0, 4).map((item) => (
-            <DmnTopCard key={item.storyId} item={item} />
+          {topRow.slice(0, 4).map((item, index) => (
+            <DmnTopCard
+              key={`${item.storyId}-${index}`}
+              item={item}
+              studio={studio}
+              slotId={`editorial-top-${index}` as HomepageStudioSlot}
+            />
           ))}
         </div>
       </section>
@@ -207,6 +249,39 @@ export function DmnEditorialGrid({
           </nav>
 
           <article className="dmn-editorial__business-lead">
+            {studio ? (
+              <StudioSlot
+                slotId="business-lead"
+                selected={studio.selectedSlot === "business-lead"}
+                isDraft={businessLead.storyId === studio.draftStoryId}
+                onSelect={studio.onSelectSlot}
+              >
+                <div className="card-3d group grid h-full grid-cols-1 overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]">
+                  <div className="relative min-h-[200px] md:min-h-[260px]">
+                    {businessLead.imageSrc ? (
+                      <Image
+                        src={businessLead.imageSrc}
+                        alt={businessLead.imageAlt ?? businessLead.headline}
+                        fill
+                        className="object-cover"
+                        sizes="(max-width: 768px) 100vw, 40vw"
+                        unoptimized
+                      />
+                    ) : (
+                      <div className="absolute inset-0 bg-gradient-to-br from-midnight to-void" />
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-obsidian/70 to-transparent" />
+                  </div>
+                  <div className="flex flex-col justify-center gap-3 p-5 md:p-6">
+                    <DmnCategoryLabel>{businessLead.category}</DmnCategoryLabel>
+                    <h3 className="font-cormorant text-xl font-light leading-tight text-cream/90 md:text-2xl">
+                      {businessLead.headline}
+                    </h3>
+                    <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75 line-clamp-5">{businessLead.dek}</p>
+                  </div>
+                </div>
+              </StudioSlot>
+            ) : (
             <Link
               href={`/newspaper?story=${businessLead.storyId}`}
               className="card-3d group grid h-full grid-cols-1 overflow-hidden rounded-lg border border-white/[0.09] bg-obsidian md:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)]"
@@ -232,6 +307,7 @@ export function DmnEditorialGrid({
                 <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75 line-clamp-5">{businessLead.dek}</p>
               </div>
             </Link>
+            )}
           </article>
 
           {businessPromoAd ? (
@@ -478,6 +554,7 @@ export function BroadsheetFourColumnGrid({ columns }: { columns: BroadsheetColum
 export function DeskWireNewsGrid({
   wireStories,
   lead,
+  studio,
 }: {
   wireStories?: WireBrief[];
   lead?: {
@@ -488,6 +565,7 @@ export function DeskWireNewsGrid({
     imageSrc?: string;
     imageAlt?: string;
   };
+  studio?: HomepageGridStudioConfig;
 }) {
   const defaultWireStories: WireBrief[] = [
     {
@@ -529,6 +607,28 @@ export function DeskWireNewsGrid({
         />
       </div>
 
+      {studio && useLiveLead && lead ? (
+        <StudioSlot
+          slotId="markets-lead"
+          selected={studio.selectedSlot === "markets-lead"}
+          isDraft={lead.storyId === studio.draftStoryId}
+          onSelect={studio.onSelectSlot}
+        >
+          <article className="desk-wire-grid__lead card-3d overflow-hidden border border-white/[0.09] bg-obsidian">
+            <div className="grid md:grid-cols-2">
+              <div className="relative min-h-[200px] md:min-h-full">
+                <Image src={leadImage} alt="" fill className="object-cover" unoptimized />
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent to-obsidian/40 md:bg-gradient-to-l md:from-obsidian/30" />
+              </div>
+              <div className="flex flex-col gap-4 p-6 md:p-7">
+                <span className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/62">{lead.category}</span>
+                <h3 className="font-cormorant text-2xl font-light leading-tight text-cream/88 md:text-[1.75rem]">{lead.headline}</h3>
+                <p className="font-robinhood text-sm leading-relaxed text-silver-dim/75">{lead.dek}</p>
+              </div>
+            </div>
+          </article>
+        </StudioSlot>
+      ) : (
       <article className="desk-wire-grid__lead card-3d overflow-hidden border border-white/[0.09] bg-obsidian">
         <div className="grid md:grid-cols-2">
           <div className="relative min-h-[200px] md:min-h-full">
@@ -571,6 +671,7 @@ export function DeskWireNewsGrid({
           </div>
         </div>
       </article>
+      )}
 
       <div className="desk-wire-grid__list border border-white/[0.08] bg-obsidian/90">
         {stories.map((w) => (

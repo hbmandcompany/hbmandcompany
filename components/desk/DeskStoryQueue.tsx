@@ -191,7 +191,7 @@ export function DeskStoryQueue() {
                 >
                   <div className={clsx("border-b px-3 py-2", deskPaper.border)}>
                     <span className={clsx("font-robinhood text-[10px] uppercase tracking-[0.18em]", deskPaper.inkLabel)}>
-                      New story
+                      Story
                     </span>
                   </div>
                   {STORY_TYPES.map((type) => (
