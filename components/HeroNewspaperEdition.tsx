@@ -214,26 +214,30 @@ export function HeroNewspaperEdition({
               leadCopy
             )}
             {leadFollowUp ? (
-              <article className="hero-front-page__lead-follow">
-                <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>
-                {studio ? (
-                  <StudioSlot slotId="hero-follow-up" studio={studio} isDraft={leadFollowUp.storyId === studio.draftStoryId}>
+              studio ? (
+                <StudioSlot slotId="hero-follow-up" studio={studio} isDraft={leadFollowUp.storyId === studio.draftStoryId}>
+                  <article className="hero-front-page__lead-follow">
+                    <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>
                     <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88">
                       {leadFollowUp.headline}
                     </h3>
-                  </StudioSlot>
-                ) : (
-                  <Link
-                    href={`/newspaper?story=${leadFollowUp.storyId}`}
-                    className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
-                  >
-                    <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88 transition-colors group-hover:text-gold">
-                      {leadFollowUp.headline}
-                    </h3>
-                  </Link>
-                )}
+                    <p className="hero-front-page__lead-follow-dek font-robinhood text-silver-dim/68">{leadFollowUp.dek}</p>
+                  </article>
+                </StudioSlot>
+              ) : (
+              <article className="hero-front-page__lead-follow">
+                <span className="hero-front-page__category font-mono-hbm">{leadFollowUp.category}</span>
+                <Link
+                  href={`/newspaper?story=${leadFollowUp.storyId}`}
+                  className="group outline-none focus-visible:ring-2 focus-visible:ring-gold/30"
+                >
+                  <h3 className="hero-front-page__lead-follow-headline font-cormorant font-semibold text-cream/88 transition-colors group-hover:text-gold">
+                    {leadFollowUp.headline}
+                  </h3>
+                </Link>
                 <p className="hero-front-page__lead-follow-dek font-robinhood text-silver-dim/68">{leadFollowUp.dek}</p>
               </article>
+              )
             ) : null}
             <div className="hero-front-page__rule" aria-hidden />
             <nav className="hero-front-page__briefs" aria-label="More headlines">

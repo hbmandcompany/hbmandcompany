@@ -2331,7 +2331,6 @@
 
 .home-studio-canvas[data-slot-focus="true"] .studio-slot {
   opacity: 0.38;
-  transition: opacity 0.2s ease;
 }
 
 .home-studio-canvas[data-slot-focus="true"] .studio-slot[data-hovered="true"],

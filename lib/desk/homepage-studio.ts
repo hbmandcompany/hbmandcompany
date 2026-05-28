@@ -448,3 +448,107 @@ export function isDraftStudioSlot(slot: HomepageStudioSlot, draftStoryId: string
   }
   return false;
 }
+
+export type SlotCardFields = {
+  storyId: string;
+  headline: string;
+  dek: string;
+};
+
+type HeroProps = ReturnType<typeof buildHeroProps>;
+
+function fromWire(item: { storyId: string; headline: string; dek?: string }): SlotCardFields {
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek ?? "" };
+}
+
+function fromLead(item: { storyId: string; headline: string; dek: string }): SlotCardFields {
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek };
+}
+
+function fromMagazine(item: { storyId: string; headline: string; dek: string }): SlotCardFields {
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek };
+}
+
+/** Read headline + dek for any homepage placement slot from built section data. */
+export function resolveSlotCardFields(
+  sections: HomepageSections,
+  hero: HeroProps,
+  slot: HomepageStudioSlot,
+): SlotCardFields | null {
+  if (slot === "hero-lead") return fromMagazine(hero.heroLead);
+  if (slot === "hero-follow-up") return fromMagazine(hero.heroFollowUp);
+  if (slot === "hero-right-featured") return fromMagazine(hero.heroRightFeatured);
+  if (slot === "hero-right-secondary") return fromMagazine(hero.heroRightSecondary);
+
+  if (slot.startsWith("hero-left-")) {
+    const index = Number(slot.split("-").pop());
+    const item = hero.heroLeft[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot.startsWith("hero-right-top-")) {
+    const index = Number(slot.split("-").pop());
+    const item = hero.heroRightTopBriefs[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot.startsWith("hero-culture-")) {
+    const index = Number(slot.split("-").pop());
+    const item = hero.heroCulture[index];
+    return item ? fromWire(item) : null;
+  }
+
+  if (slot.startsWith("editorial-top-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.editorialTopRow[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot.startsWith("business-list-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.editorialBusinessList[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot === "business-lead") return fromLead(sections.editorialBusinessLead);
+
+  if (slot === "lifestyle-food-lead") return fromWire(sections.lifestyle.foodLead);
+  if (slot.startsWith("lifestyle-food-secondary-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.lifestyle.foodSecondary[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot.startsWith("lifestyle-food-col2-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.lifestyle.foodColTwo[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot.startsWith("lifestyle-food-thumb-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.lifestyle.foodThumbs[index];
+    return item ? fromWire(item) : null;
+  }
+  if (slot.startsWith("lifestyle-arts-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.lifestyle.artsStories[index];
+    return item ? fromWire(item) : null;
+  }
+
+  if (slot === "markets-lead") return fromLead(sections.marketsLead);
+  if (slot.startsWith("markets-wire-")) {
+    const index = Number(slot.split("-").pop());
+    const item = sections.marketsWire[index];
+    return item ? fromWire(item) : null;
+  }
+
+  if (slot.startsWith("column-") && slot.endsWith("-lead")) {
+    const columnIndex = Number(slot.split("-")[1]);
+    const lead = sections.broadsheetColumns[columnIndex]?.lead;
+    return lead ? { storyId: lead.storyId, headline: lead.headline, dek: "" } : null;
+  }
+  if (slot.startsWith("column-") && slot.includes("-more-")) {
+    const [, columnToken, , moreToken] = slot.split("-");
+    const columnIndex = Number(columnToken);
+    const moreIndex = Number(moreToken);
+    const item = sections.broadsheetColumns[columnIndex]?.more[moreIndex];
+    return item ? { storyId: item.storyId, headline: item.headline, dek: "" } : null;
+  }
+
+  return null;
+}

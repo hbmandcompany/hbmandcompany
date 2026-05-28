@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { clsx } from "clsx";
 import { deskPaper } from "@/components/desk/desk-paper";
 import {
@@ -15,24 +14,15 @@ export function StudioPlacementPanel({
   hoveredSlot,
   onSelectSlot,
   onHoverSlot,
-  onEditFields,
 }: {
   placementSlot: HomepageStudioSlot;
   selectedSlot: HomepageStudioSlot | null;
   hoveredSlot: HomepageStudioSlot | null;
   onSelectSlot: (slot: HomepageStudioSlot) => void;
   onHoverSlot: (slot: HomepageStudioSlot | null) => void;
-  onEditFields: () => void;
 }) {
-  const slotRefs = useRef<Map<HomepageStudioSlot, HTMLButtonElement>>(new Map());
-
-  useEffect(() => {
-    if (!hoveredSlot) return;
-    slotRefs.current.get(hoveredSlot)?.scrollIntoView({ block: "nearest", behavior: "smooth" });
-  }, [hoveredSlot]);
-
   return (
-    <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
+    <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)} data-studio-placement-panel>
       <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Placement</div>
       <p className={clsx("mt-1 font-robinhood text-[11px] leading-relaxed", deskPaper.inkMeta)}>
         Hover a slot to illuminate it on the preview — and vice versa.
@@ -59,10 +49,6 @@ export function StudioPlacementPanel({
                   return (
                     <button
                       key={slot}
-                      ref={(el) => {
-                        if (el) slotRefs.current.set(slot, el);
-                        else slotRefs.current.delete(slot);
-                      }}
                       type="button"
                       onClick={() => onSelectSlot(slot)}
                       onMouseEnter={() => onHoverSlot(slot)}
@@ -85,21 +71,6 @@ export function StudioPlacementPanel({
           );
         })}
       </div>
-
-      {selectedSlot ? (
-        <button
-          type="button"
-          onClick={onEditFields}
-          className={clsx(
-            "mt-4 w-full rounded-md border py-2 font-robinhood text-[10px] uppercase tracking-wider",
-            deskPaper.border,
-            deskPaper.accent,
-            deskPaper.hover,
-          )}
-        >
-          Edit full story →
-        </button>
-      ) : null}
     </section>
   );
 }

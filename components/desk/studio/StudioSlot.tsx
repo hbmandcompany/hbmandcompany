@@ -47,7 +47,15 @@ export function StudioSlot({
           : undefined
       }
       onMouseEnter={hoverHandler ? () => hoverHandler(slotId) : undefined}
-      onMouseLeave={hoverHandler ? () => hoverHandler(null) : undefined}
+      onMouseLeave={
+        hoverHandler
+          ? (e) => {
+              const next = e.relatedTarget;
+              if (next instanceof Node && e.currentTarget.contains(next)) return;
+              hoverHandler(null);
+            }
+          : undefined
+      }
       onKeyDown={
         selectHandler
           ? (e) => {
@@ -66,11 +74,11 @@ export function StudioSlot({
         <>
           <div
             className={clsx(
-              "pointer-events-none absolute inset-0 z-20 rounded-[inherit] transition-all duration-200",
+              "pointer-events-none absolute inset-0 z-20 rounded-[inherit]",
               isSelected && "bg-gold/[0.08] ring-2 ring-gold shadow-[0_0_0_1px_rgba(201,169,98,0.35)]",
               isHovered && !isSelected && "bg-gold/[0.14] ring-2 ring-gold/95 shadow-[0_0_32px_rgba(201,169,98,0.55)]",
               isHovered && isSelected && "bg-gold/[0.12] shadow-[0_0_36px_rgba(201,169,98,0.65)]",
-              !isHovered && !isSelected && "ring-1 ring-transparent hover:ring-gold/35",
+              !isHovered && !isSelected && "ring-1 ring-transparent",
             )}
             aria-hidden
           />

@@ -1,27 +1,35 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { clsx } from "clsx";
 import { useDesk } from "@/components/desk/DeskContext";
 import { deskPaper } from "@/components/desk/desk-paper";
 import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
-import { EditorSitePreview } from "@/components/desk/EditorSitePreview";
 import { LiveArticleEditor } from "@/components/desk/LiveArticleEditor";
 import { LiveStudioHomepage } from "@/components/desk/LiveStudioHomepage";
 import { StudioPlacementPanel } from "@/components/desk/StudioPlacementPanel";
 import { ARTICLE_WEIGHT_OPTIONS } from "@/components/desk/ArticleWeightBadge";
 import { countWords, deskStatusFromArticle, slugifyTitle } from "@/components/desk/desk-article-mappers";
+import { articleToBriefing } from "@/lib/desk/article-to-briefing";
+import {
+  buildStudioHeroProps,
+  buildStudioHomepageSections,
+  resolveSlotCardFields,
+  type HomepageStudioSlot,
+  type SlotCardFields,
+} from "@/lib/desk/homepage-studio";
 import {
   fetchArticleByIdClient,
+  fetchPublishedArticlesClient,
   publishArticleClient,
   saveArticleDraftClient,
   submitArticleForReviewClient,
+  updateArticleClient,
 } from "@/lib/supabase/queries/articles.client";
 import type { ArticleStatus } from "@/lib/supabase/types";
-import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 
 const defaultDraft = {
   section: "Finance",
@@ -29,57 +37,9 @@ const defaultDraft = {
   tone: "neutral" as const,
 };
 
-type StudioTab = "homepage" | "write" | "preview";
+type StudioView = "homepage" | "write";
 
-function StudioTabBar({
-  active,
-  onHomepage,
-  onWrite,
-  onPreview,
-}: {
-  active: StudioTab;
-  onHomepage: () => void;
-  onWrite: () => void;
-  onPreview: () => void;
-}) {
-  return (
-    <div className={clsx("flex flex-wrap items-center rounded-md border p-0.5", deskPaper.border)}>
-      <button
-        type="button"
-        onClick={onHomepage}
-        className={clsx(
-          "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
-          active === "homepage" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover),
-        )}
-      >
-        Homepage
-      </button>
-
-      <span className={clsx("mx-1 h-5 w-px shrink-0", deskPaper.border)} aria-hidden />
-
-      <button
-        type="button"
-        onClick={onWrite}
-        className={clsx(
-          "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
-          active === "write" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover),
-        )}
-      >
-        Write
-      </button>
-      <button
-        type="button"
-        onClick={onPreview}
-        className={clsx(
-          "rounded px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
-          active === "preview" ? clsx(deskPaper.activeNav, deskPaper.inkHeading) : clsx(deskPaper.inkMeta, deskPaper.hover),
-        )}
-      >
-        Preview
-      </button>
-    </div>
-  );
-}
+type CardBaseline = SlotCardFields & { slot: HomepageStudioSlot };
 
 export default function StoryEditorPage() {
   const router = useRouter();
@@ -95,10 +55,11 @@ export default function StoryEditorPage() {
   const [lastSavedAt, setLastSavedAt] = useState<Date | null>(null);
   const [articleStatus, setArticleStatus] = useState<ArticleStatus>("draft");
 
-  const [studioTab, setStudioTab] = useState<StudioTab>("homepage");
+  const [studioView, setStudioView] = useState<StudioView>("homepage");
   const [placementSlot, setPlacementSlot] = useState<HomepageStudioSlot>("editorial-top-0");
   const [selectedSlot, setSelectedSlot] = useState<HomepageStudioSlot | null>("editorial-top-0");
   const [hoveredSlot, setHoveredSlot] = useState<HomepageStudioSlot | null>(null);
+  const [focusedSlot, setFocusedSlot] = useState<HomepageStudioSlot | null>(null);
 
   const [headline, setHeadline] = useState("");
   const [dek, setDek] = useState("");
@@ -107,9 +68,53 @@ export default function StoryEditorPage() {
   const [weight, setWeight] = useState("");
   const [heroImage, setHeroImage] = useState<EditorImageState | null>(null);
 
+  const [cardHeadline, setCardHeadline] = useState("");
+  const [cardDek, setCardDek] = useState("");
+  const [cardStoryId, setCardStoryId] = useState<string | null>(null);
+  const [cardBaseline, setCardBaseline] = useState<CardBaseline | null>(null);
+  const [savedDraftBaseline, setSavedDraftBaseline] = useState({ headline: "", dek: "", body: "" });
+
+  const [publishedBriefings, setPublishedBriefings] = useState<ReturnType<typeof articleToBriefing>[] | null>(null);
+  const hoverClearRef = useRef<number | null>(null);
+
+  const handleHoverSlot = useCallback((slot: HomepageStudioSlot | null) => {
+    if (slot) {
+      if (hoverClearRef.current !== null) {
+        window.clearTimeout(hoverClearRef.current);
+        hoverClearRef.current = null;
+      }
+      setHoveredSlot(slot);
+      return;
+    }
+    hoverClearRef.current = window.setTimeout(() => {
+      setHoveredSlot(null);
+      hoverClearRef.current = null;
+    }, 100);
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      if (hoverClearRef.current !== null) window.clearTimeout(hoverClearRef.current);
+    };
+  }, []);
+
+  const refreshPublishedBriefings = useCallback(async () => {
+    const result = await fetchPublishedArticlesClient();
+    setPublishedBriefings((result.data ?? []).map(articleToBriefing));
+  }, []);
+
+  useEffect(() => {
+    void refreshPublishedBriefings();
+  }, [refreshPublishedBriefings]);
+
   useEffect(() => {
     setArticleId(storyId);
   }, [storyId]);
+
+  useEffect(() => {
+    const mode = searchParams.get("mode");
+    if (mode === "write") setStudioView("write");
+  }, [searchParams]);
 
   useEffect(() => {
     if (!storyId) {
@@ -140,6 +145,11 @@ export default function StoryEditorPage() {
         setBody(article.body ?? "");
         setWeight(article.weight ?? "");
         setArticleStatus(article.status);
+        setSavedDraftBaseline({
+          headline: article.title,
+          dek: article.excerpt ?? "",
+          body: article.body ?? "",
+        });
         if (article.hero_image_url) {
           setHeroImage({
             url: article.hero_image_url,
@@ -165,6 +175,52 @@ export default function StoryEditorPage() {
     };
   }, [heroImage?.url]);
 
+  const draftStoryId = articleId ?? "studio-draft";
+
+  const previewBriefings = useMemo(() => {
+    if (!publishedBriefings) return null;
+    if (!focusedSlot || !cardStoryId || cardStoryId === draftStoryId || cardStoryId === articleId) return publishedBriefings;
+    return publishedBriefings.map((briefing) =>
+      briefing.id === cardStoryId
+        ? { ...briefing, headline: cardHeadline, dek: cardDek }
+        : briefing,
+    );
+  }, [publishedBriefings, focusedSlot, cardStoryId, draftStoryId, articleId, cardHeadline, cardDek]);
+
+  const studioSections = useMemo(
+    () =>
+      buildStudioHomepageSections(previewBriefings, {
+        storyId: draftStoryId,
+        headline,
+        dek,
+        category: section,
+        imageSrc: heroImage?.url,
+      }, placementSlot),
+    [previewBriefings, draftStoryId, headline, dek, section, heroImage?.url, placementSlot],
+  );
+
+  const studioHero = useMemo(
+    () =>
+      buildStudioHeroProps(
+        studioSections,
+        { storyId: draftStoryId, headline, dek, category: section, imageSrc: heroImage?.url },
+        placementSlot,
+      ),
+    [studioSections, draftStoryId, headline, dek, section, heroImage?.url, placementSlot],
+  );
+
+  const resolveSlotFields = useCallback(
+    (slot: HomepageStudioSlot) => resolveSlotCardFields(studioSections, studioHero, slot),
+    [studioSections, studioHero],
+  );
+
+  const previewSlot = hoveredSlot ?? focusedSlot;
+  const previewFields = previewSlot ? resolveSlotFields(previewSlot) : null;
+
+  const displayHeadline = focusedSlot ? cardHeadline : previewFields?.headline ?? "";
+  const displayDek = focusedSlot ? cardDek : previewFields?.dek ?? "";
+  const cardEditable = focusedSlot !== null;
+
   function updateHeroImage(next: EditorImageState | null) {
     setHeroImage((prev) => {
       if (prev?.url.startsWith("blob:") && prev.url !== next?.url) URL.revokeObjectURL(prev.url);
@@ -172,14 +228,48 @@ export default function StoryEditorPage() {
     });
   }
 
-  function selectPlacement(slot: HomepageStudioSlot) {
+  const clearCardEdit = useCallback(() => {
+    setFocusedSlot(null);
+  }, []);
+
+  function focusSlot(slot: HomepageStudioSlot) {
+    if (focusedSlot === slot) {
+      clearCardEdit();
+      return;
+    }
+    const fields = resolveSlotFields(slot);
+    setFocusedSlot(slot);
     setSelectedSlot(slot);
     setPlacementSlot(slot);
+    if (fields) {
+      setCardHeadline(fields.headline);
+      setCardDek(fields.dek);
+      setCardStoryId(fields.storyId);
+      setCardBaseline({ ...fields, slot });
+      if (fields.storyId === draftStoryId || fields.storyId === articleId) {
+        setHeadline(fields.headline);
+        setDek(fields.dek);
+      }
+    }
   }
 
-  function handleCanvasSlot(slot: HomepageStudioSlot) {
-    selectPlacement(slot);
-    setStudioTab("write");
+  function handleCardHeadlineChange(value: string) {
+    setCardHeadline(value);
+    if (cardStoryId === draftStoryId || cardStoryId === articleId) setHeadline(value);
+  }
+
+  function handleCardDekChange(value: string) {
+    setCardDek(value);
+    if (cardStoryId === draftStoryId || cardStoryId === articleId) setDek(value);
+  }
+
+  function handleWriteClick() {
+    const targetStoryId = cardStoryId ?? articleId;
+    if (targetStoryId && targetStoryId !== articleId) {
+      router.push(`/desk/newsroom/editor?story=${targetStoryId}&mode=write`);
+      return;
+    }
+    setStudioView("write");
   }
 
   const wordCount = useMemo(() => countWords([headline, dek, body].join(" ")), [headline, dek, body]);
@@ -190,6 +280,20 @@ export default function StoryEditorPage() {
     if (mapped.label === "DRAFT") return { label: "Live Studio", tone: mapped.tone };
     return mapped;
   }, [loading, articleStatus]);
+
+  const cardDirty = Boolean(
+    focusedSlot &&
+      cardBaseline &&
+      (cardHeadline !== cardBaseline.headline || cardDek !== cardBaseline.dek),
+  );
+
+  const draftDirty = Boolean(
+    headline !== savedDraftBaseline.headline ||
+      dek !== savedDraftBaseline.dek ||
+      body !== savedDraftBaseline.body,
+  );
+
+  const hasUnsavedChanges = cardDirty || draftDirty;
 
   const buildPayload = useCallback(
     () => ({
@@ -205,7 +309,60 @@ export default function StoryEditorPage() {
     [headline, dek, body, articleStatus, heroImage, weight],
   );
 
+  async function saveCardFields(): Promise<boolean> {
+    if (!focusedSlot || !cardStoryId || !cardDirty) return true;
+
+    setSaving(true);
+    setSaveError(null);
+
+    const title = cardHeadline.trim() || "Untitled draft";
+    const excerpt = cardDek.trim() || null;
+    const isCurrentDraft = cardStoryId === draftStoryId || cardStoryId === articleId;
+
+    let result;
+    if (isCurrentDraft) {
+      setHeadline(title);
+      setDek(excerpt ?? "");
+      result = await saveArticleDraftClient(articleId, {
+        ...buildPayload(),
+        title,
+        excerpt,
+        status: "draft",
+        published_at: null,
+      });
+    } else {
+      result = await updateArticleClient(cardStoryId, { title, excerpt });
+    }
+
+    setSaving(false);
+
+    if (result.error) {
+      setSaveError(result.error.message);
+      return false;
+    }
+
+    if (result.data) {
+      setCardBaseline({ slot: focusedSlot, storyId: cardStoryId, headline: title, dek: excerpt ?? "" });
+      if (isCurrentDraft) {
+        setArticleId(result.data.id);
+        setArticleStatus(result.data.status);
+        setSavedDraftBaseline({ headline: title, dek: excerpt ?? "", body });
+        if (!articleId) {
+          router.replace(`/desk/newsroom/editor?story=${result.data.id}`);
+        }
+      }
+      setLastSavedAt(new Date());
+      await refreshPublishedBriefings();
+    }
+
+    return true;
+  }
+
   async function persist(action: "draft" | "review" | "publish"): Promise<boolean> {
+    if (action === "draft" && cardDirty) {
+      return saveCardFields();
+    }
+
     if (!weight) {
       setSaveError("Select a weight before saving.");
       return false;
@@ -236,9 +393,14 @@ export default function StoryEditorPage() {
       setArticleId(result.data.id);
       setArticleStatus(result.data.status);
       setLastSavedAt(new Date());
+      setSavedDraftBaseline({
+        headline: result.data.title,
+        dek: result.data.excerpt ?? "",
+        body: result.data.body ?? "",
+      });
 
       if (!articleId) {
-        router.replace(`/desk/newsroom/editor?mode=write&story=${result.data.id}`);
+        router.replace(`/desk/newsroom/editor?story=${result.data.id}`);
       }
     }
 
@@ -262,25 +424,35 @@ export default function StoryEditorPage() {
           </Link>
           <PaperStatusPill label={statusDisplay.label} tone={statusDisplay.tone} />
           <span className={clsx("font-robinhood text-[11px] tabular-nums", deskPaper.inkMeta)}>{wordCount.toLocaleString()} words</span>
+          {hasUnsavedChanges ? (
+            <span className="font-robinhood text-[10px] uppercase tracking-wider text-[#8d6f4d]">Unsaved changes</span>
+          ) : null}
         </div>
 
-        <StudioTabBar
-          active={studioTab}
-          onHomepage={() => setStudioTab("homepage")}
-          onWrite={() => setStudioTab("write")}
-          onPreview={() => setStudioTab("preview")}
-        />
-
         <div className="flex flex-wrap items-center gap-2">
+          {studioView === "write" ? (
+            <button
+              type="button"
+              onClick={() => setStudioView("homepage")}
+              className={clsx(
+                "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
+                deskPaper.border,
+                deskPaper.inkMeta,
+                deskPaper.hover,
+              )}
+            >
+              ← Homepage
+            </button>
+          ) : null}
           <button
             type="button"
-            disabled={saving}
+            disabled={saving || !hasUnsavedChanges}
             onClick={() => void persist("draft")}
             className={clsx(
               "rounded border px-4 py-2 font-robinhood text-[10px] uppercase tracking-wider transition-colors disabled:opacity-50",
-              deskPaper.border,
-              deskPaper.inkMeta,
-              deskPaper.hover,
+              hasUnsavedChanges
+                ? "border-[#6a5843] bg-[#8d6f4d] text-[#f2e6d1] hover:bg-[#6a5843]"
+                : clsx(deskPaper.border, deskPaper.inkMeta, deskPaper.hover),
             )}
           >
             {saving ? "Saving…" : "Save draft"}
@@ -321,22 +493,28 @@ export default function StoryEditorPage() {
 
       <div className="grid flex-1 gap-6 px-6 py-6 lg:grid-cols-[1fr_280px]">
         <div className="min-w-0">
-          {studioTab === "homepage" ? (
+          {studioView === "homepage" ? (
             <LiveStudioHomepage
               storyId={articleId}
               headline={headline}
               dek={dek}
               section={section}
               heroImage={heroImage}
-              onHeadlineChange={setHeadline}
-              onDekChange={setDek}
+              cardHeadline={displayHeadline}
+              cardDek={displayDek}
+              cardEditable={cardEditable}
+              onCardHeadlineChange={handleCardHeadlineChange}
+              onCardDekChange={handleCardDekChange}
               selectedSlot={selectedSlot}
               placementSlot={placementSlot}
               hoveredSlot={hoveredSlot}
-              onSelectSlot={handleCanvasSlot}
-              onHoverSlot={setHoveredSlot}
+              onSelectSlot={focusSlot}
+              onHoverSlot={handleHoverSlot}
+              onWriteClick={handleWriteClick}
+              onClearCardEdit={clearCardEdit}
+              publishedBriefings={previewBriefings}
             />
-          ) : studioTab === "write" ? (
+          ) : (
             <LiveArticleEditor
               headline={headline}
               dek={dek}
@@ -349,30 +527,19 @@ export default function StoryEditorPage() {
               onDekChange={setDek}
               onBodyChange={setBody}
             />
-          ) : (
-            <EditorSitePreview
-              headline={headline}
-              dek={dek}
-              body={body}
-              section={section}
-              byline={user.name}
-              image={heroImage}
-              weight={weight}
-            />
           )}
         </div>
 
         <aside className="space-y-4">
           <EditorImagePanel image={heroImage} onImageChange={updateHeroImage} />
 
-          {studioTab === "homepage" ? (
+          {studioView === "homepage" ? (
             <StudioPlacementPanel
               placementSlot={placementSlot}
               selectedSlot={selectedSlot}
               hoveredSlot={hoveredSlot}
-              onSelectSlot={selectPlacement}
-              onHoverSlot={setHoveredSlot}
-              onEditFields={() => setStudioTab("write")}
+              onSelectSlot={focusSlot}
+              onHoverSlot={handleHoverSlot}
             />
           ) : null}
 
