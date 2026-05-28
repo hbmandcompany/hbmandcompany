@@ -103,6 +103,7 @@ export default function HomePageClient({
   const showColumns = studioSection === "all" || studioSection === "columns";
   const showHeroFooter = !(studio && studioSection === "hero" && !studio.revealHeroFooter);
   const studioFocused = Boolean(studio && studioSection !== "all");
+  const heroStudioPreview = Boolean(studio && studioSection === "hero");
   const showMarketsAd = showMarkets && !studioFocused;
   const sectionBandClass = studioFocused ? "py-4 md:py-5" : "py-10 md:py-12";
 
@@ -111,9 +112,15 @@ export default function HomePageClient({
       <div className="font-robinhood font-normal tracking-normal antialiased home-robinhood">
       {showHero ? (
       <section
-        className="home-front-unified relative flex flex-col justify-start pt-[calc(env(safe-area-inset-top,0px)+0.35rem)] pb-10 md:pt-[calc(env(safe-area-inset-top,0px)+0.5rem)] md:pb-12"
+        className={clsx(
+          "home-front-unified relative flex flex-col justify-start",
+          heroStudioPreview
+            ? "home-front-unified--studio-preview bg-void pt-0 pb-0"
+            : "pt-[calc(env(safe-area-inset-top,0px)+0.35rem)] pb-10 md:pt-[calc(env(safe-area-inset-top,0px)+0.5rem)] md:pb-12",
+        )}
         aria-label="Front page"
       >
+        {!heroStudioPreview ? (
         <div className="absolute inset-0 z-0 overflow-hidden">
         <Image
             src="https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?w=1920&q=90"
@@ -130,7 +137,9 @@ export default function HomePageClient({
           <div className="absolute inset-0"
             style={{ background: "radial-gradient(ellipse 70% 70% at 50% 50%, transparent 40%, rgba(2,2,5,0.7) 100%)" }} />
         </div>
+        ) : null}
 
+        {!heroStudioPreview ? (
           <div
             className="pointer-events-none absolute left-1/2 top-[42%] z-[1] h-[min(58vh,520px)] w-[min(92vw,720px)] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-90"
             style={{
@@ -139,6 +148,7 @@ export default function HomePageClient({
             }}
             aria-hidden
           />
+        ) : null}
 
         <h1 className="sr-only">
           Music, Film &amp; Culture News — HBM &amp; Company
@@ -148,7 +158,10 @@ export default function HomePageClient({
           variants={heroContainer}
           initial="hidden"
           animate="show"
-          className="relative z-10 mx-auto w-full max-w-[1440px] px-[max(1.25rem,env(safe-area-inset-left,0px))] md:px-12"
+          className={clsx(
+            "relative z-10 mx-auto w-full max-w-[1440px]",
+            heroStudioPreview ? "px-0" : "px-[max(1.25rem,env(safe-area-inset-left,0px))] md:px-12",
+          )}
           style={{ transform: "translateZ(0)" }}
         >
           <motion.div variants={heroItem} style={{ willChange: "transform" }}>
@@ -164,6 +177,7 @@ export default function HomePageClient({
               rightSecondaryBriefs={hero.heroCulture}
               tickerHeadlines={hero.heroTicker}
               studio={studioGrid}
+              studioPreview={heroStudioPreview}
               footer={
                 showHeroFooter ? (
                 <DmnEditorialGrid

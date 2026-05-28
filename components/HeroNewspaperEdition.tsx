@@ -3,6 +3,7 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { clsx } from "clsx";
 import { StudioSlot } from "@/components/desk/studio/StudioSlot";
 import type { HomepageStudioCanvasConfig, HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 import { getShopUrl } from "@/lib/site-urls";
@@ -161,6 +162,7 @@ export function HeroNewspaperEdition({
   tickerHeadlines,
   footer,
   studio,
+  studioPreview = false,
 }: {
   lead: MagazineStory;
   /** Second story stacked under the left-column lead. */
@@ -177,6 +179,8 @@ export function HeroNewspaperEdition({
   /** Culture desk and below — rendered inside the same edition shell. */
   footer?: ReactNode;
   studio?: HomepageStudioCanvasConfig;
+  /** Live Studio hero tab — front page grid only, no banner/masthead/ticker. */
+  studioPreview?: boolean;
 }) {
   const leadCopy = (
     <article className="hero-front-page__lead-copy">
@@ -198,11 +202,16 @@ export function HeroNewspaperEdition({
   );
 
   return (
-    <div className="hero-dmn-shell mx-auto w-full max-w-[1440px]">
-      <HeroEditionBanner />
-      <div className={footer ? "hero-dmn-edition hero-dmn-edition--with-footer" : "hero-dmn-edition"}>
-        <HeroMasthead />
-        <HeroEditionTicker headlines={tickerHeadlines} />
+    <div className={clsx("hero-dmn-shell mx-auto w-full max-w-[1440px]", studioPreview && "hero-dmn-shell--studio-preview")}>
+      {!studioPreview ? <HeroEditionBanner /> : null}
+      <div
+        className={clsx(
+          footer ? "hero-dmn-edition hero-dmn-edition--with-footer" : "hero-dmn-edition",
+          studioPreview && "hero-dmn-edition--studio-preview",
+        )}
+      >
+        {!studioPreview ? <HeroMasthead /> : null}
+        {!studioPreview ? <HeroEditionTicker headlines={tickerHeadlines} /> : null}
 
         <div className="hero-front-page" role="region" aria-label="Front page">
           <div className="hero-front-page__left">
