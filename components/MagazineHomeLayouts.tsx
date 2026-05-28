@@ -667,12 +667,12 @@ export function DeskWireNewsGrid({
     },
   ];
 
+  const useLiveLead = Boolean(lead);
   const rawStories = wireStories ?? defaultWireStories;
   const stories =
     useLiveLead && lead ? rawStories.filter((w) => w.storyId !== lead.storyId) : rawStories;
   const leadImage =
     lead?.imageSrc ?? "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=85";
-  const useLiveLead = Boolean(lead);
 
   return (
     <div className="desk-wire-grid">
