@@ -353,7 +353,7 @@ function buildFallbackSections(): HomepageSections {
       imageAlt: FALLBACK_SUITE.imageAlt,
     },
     lifestyle,
-    marketsWire: FALLBACK_WIRE.slice(7, 10),
+    marketsWire: FALLBACK_WIRE.slice(8, 10),
     marketsLead: {
       storyId: FALLBACK_WIRE[7].storyId,
       category: FALLBACK_WIRE[7].category,

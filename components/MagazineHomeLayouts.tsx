@@ -667,7 +667,9 @@ export function DeskWireNewsGrid({
     },
   ];
 
-  const stories = wireStories ?? defaultWireStories;
+  const rawStories = wireStories ?? defaultWireStories;
+  const stories =
+    useLiveLead && lead ? rawStories.filter((w) => w.storyId !== lead.storyId) : rawStories;
   const leadImage =
     lead?.imageSrc ?? "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=800&q=85";
   const useLiveLead = Boolean(lead);
@@ -685,7 +687,12 @@ export function DeskWireNewsGrid({
 
       {(() => {
         const leadArticle = (
-          <article className="desk-wire-grid__lead card-3d overflow-hidden border border-white/[0.09] bg-obsidian">
+          <article
+            className={clsx(
+              "card-3d h-full overflow-hidden border border-white/[0.09] bg-obsidian",
+              !studio && "desk-wire-grid__lead",
+            )}
+          >
             <div className="grid md:grid-cols-2">
               <div className="relative min-h-[200px] md:min-h-full">
                 <Image src={leadImage} alt="" fill className="object-cover" unoptimized />
@@ -727,6 +734,7 @@ export function DeskWireNewsGrid({
               slotId="markets-lead"
               studio={studio}
               isDraft={Boolean(lead && lead.storyId === studio.draftStoryId)}
+              className="desk-wire-grid__lead min-h-0"
             >
               {leadArticle}
             </StudioSlot>

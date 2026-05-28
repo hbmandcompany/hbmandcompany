@@ -1101,6 +1101,11 @@
 
   .desk-wire-grid__lead {
     grid-column: 1 / span 7;
+    min-height: 0;
+  }
+
+  .desk-wire-grid .studio-slot.desk-wire-grid__lead > article {
+    height: 100%;
   }
 
   .desk-wire-grid__list {
