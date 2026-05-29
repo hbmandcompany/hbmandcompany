@@ -226,17 +226,20 @@ export type HomepageStudioCanvasConfig = {
   onHoverSlot: (slot: HomepageStudioSlot | null) => void;
 };
 
-export type StudioSectionView = "hero" | "lifestyle" | "markets" | "columns";
+export type StudioSectionView = "hero" | "culture" | "lifestyle" | "markets" | "columns";
 
 /** Maps a placement slot to the homepage section tab that contains it. */
 export function studioSectionForSlot(slot: HomepageStudioSlot): StudioSectionView {
   if (slot.startsWith("lifestyle-")) return "lifestyle";
   if (slot.startsWith("markets-")) return "markets";
   if (slot.startsWith("column-")) return "columns";
+  if (slot.startsWith("editorial-top-") || slot.startsWith("business-list-") || slot === "business-lead") {
+    return "culture";
+  }
   return "hero";
 }
 
-/** Editorial grid + culture/markets block live in the hero footer band. */
+/** @deprecated Culture Desk has its own section tab. */
 export function slotRequiresHeroFooter(slot: HomepageStudioSlot): boolean {
   return slot.startsWith("editorial-top-") || slot.startsWith("business-list-") || slot === "business-lead";
 }

@@ -35,11 +35,11 @@ type HomePageStudioProps = {
   hoveredSlot: HomepageStudioSlot | null;
   onSelectSlot: (slot: HomepageStudioSlot) => void;
   onHoverSlot: (slot: HomepageStudioSlot | null) => void;
-  /** When hovering editorial/business slots, reveal the hero footer band. */
+  /** @deprecated Culture Desk has its own section tab — footer no longer toggles on hover. */
   revealHeroFooter?: boolean;
 };
 
-export type StudioSectionView = "hero" | "lifestyle" | "markets" | "columns" | "all";
+export type StudioSectionView = "hero" | "culture" | "lifestyle" | "markets" | "columns" | "all";
 
 type HomePageClientProps = {
   heroBriefings?: PublicArticleBriefing[] | null;
@@ -98,12 +98,14 @@ export default function HomePageClient({
   };
 
   const showHero = studioSection === "all" || studioSection === "hero";
+  const showCulture = Boolean(studio && (studioSection === "all" || studioSection === "culture"));
   const showLifestyle = studioSection === "all" || studioSection === "lifestyle";
   const showMarkets = studioSection === "all" || studioSection === "markets";
   const showColumns = studioSection === "all" || studioSection === "columns";
-  const showHeroFooter = !(studio && studioSection === "hero" && !studio.revealHeroFooter);
+  const showHeroFooter = !studio || studioSection === "all";
   const studioFocused = Boolean(studio && studioSection !== "all");
   const heroStudioPreview = Boolean(studio && studioSection === "hero");
+  const cultureStudioPreview = Boolean(studio && studioSection === "culture");
   const showMarketsAd = showMarkets && !studioFocused;
   const sectionBandClass = studioFocused ? "py-4 md:py-5" : "py-10 md:py-12";
 
@@ -214,6 +216,45 @@ export default function HomePageClient({
           <SectionReveal>
             <FooterBrandVotingGrid typography="robinhood" instanceId="home-thesis" brandSide="left" band="thesis" />
           </SectionReveal>
+        </div>
+      </section>
+      ) : null}
+
+      {showCulture ? (
+      <section
+        className={clsx("relative bg-void", sectionBandClass, cultureStudioPreview && "pt-0 pb-0")}
+        aria-label="Culture desk"
+      >
+        <div
+          className={clsx(
+            "relative z-10 mx-auto w-full max-w-[1440px]",
+            cultureStudioPreview ? "px-0" : "px-6 md:px-12",
+          )}
+        >
+          {studio ? (
+            <DmnEditorialGrid
+              embedded={cultureStudioPreview}
+              studio={studioGrid}
+              columnistHeading="From HBM & Company · Culture Desk"
+              topRow={sections.editorialTopRow}
+              businessHeading="Markets"
+              businessList={sections.editorialBusinessList}
+              businessLead={sections.editorialBusinessLead}
+              businessPromoAd
+            />
+          ) : (
+            <SectionReveal>
+              <DmnEditorialGrid
+                studio={studioGrid}
+                columnistHeading="From HBM & Company · Culture Desk"
+                topRow={sections.editorialTopRow}
+                businessHeading="Markets"
+                businessList={sections.editorialBusinessList}
+                businessLead={sections.editorialBusinessLead}
+                businessPromoAd
+              />
+            </SectionReveal>
+          )}
         </div>
       </section>
       ) : null}

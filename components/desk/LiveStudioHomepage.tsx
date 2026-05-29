@@ -8,7 +8,6 @@ import { deskPaper } from "@/components/desk/desk-paper";
 import type { PublicArticleBriefing } from "@/lib/desk/article-to-briefing";
 import type { HomepageStudioSlot } from "@/lib/desk/homepage-studio";
 import {
-  slotRequiresHeroFooter,
   STUDIO_COMPACT_PAGE_HEIGHT,
   STUDIO_PAGE_WIDTH,
   studioSectionForSlot,
@@ -20,6 +19,7 @@ export const STUDIO_CARD_VIEWPORT_HEIGHT = 520;
 
 const STUDIO_SECTION_OPTIONS: { id: StudioSectionView; label: string }[] = [
   { id: "hero", label: "Hero" },
+  { id: "culture", label: "Culture Desk" },
   { id: "lifestyle", label: "Lifestyle" },
   { id: "markets", label: "Markets" },
   { id: "columns", label: "Columns" },
@@ -44,6 +44,7 @@ export function LiveStudioHomepage({
   onWriteClick,
   onClearCardEdit,
   publishedBriefings,
+  writeEnabled = false,
 }: {
   storyId: string | null;
   headline: string;
@@ -63,6 +64,7 @@ export function LiveStudioHomepage({
   onWriteClick: () => void;
   onClearCardEdit: () => void;
   publishedBriefings: PublicArticleBriefing[] | null;
+  writeEnabled?: boolean;
 }) {
   const measureRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
@@ -159,7 +161,6 @@ export function LiveStudioHomepage({
   }, [cardEditable, onClearCardEdit, shouldKeepEditing]);
 
   const draftStoryId = storyId ?? "studio-draft";
-  const revealHeroFooter = hoveredSlot ? slotRequiresHeroFooter(hoveredSlot) : false;
 
   const studio = useMemo(
     () => ({
@@ -175,9 +176,8 @@ export function LiveStudioHomepage({
       hoveredSlot,
       onSelectSlot,
       onHoverSlot,
-      revealHeroFooter,
     }),
-    [draftStoryId, headline, dek, section, heroImage?.url, placementSlot, selectedSlot, hoveredSlot, onSelectSlot, onHoverSlot, revealHeroFooter],
+    [draftStoryId, headline, dek, section, heroImage?.url, placementSlot, selectedSlot, hoveredSlot, onSelectSlot, onHoverSlot],
   );
 
   const scaledHeight = pageHeight * scale;
@@ -212,12 +212,13 @@ export function LiveStudioHomepage({
             <button
               type="button"
               onClick={onWriteClick}
+              disabled={!writeEnabled}
               data-studio-write
               className={clsx(
-                "rounded-md border px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
-                deskPaper.border,
-                deskPaper.accent,
-                deskPaper.hover,
+                "rounded-md border px-3 py-1.5 font-robinhood text-[10px] uppercase tracking-wider transition-colors disabled:cursor-default",
+                writeEnabled
+                  ? clsx(deskPaper.border, deskPaper.accent, deskPaper.hover)
+                  : clsx(deskPaper.border, deskPaper.inkMeta, "opacity-45"),
               )}
             >
               Write

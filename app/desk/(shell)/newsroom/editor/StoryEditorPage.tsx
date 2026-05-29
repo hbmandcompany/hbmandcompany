@@ -247,6 +247,7 @@ export default function StoryEditorPage() {
   const displayHeadline = focusedSlot ? cardHeadline : previewFields?.headline ?? "";
   const displayDek = focusedSlot ? cardDek : previewFields?.dek ?? "";
   const cardEditable = focusedSlot !== null;
+  const writeEnabled = Boolean(focusedSlot || selectedSlot);
   const canEditPlacementImage =
     studioView === "write" || (imagePanelSupported && (cardEditable || sidebarPreviewSlot === placementSlot));
   const imageIlluminated = Boolean(
@@ -353,6 +354,7 @@ export default function StoryEditorPage() {
   }
 
   function handleWriteClick() {
+    if (!focusedSlot && !selectedSlot) return;
     const targetStoryId = cardStoryId ?? articleId;
     router.push(editorHref({ story: targetStoryId, mode: "write" }));
   }
@@ -613,6 +615,7 @@ export default function StoryEditorPage() {
               onWriteClick={handleWriteClick}
               onClearCardEdit={clearCardEdit}
               publishedBriefings={previewBriefings}
+              writeEnabled={writeEnabled}
             />
           ) : (
             <LiveArticleEditor
@@ -651,6 +654,8 @@ export default function StoryEditorPage() {
             />
           ) : null}
 
+          {studioView === "write" ? (
+            <>
           <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Filing</div>
             <div className="mt-3 space-y-3">
@@ -702,6 +707,8 @@ export default function StoryEditorPage() {
               {lastSavedAt ? `Saved ${lastSavedAt.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })}` : "Not saved yet"}
             </div>
           </section>
+            </>
+          ) : null}
         </aside>
       </div>
     </div>
