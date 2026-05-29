@@ -90,6 +90,51 @@ function ThumbStory({
   );
 }
 
+function ListenPromo({
+  story,
+  studio,
+}: {
+  story: LifestyleStory;
+  studio?: LifestyleStudioConfig;
+}) {
+  const body = (
+    <>
+      <figure className="lifestyle-wire__promo-media relative aspect-[4/3] overflow-hidden bg-midnight">
+        {story.imageSrc ? (
+          <Image
+            src={story.imageSrc}
+            alt=""
+            fill
+            className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-[1.03]"
+            unoptimized
+          />
+        ) : (
+          <div className="absolute inset-0 bg-gradient-to-br from-midnight to-void" />
+        )}
+      </figure>
+      <div className="lifestyle-wire__promo-body">
+        <p className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/65">{story.category}</p>
+        <h4 className="lifestyle-wire__promo-title font-robinhood group-hover:text-gold">{story.headline}</h4>
+        {story.dek ? <p className="lifestyle-wire__dek font-robinhood">{story.dek}</p> : null}
+      </div>
+    </>
+  );
+
+  if (studio) {
+    return (
+      <StudioSlot slotId="lifestyle-listen-promo" studio={studio} isDraft={story.storyId === studio.draftStoryId}>
+        <div className="lifestyle-wire__promo group block">{body}</div>
+      </StudioSlot>
+    );
+  }
+
+  return (
+    <Link href={`/newspaper?story=${story.storyId}`} className="lifestyle-wire__promo group block">
+      {body}
+    </Link>
+  );
+}
+
 /** Food / Arts & Entertainment wire — DMN-style multi-column band. */
 export function MagazineLifestyleGrid({
   data,
@@ -98,7 +143,7 @@ export function MagazineLifestyleGrid({
   data?: LifestyleGridData;
   studio?: LifestyleStudioConfig;
 }) {
-  const { foodLead, foodSecondary, foodColTwo, foodThumbs, artsStories } = data ?? fallbackData;
+  const { foodLead, foodSecondary, foodColTwo, foodThumbs, artsStories, listenPromo } = data ?? fallbackData;
 
   return (
     <div className="lifestyle-wire">
@@ -187,22 +232,7 @@ export function MagazineLifestyleGrid({
           {artsStories.map((story, index) => (
             <ThumbStory key={story.storyId} story={story} studio={studio} slotId={`lifestyle-arts-${index}` as HomepageStudioSlot} />
           ))}
-          <Link href="/newspaper" className="lifestyle-wire__promo group block">
-            <figure className="lifestyle-wire__promo-media relative aspect-[4/3] overflow-hidden bg-midnight">
-              <Image
-                src="https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=85"
-                alt=""
-                fill
-                className="object-cover opacity-90 transition-transform duration-500 group-hover:scale-[1.03]"
-                unoptimized
-              />
-            </figure>
-            <div className="lifestyle-wire__promo-body">
-              <p className="font-mono-hbm text-[8px] uppercase tracking-[0.28em] text-gold/65">Listen</p>
-              <h4 className="lifestyle-wire__promo-title font-robinhood group-hover:text-gold">Podcasts from HBM &amp; Company</h4>
-              <p className="lifestyle-wire__dek font-robinhood">Desk briefings, culture wires, and treasury dispatches.</p>
-            </div>
-          </Link>
+          <ListenPromo story={listenPromo} studio={studio} />
         </aside>
       </div>
     </div>

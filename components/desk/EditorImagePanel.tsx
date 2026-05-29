@@ -15,11 +15,13 @@ export function EditorImagePanel({
   image,
   illuminated = false,
   editable = true,
+  supportsImage = true,
   onImageChange,
 }: {
   image: EditorImageState | null;
   illuminated?: boolean;
   editable?: boolean;
+  supportsImage?: boolean;
   onImageChange: (next: EditorImageState | null) => void;
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -45,17 +47,22 @@ export function EditorImagePanel({
 
   return (
     <section
+      data-editor-image-panel
       className={clsx(
-        "rounded-md border p-4 transition-all duration-200",
+        "rounded-md border p-4 ring-2 ring-transparent transition-[color,background-color,border-color,box-shadow] duration-200",
         deskPaper.card,
         illuminated
-          ? "border-[#c9a962] bg-[#eadbc1] shadow-[0_0_16px_rgba(201,169,98,0.35)] ring-2 ring-[#c9a962]/60"
+          ? "border-[#c9a962] bg-[#eadbc1] shadow-[0_0_16px_rgba(201,169,98,0.35)] ring-[#c9a962]/60"
           : deskPaper.border,
       )}
     >
       <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Hero image</div>
       <p className={clsx("mt-1 font-robinhood text-[11px]", deskPaper.inkMeta)}>
-        {editable ? "Upload the lead photo for site preview." : "Lead photo for the highlighted placement."}
+        {!supportsImage
+          ? "This placement is text-only on the homepage — no image."
+          : editable
+            ? "Upload the lead photo for site preview."
+            : "Lead photo for the highlighted placement."}
       </p>
 
       <input
@@ -142,7 +149,13 @@ export function EditorImagePanel({
             editable ? deskPaper.hover : "cursor-default opacity-80",
           )}
         >
-          {editable ? "Upload image" : illuminated ? "No image · click card to edit" : "Upload image"}
+          {!supportsImage
+            ? "No image for this placement"
+            : editable
+              ? "Upload image"
+              : illuminated
+                ? "No image · click card to edit"
+                : "Upload image"}
         </button>
       )}
     </section>

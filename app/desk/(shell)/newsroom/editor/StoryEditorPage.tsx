@@ -10,6 +10,7 @@ import { PaperStatusPill } from "@/components/desk/PaperStatusPill";
 import { EditorImagePanel, type EditorImageState } from "@/components/desk/EditorImagePanel";
 import { LiveArticleEditor } from "@/components/desk/LiveArticleEditor";
 import { LiveStudioHomepage } from "@/components/desk/LiveStudioHomepage";
+import { StudioPlacementPanel } from "@/components/desk/StudioPlacementPanel";
 import { ARTICLE_WEIGHT_OPTIONS } from "@/components/desk/ArticleWeightBadge";
 import { countWords, deskStatusFromArticle, slugifyTitle } from "@/components/desk/desk-article-mappers";
 import { articleToBriefing } from "@/lib/desk/article-to-briefing";
@@ -56,7 +57,7 @@ export default function StoryEditorPage() {
 
   const [studioView, setStudioView] = useState<StudioView>("homepage");
   const [placementSlot, setPlacementSlot] = useState<HomepageStudioSlot>("editorial-top-0");
-  const [selectedSlot, setSelectedSlot] = useState<HomepageStudioSlot | null>("editorial-top-0");
+  const [selectedSlot, setSelectedSlot] = useState<HomepageStudioSlot | null>(null);
   const [hoveredSlot, setHoveredSlot] = useState<HomepageStudioSlot | null>(null);
   const [focusedSlot, setFocusedSlot] = useState<HomepageStudioSlot | null>(null);
 
@@ -76,21 +77,36 @@ export default function StoryEditorPage() {
 
   const [publishedBriefings, setPublishedBriefings] = useState<ReturnType<typeof articleToBriefing>[] | null>(null);
   const hoverClearRef = useRef<number | null>(null);
+  const [hoverScrollFromPreview, setHoverScrollFromPreview] = useState(false);
 
-  const handleHoverSlot = useCallback((slot: HomepageStudioSlot | null) => {
+  const handleHoverSlot = useCallback((slot: HomepageStudioSlot | null, source?: "panel" | "preview") => {
     if (slot) {
       if (hoverClearRef.current !== null) {
         window.clearTimeout(hoverClearRef.current);
         hoverClearRef.current = null;
       }
+      setHoverScrollFromPreview(source === "preview");
       setHoveredSlot(slot);
       return;
     }
     hoverClearRef.current = window.setTimeout(() => {
       setHoveredSlot(null);
+      setHoverScrollFromPreview(false);
       hoverClearRef.current = null;
     }, 100);
   }, []);
+
+  const handlePanelHoverSlot = useCallback(
+    (slot: HomepageStudioSlot) => handleHoverSlot(slot, "panel"),
+    [handleHoverSlot],
+  );
+
+  const handlePreviewHoverSlot = useCallback(
+    (slot: HomepageStudioSlot | null) => handleHoverSlot(slot, "preview"),
+    [handleHoverSlot],
+  );
+
+  const handleClearHoverSlot = useCallback(() => handleHoverSlot(null), [handleHoverSlot]);
 
   useEffect(() => {
     return () => {
@@ -202,9 +218,9 @@ export default function StoryEditorPage() {
         headline,
         dek,
         category: section,
-        imageSrc: heroImage?.url,
+        imageSrc: slotImage?.url ?? heroImage?.url,
       }, placementSlot),
-    [previewBriefings, draftStoryId, headline, dek, section, heroImage?.url, placementSlot],
+    [previewBriefings, draftStoryId, headline, dek, section, slotImage?.url, heroImage?.url, placementSlot],
   );
 
   const studioHero = useMemo(
@@ -222,16 +238,47 @@ export default function StoryEditorPage() {
     [studioSections, studioHero],
   );
 
-  const previewSlot = hoveredSlot ?? focusedSlot;
-  const previewFields = previewSlot ? resolveSlotFields(previewSlot) : null;
+  // Sidebar: card focus, preview hover, or assigned placement (panel hover does not drive the aside).
+  const sidebarPreviewSlot =
+    focusedSlot ?? (hoverScrollFromPreview ? hoveredSlot : null) ?? placementSlot;
+  const previewFields = sidebarPreviewSlot ? resolveSlotFields(sidebarPreviewSlot) : null;
+  const imagePanelSupported = sidebarPreviewSlot ? (previewFields?.supportsImage ?? false) : true;
 
   const displayHeadline = focusedSlot ? cardHeadline : previewFields?.headline ?? "";
   const displayDek = focusedSlot ? cardDek : previewFields?.dek ?? "";
   const cardEditable = focusedSlot !== null;
+  const canEditPlacementImage =
+    studioView === "write" || (imagePanelSupported && (cardEditable || sidebarPreviewSlot === placementSlot));
+  const imageIlluminated = Boolean(
+    studioView === "homepage" &&
+      imagePanelSupported &&
+      sidebarPreviewSlot &&
+      (hoveredSlot === sidebarPreviewSlot ||
+        focusedSlot === sidebarPreviewSlot ||
+        (!hoveredSlot && !focusedSlot && sidebarPreviewSlot === placementSlot)),
+  );
 
   function imageStateFromSrc(url: string, headline: string): EditorImageState {
     return { url, alt: headline, caption: "", fileName: "Homepage image" };
   }
+
+  const editingOwnPlacement =
+    sidebarPreviewSlot === placementSlot &&
+    (!previewFields?.storyId ||
+      previewFields.storyId === draftStoryId ||
+      previewFields.storyId === articleId);
+
+  const panelImage: EditorImageState | null = (() => {
+    if (focusedSlot) return slotImage;
+    if (!imagePanelSupported) return null;
+    if (editingOwnPlacement) return slotImage ?? heroImage;
+    if (sidebarPreviewSlot) {
+      return previewFields?.imageSrc
+        ? imageStateFromSrc(previewFields.imageSrc, previewFields.headline)
+        : null;
+    }
+    return heroImage;
+  })();
 
   function updateHeroImage(next: EditorImageState | null) {
     setHeroImage((prev) => {
@@ -240,12 +287,29 @@ export default function StoryEditorPage() {
     });
   }
 
+  function updateSlotImage(next: EditorImageState | null) {
+    setSlotImage((prev) => {
+      if (prev?.url.startsWith("blob:") && prev.url !== next?.url) URL.revokeObjectURL(prev.url);
+      return next;
+    });
+    const editingOwnStory =
+      cardStoryId === draftStoryId ||
+      cardStoryId === articleId ||
+      (editingOwnPlacement && !cardStoryId);
+    if (editingOwnStory) {
+      updateHeroImage(next);
+    }
+  }
+
   const clearCardEdit = useCallback(() => {
     setFocusedSlot(null);
+    setSelectedSlot(null);
     setSlotImage(null);
   }, []);
 
-  function focusSlot(slot: HomepageStudioSlot) {
+  function focusSlot(slot: HomepageStudioSlot, options?: { assignPlacement?: boolean }) {
+    const assignPlacement = options?.assignPlacement ?? false;
+
     if (focusedSlot === slot) {
       clearCardEdit();
       return;
@@ -253,13 +317,16 @@ export default function StoryEditorPage() {
     const fields = resolveSlotFields(slot);
     setFocusedSlot(slot);
     setSelectedSlot(slot);
-    setPlacementSlot(slot);
+    if (assignPlacement) {
+      setPlacementSlot(slot);
+    }
     if (fields) {
       setCardHeadline(fields.headline);
       setCardDek(fields.dek);
       setCardStoryId(fields.storyId);
       setCardBaseline({ ...fields, slot });
-      if (fields.imageSrc) {
+      if (fields.category) setSection(fields.category);
+      if (fields.supportsImage && fields.imageSrc) {
         setSlotImage(imageStateFromSrc(fields.imageSrc, fields.headline));
       } else {
         setSlotImage(null);
@@ -267,7 +334,8 @@ export default function StoryEditorPage() {
       if (fields.storyId === draftStoryId || fields.storyId === articleId) {
         setHeadline(fields.headline);
         setDek(fields.dek);
-        if (fields.imageSrc) {
+        if (fields.category) setSection(fields.category);
+        if (fields.supportsImage && fields.imageSrc) {
           setHeroImage(imageStateFromSrc(fields.imageSrc, fields.headline));
         }
       }
@@ -373,6 +441,7 @@ export default function StoryEditorPage() {
         headline: title,
         dek: excerpt ?? "",
         imageSrc: heroUrl ?? undefined,
+        supportsImage: cardBaseline?.supportsImage ?? true,
       });
       if (isCurrentDraft) {
         setArticleId(result.data.id);
@@ -522,7 +591,7 @@ export default function StoryEditorPage() {
         <div className={clsx("border-b px-6 py-2 font-robinhood text-[11px] text-desk-red", deskPaper.border)}>{saveError}</div>
       ) : null}
 
-      <div className={clsx("grid flex-1 gap-6 px-6 py-6", studioView === "write" && "lg:grid-cols-[1fr_280px]")}>
+      <div className="grid flex-1 gap-6 px-6 py-6 lg:grid-cols-[1fr_280px]">
         <div className="min-w-0">
           {studioView === "homepage" ? (
             <LiveStudioHomepage
@@ -539,8 +608,8 @@ export default function StoryEditorPage() {
               selectedSlot={selectedSlot}
               placementSlot={placementSlot}
               hoveredSlot={hoveredSlot}
-              onSelectSlot={focusSlot}
-              onHoverSlot={handleHoverSlot}
+              onSelectSlot={(slot) => focusSlot(slot, { assignPlacement: false })}
+              onHoverSlot={handlePreviewHoverSlot}
               onWriteClick={handleWriteClick}
               onClearCardEdit={clearCardEdit}
               publishedBriefings={previewBriefings}
@@ -561,13 +630,26 @@ export default function StoryEditorPage() {
           )}
         </div>
 
-        {studioView === "write" ? (
         <aside className="space-y-4">
           <EditorImagePanel
-            image={heroImage}
-            editable
-            onImageChange={updateHeroImage}
+            image={studioView === "write" ? heroImage : panelImage}
+            illuminated={imageIlluminated}
+            editable={canEditPlacementImage}
+            supportsImage={studioView === "write" ? true : imagePanelSupported}
+            onImageChange={studioView === "write" ? updateHeroImage : updateSlotImage}
           />
+
+          {studioView === "homepage" ? (
+            <StudioPlacementPanel
+              placementSlot={placementSlot}
+              selectedSlot={selectedSlot}
+              hoveredSlot={hoveredSlot}
+              scrollOnHover={hoverScrollFromPreview}
+              onSelectSlot={(slot) => focusSlot(slot, { assignPlacement: true })}
+              onHoverSlot={handlePanelHoverSlot}
+              onClearHover={handleClearHoverSlot}
+            />
+          ) : null}
 
           <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}>
             <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Filing</div>
@@ -621,7 +703,6 @@ export default function StoryEditorPage() {
             </div>
           </section>
         </aside>
-        ) : null}
       </div>
     </div>
   );

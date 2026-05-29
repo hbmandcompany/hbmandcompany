@@ -44,6 +44,7 @@ export type HomepageStudioSlot =
   | "lifestyle-arts-0"
   | "lifestyle-arts-1"
   | "lifestyle-arts-2"
+  | "lifestyle-listen-promo"
   | "column-0-lead"
   | "column-1-lead"
   | "column-2-lead"
@@ -93,9 +94,9 @@ export const HOMEPAGE_STUDIO_SLOT_LABELS: Record<HomepageStudioSlot, string> = {
   "business-list-2": "Markets list 3",
   "business-lead": "Markets lead",
   "markets-lead": "Wire lead",
-  "markets-wire-0": "Wire item 1",
-  "markets-wire-1": "Wire item 2",
-  "markets-wire-2": "Wire item 3",
+  "markets-wire-0": "Treasury wire",
+  "markets-wire-1": "Governance wire",
+  "markets-wire-2": "Documentation wire",
   "lifestyle-food-lead": "Culture lead",
   "lifestyle-food-secondary-0": "Culture text 1",
   "lifestyle-food-secondary-1": "Culture text 2",
@@ -105,6 +106,7 @@ export const HOMEPAGE_STUDIO_SLOT_LABELS: Record<HomepageStudioSlot, string> = {
   "lifestyle-arts-0": "Arts item 1",
   "lifestyle-arts-1": "Arts item 2",
   "lifestyle-arts-2": "Arts item 3",
+  "lifestyle-listen-promo": "Listen promo",
   "column-0-lead": "Music lead",
   "column-1-lead": "Culture lead",
   "column-2-lead": "Markets lead",
@@ -157,7 +159,21 @@ export const HOMEPAGE_STUDIO_SLOT_GROUPS: {
   },
   { label: "Editorial grid", slots: ["editorial-top-0", "editorial-top-1", "editorial-top-2", "editorial-top-3"] },
   { label: "Culture/Markets block", slots: ["business-list-0", "business-list-1", "business-list-2", "business-lead"] },
-  { label: "Lifestyle band", slots: ["lifestyle-food-lead", "lifestyle-food-secondary-0", "lifestyle-food-secondary-1", "lifestyle-food-col2-0", "lifestyle-food-col2-1", "lifestyle-food-thumb-0", "lifestyle-arts-0", "lifestyle-arts-1", "lifestyle-arts-2"] },
+  {
+    label: "Lifestyle band",
+    slots: [
+      "lifestyle-food-lead",
+      "lifestyle-food-secondary-0",
+      "lifestyle-food-secondary-1",
+      "lifestyle-food-col2-0",
+      "lifestyle-food-col2-1",
+      "lifestyle-food-thumb-0",
+      "lifestyle-arts-0",
+      "lifestyle-arts-1",
+      "lifestyle-arts-2",
+      "lifestyle-listen-promo",
+    ],
+  },
   { label: "Markets wire", slots: ["markets-lead", "markets-wire-0", "markets-wire-1", "markets-wire-2"] },
   {
     label: "Columns",
@@ -315,6 +331,7 @@ export function buildStudioHomepageSections(
 
   const lifestyle = {
     ...sections.lifestyle,
+    listenPromo: { ...sections.lifestyle.listenPromo },
     foodSecondary: [...sections.lifestyle.foodSecondary],
     foodColTwo: [...sections.lifestyle.foodColTwo],
     foodThumbs: [...sections.lifestyle.foodThumbs],
@@ -333,6 +350,16 @@ export function buildStudioHomepageSections(
   if (placementSlot.startsWith("lifestyle-arts-")) {
     const index = Number(placementSlot.split("-").pop());
     if (index >= 0 && index < lifestyle.artsStories.length) lifestyle.artsStories[index] = draftWire(draft);
+  }
+  if (placementSlot === "lifestyle-listen-promo") {
+    const wire = draftWire(draft);
+    lifestyle.listenPromo = {
+      storyId: wire.storyId,
+      category: draft.category.trim() || "Listen",
+      headline: wire.headline,
+      dek: wire.dek ?? sections.lifestyle.listenPromo.dek,
+      imageSrc: wire.imageSrc ?? sections.lifestyle.listenPromo.imageSrc,
+    };
   }
 
   const broadsheetColumns = sections.broadsheetColumns.map((column) => ({ ...column, more: [...column.more] }));
@@ -453,21 +480,74 @@ export type SlotCardFields = {
   storyId: string;
   headline: string;
   dek: string;
+  category?: string;
   imageSrc?: string;
+  supportsImage: boolean;
 };
 
 type HeroProps = ReturnType<typeof buildHeroProps>;
 
-function fromWire(item: { storyId: string; headline: string; dek?: string; imageSrc?: string }): SlotCardFields {
-  return { storyId: item.storyId, headline: item.headline, dek: item.dek ?? "", imageSrc: item.imageSrc };
+function fromWire(item: {
+  storyId: string;
+  headline: string;
+  dek?: string;
+  imageSrc?: string;
+  category?: string;
+}): SlotCardFields {
+  return {
+    storyId: item.storyId,
+    headline: item.headline,
+    dek: item.dek ?? "",
+    imageSrc: item.imageSrc,
+    category: item.category,
+    supportsImage: true,
+  };
 }
 
 function fromLead(item: { storyId: string; headline: string; dek: string; imageSrc?: string }): SlotCardFields {
-  return { storyId: item.storyId, headline: item.headline, dek: item.dek, imageSrc: item.imageSrc };
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek, imageSrc: item.imageSrc, supportsImage: true };
 }
 
 function fromMagazine(item: { storyId: string; headline: string; dek: string; imageSrc?: string }): SlotCardFields {
-  return { storyId: item.storyId, headline: item.headline, dek: item.dek, imageSrc: item.imageSrc };
+  return { storyId: item.storyId, headline: item.headline, dek: item.dek, imageSrc: item.imageSrc, supportsImage: true };
+}
+
+/** Placements that render text-only on the homepage — never show an image in the editor panel. */
+export function slotSupportsImage(slot: HomepageStudioSlot): boolean {
+  if (slot.startsWith("hero-left-")) return false;
+  if (slot.startsWith("hero-right-top-")) return false;
+  if (slot.startsWith("hero-culture-")) return false;
+  if (slot === "hero-follow-up") return false;
+  if (slot === "hero-right-secondary") return false;
+  if (slot.startsWith("business-list-")) return false;
+  if (slot.includes("-more-")) return false;
+  if (slot.startsWith("lifestyle-food-secondary-")) return false;
+  return true;
+}
+
+/** Editor image panel — use the article's real hero image, not homepage display fallbacks. */
+function placementImage(
+  sections: HomepageSections,
+  storyId: string,
+  slotImageSrc?: string,
+): string | undefined {
+  const briefings = sections.heroBriefings;
+  if (briefings?.some((briefing) => briefing.id === storyId)) {
+    return briefings.find((briefing) => briefing.id === storyId)?.heroImageUrl ?? undefined;
+  }
+  return slotImageSrc;
+}
+
+function withPlacementImage(sections: HomepageSections, slot: HomepageStudioSlot, fields: SlotCardFields): SlotCardFields {
+  const supportsImage = slotSupportsImage(slot);
+  if (!supportsImage) {
+    return { ...fields, supportsImage: false, imageSrc: undefined };
+  }
+  return {
+    ...fields,
+    supportsImage: true,
+    imageSrc: placementImage(sections, fields.storyId, fields.imageSrc),
+  };
 }
 
 /** Read headline + dek for any homepage placement slot from built section data. */
@@ -477,83 +557,83 @@ export function resolveSlotCardFields(
   slot: HomepageStudioSlot,
 ): SlotCardFields | null {
   if (slot === "hero-lead") {
-    return {
-      ...fromMagazine(hero.heroLead),
-      imageSrc: hero.heroImage || hero.heroLead.imageSrc,
-    };
+    return withPlacementImage(sections, slot, fromMagazine(hero.heroLead));
   }
-  if (slot === "hero-follow-up") return fromMagazine(hero.heroFollowUp);
-  if (slot === "hero-right-featured") return fromMagazine(hero.heroRightFeatured);
-  if (slot === "hero-right-secondary") return fromMagazine(hero.heroRightSecondary);
+  if (slot === "hero-follow-up") return withPlacementImage(sections, slot, fromMagazine(hero.heroFollowUp));
+  if (slot === "hero-right-featured") return withPlacementImage(sections, slot, fromMagazine(hero.heroRightFeatured));
+  if (slot === "hero-right-secondary") return withPlacementImage(sections, slot, fromMagazine(hero.heroRightSecondary));
 
   if (slot.startsWith("hero-left-")) {
     const index = Number(slot.split("-").pop());
     const item = hero.heroLeft[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
   if (slot.startsWith("hero-right-top-")) {
     const index = Number(slot.split("-").pop());
     const item = hero.heroRightTopBriefs[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
   if (slot.startsWith("hero-culture-")) {
     const index = Number(slot.split("-").pop());
     const item = hero.heroCulture[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
 
   if (slot.startsWith("editorial-top-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.editorialTopRow[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
   if (slot.startsWith("business-list-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.editorialBusinessList[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
-  if (slot === "business-lead") return fromLead(sections.editorialBusinessLead);
+  if (slot === "business-lead") return withPlacementImage(sections, slot, fromLead(sections.editorialBusinessLead));
 
-  if (slot === "lifestyle-food-lead") return fromWire(sections.lifestyle.foodLead);
+  if (slot === "lifestyle-food-lead") return withPlacementImage(sections, slot, fromWire(sections.lifestyle.foodLead));
   if (slot.startsWith("lifestyle-food-secondary-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.lifestyle.foodSecondary[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
   if (slot.startsWith("lifestyle-food-col2-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.lifestyle.foodColTwo[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
   if (slot.startsWith("lifestyle-food-thumb-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.lifestyle.foodThumbs[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
   if (slot.startsWith("lifestyle-arts-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.lifestyle.artsStories[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
+  if (slot === "lifestyle-listen-promo") return withPlacementImage(sections, slot, fromWire(sections.lifestyle.listenPromo));
 
-  if (slot === "markets-lead") return fromLead(sections.marketsLead);
+  if (slot === "markets-lead") return withPlacementImage(sections, slot, fromLead(sections.marketsLead));
   if (slot.startsWith("markets-wire-")) {
     const index = Number(slot.split("-").pop());
     const item = sections.marketsWire[index];
-    return item ? fromWire(item) : null;
+    return item ? withPlacementImage(sections, slot, fromWire(item)) : null;
   }
 
   if (slot.startsWith("column-") && slot.endsWith("-lead")) {
     const columnIndex = Number(slot.split("-")[1]);
     const lead = sections.broadsheetColumns[columnIndex]?.lead;
-    return lead ? { storyId: lead.storyId, headline: lead.headline, dek: "", imageSrc: lead.imageSrc } : null;
+    return lead
+      ? withPlacementImage(sections, slot, { storyId: lead.storyId, headline: lead.headline, dek: "", imageSrc: lead.imageSrc, supportsImage: true })
+      : null;
   }
   if (slot.startsWith("column-") && slot.includes("-more-")) {
     const [, columnToken, , moreToken] = slot.split("-");
     const columnIndex = Number(columnToken);
     const moreIndex = Number(moreToken);
     const item = sections.broadsheetColumns[columnIndex]?.more[moreIndex];
-    return item ? { storyId: item.storyId, headline: item.headline, dek: "" } : null;
+    return item ? withPlacementImage(sections, slot, { storyId: item.storyId, headline: item.headline, dek: "", supportsImage: false }) : null;
   }
 
   return null;

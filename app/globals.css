@@ -2369,35 +2369,41 @@
   padding: 0.85rem 0.9rem;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__headline {
-  font-size: clamp(1.32rem, 1.75vw, 1.74rem);
-  line-height: 1.12;
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__category {
+  font-size: 0.96rem;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__lead-follow {
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__headline {
+  font-size: clamp(1.75rem, 1.35rem + 1.35vw, 2.35rem);
+  line-height: 1.06;
+  letter-spacing: -0.02em;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__lead-follow {
   margin-top: 0.6rem;
   padding-top: 0.6rem;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__lead-follow-headline {
-  font-size: 1.03rem;
-  line-height: 1.15;
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__lead-follow-headline {
+  font-size: clamp(1.32rem, 1.1rem + 0.6vw, 1.58rem);
+  line-height: 1.1;
+  letter-spacing: -0.015em;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__dek {
-  font-size: 0.84rem;
-  line-height: 1.4;
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__dek {
+  font-size: 1.12rem;
+  line-height: 1.48;
   display: -webkit-box;
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__lead-follow-dek {
-  font-size: 0.8rem;
-  line-height: 1.35;
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__lead-follow-dek {
+  font-size: 1.08rem;
+  line-height: 1.42;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
@@ -2415,9 +2421,14 @@
   padding-block: 0.18rem;
 }
 
-.home-studio-canvas[data-studio-section="hero"] .hero-front-page__brief-link span {
-  font-size: 0.72rem !important;
-  line-height: 1.28;
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .hero-front-page__brief-link span {
+  font-size: 1rem !important;
+  line-height: 1.4;
+}
+
+.home-studio-canvas[data-studio-section="hero"] .hero-front-page__left .studio-slot > span {
+  font-size: 0.625rem !important;
+  letter-spacing: 0.16em;
 }
 
 .home-studio-canvas[data-studio-section="hero"] .hero-front-page__right-headline {
@@ -2479,7 +2490,7 @@
 
 @media (min-width: 1024px) {
   .home-studio-canvas[data-studio-section="hero"] .hero-dmn-edition--studio-preview .hero-front-page {
-    grid-template-columns: minmax(0, 1.16fr) minmax(0, 1.28fr) minmax(0, 1.16fr);
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1.15fr) minmax(0, 1.2fr);
     grid-template-areas: "left center right";
     min-height: 390px !important;
   }
@@ -2607,43 +2618,64 @@
 }
 
 .home-studio-canvas[data-studio-section="lifestyle"] .lifestyle-wire__promo {
-  display: none;
+  margin-top: 0.55rem;
+  padding: 0.55rem 0.6rem;
 }
 
-/* Columns — compact four-up broadsheet */
+.home-studio-canvas[data-studio-section="lifestyle"] .lifestyle-wire__promo-media {
+  aspect-ratio: 4 / 2.5 !important;
+}
+
+.home-studio-canvas[data-studio-section="lifestyle"] .lifestyle-wire__promo-title {
+  margin-top: 0.25rem;
+  font-size: 0.78rem;
+  line-height: 1.2;
+}
+
+.home-studio-canvas[data-studio-section="lifestyle"] .lifestyle-wire__promo-body .lifestyle-wire__dek {
+  margin-top: 0.25rem;
+  font-size: 0.7rem;
+  line-height: 1.35;
+  -webkit-line-clamp: 2;
+}
+
+/* Columns — readable four-up broadsheet in studio preview */
 .home-studio-canvas[data-studio-section="columns"] .broadsheet-four-col__column {
-  padding: 0.65rem 0.75rem 0.75rem;
+  padding: 1rem 1.1rem 1.15rem;
 }
 
 .home-studio-canvas[data-studio-section="columns"] .broadsheet-four-col__column-header {
-  margin-bottom: 0.5rem;
-  padding-bottom: 0.45rem;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.6rem;
 }
 
 .home-studio-canvas[data-studio-section="columns"] .broadsheet-four-col__column-title {
-  font-size: 0.9rem;
+  font-size: 1.35rem;
+  font-weight: 700;
+  letter-spacing: 0.02em;
 }
 
 .home-studio-canvas[data-studio-section="columns"] .broadsheet-four-col__lead-media {
-  aspect-ratio: 16 / 7 !important;
+  aspect-ratio: 16 / 9 !important;
 }
 
 .home-studio-canvas[data-studio-section="columns"] .broadsheet-four-col__lead-headline {
-  margin-top: 0.45rem;
-  font-size: 0.78rem;
-  line-height: 1.25;
+  margin-top: 0.65rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.3;
   display: -webkit-box;
-  -webkit-line-clamp: 3;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
 
 .home-studio-canvas[data-studio-section="columns"] .broadsheet-four-col__list-link {
-  padding-block: 0.35rem;
-  font-size: 0.72rem;
-  line-height: 1.3;
+  padding-block: 0.55rem;
+  font-size: 1.02rem;
+  line-height: 1.4;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }

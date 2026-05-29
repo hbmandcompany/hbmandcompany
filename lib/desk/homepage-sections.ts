@@ -29,6 +29,7 @@ export type LifestyleGridData = {
   foodColTwo: LifestyleStory[];
   foodThumbs: LifestyleStory[];
   artsStories: LifestyleStory[];
+  listenPromo: LifestyleStory;
 };
 
 export type HomepageSections = {
@@ -143,6 +144,13 @@ const FALLBACK_WIRE: WireBrief[] = [
     headline: "Balance-Sheet Discipline Briefings Open for Q2",
     dateline: "May 15, 2026",
     imageSrc: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=85",
+  },
+  {
+    storyId: "governance-reserve",
+    category: "Governance Wire",
+    headline: "Reserve Committee Signer Rotation Enters Q2 Window",
+    dateline: "May 14, 2026",
+    imageSrc: "https://images.unsplash.com/photo-1639765481667-de9d24e3f329?w=400&q=85",
   },
   {
     storyId: "whitepaper-access",
@@ -335,6 +343,13 @@ function buildFallbackLifestyle(): LifestyleGridData {
         imageSrc: "https://images.unsplash.com/photo-1513885535751-8b9238bd345a?w=300&q=85",
       },
     ],
+    listenPromo: {
+      storyId: "hbm-podcasts-listen",
+      category: "Listen",
+      headline: "Podcasts from HBM & Company",
+      dek: "Desk briefings, culture wires, and treasury dispatches.",
+      imageSrc: "https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=85",
+    },
   };
 }
 
@@ -353,7 +368,7 @@ function buildFallbackSections(): HomepageSections {
       imageAlt: FALLBACK_SUITE.imageAlt,
     },
     lifestyle,
-    marketsWire: FALLBACK_WIRE.slice(8, 10),
+    marketsWire: FALLBACK_WIRE.slice(8, 11),
     marketsLead: {
       storyId: FALLBACK_WIRE[7].storyId,
       category: FALLBACK_WIRE[7].category,
@@ -427,6 +442,7 @@ export function buildHomepageSections(live: PublicArticleBriefing[] | null): Hom
       foodColTwo: [0, 1].map((i) => pickLifestyle(live, i + 15, lifestyleFallback.foodColTwo[i])),
       foodThumbs: [pickLifestyle(live, 17, lifestyleFallback.foodThumbs[0])],
       artsStories: [0, 1, 2].map((i) => pickLifestyle(live, i + 18, lifestyleFallback.artsStories[i])),
+      listenPromo: lifestyleFallback.listenPromo,
     },
     marketsWire: [0, 1, 2].map((i) => pickWire(live, i + 21, fallback.marketsWire[i])),
     marketsLead: (() => {

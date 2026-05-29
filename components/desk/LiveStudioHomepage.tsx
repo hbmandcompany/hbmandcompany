@@ -107,16 +107,32 @@ export function LiveStudioHomepage({
     };
   }, [publishedBriefings, headline, dek, section, heroImage?.url, placementSlot, sectionView]);
 
+  const sectionSwitchRef = useRef<number | null>(null);
+
   useEffect(() => {
     if (!hoveredSlot) return;
     const next = studioSectionForSlot(hoveredSlot);
-    setSectionView((current) => (current === next ? current : next));
+    sectionSwitchRef.current = window.setTimeout(() => {
+      setSectionView((current) => (current === next ? current : next));
+      sectionSwitchRef.current = null;
+    }, 150);
+    return () => {
+      if (sectionSwitchRef.current !== null) {
+        window.clearTimeout(sectionSwitchRef.current);
+        sectionSwitchRef.current = null;
+      }
+    };
   }, [hoveredSlot]);
 
   const shouldKeepEditing = useCallback((target: EventTarget | null) => {
     if (!(target instanceof Node)) return false;
     if (cardEditRef.current?.contains(target)) return true;
-    if (target instanceof Element && target.closest("[data-studio-card-edit], [data-studio-write], .studio-slot, [data-studio-placement-panel]")) {
+    if (
+      target instanceof Element &&
+      target.closest(
+        "[data-studio-card-edit], [data-studio-write], [data-editor-image-panel], .studio-slot, [data-studio-placement-panel]",
+      )
+    ) {
       return true;
     }
     return false;
@@ -260,7 +276,7 @@ export function LiveStudioHomepage({
               type="button"
               onClick={() => setSectionView(option.id)}
               className={clsx(
-                "rounded px-2.5 py-1 font-robinhood text-[10px] uppercase tracking-wider transition-colors",
+                "rounded px-2.5 py-1 font-robinhood text-[13px] uppercase tracking-wider transition-colors",
                 sectionView === option.id
                   ? clsx(deskPaper.activeNav, deskPaper.inkHeading)
                   : clsx(deskPaper.inkMeta, deskPaper.hover),

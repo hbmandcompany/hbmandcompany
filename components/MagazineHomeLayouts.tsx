@@ -660,6 +660,13 @@ export function DeskWireNewsGrid({
       imageSrc: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=400&q=85",
     },
     {
+      storyId: "governance-reserve",
+      category: "Governance Wire",
+      headline: "Reserve Committee Signer Rotation Enters Q2 Window",
+      dateline: "May 14, 2026",
+      imageSrc: "https://images.unsplash.com/photo-1639765481667-de9d24e3f329?w=400&q=85",
+    },
+    {
       storyId: "whitepaper-access",
       category: "Documentation",
       headline: "Whitepaper: Institutional Reserve Framework",

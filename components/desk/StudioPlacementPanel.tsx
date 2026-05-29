@@ -29,29 +29,42 @@ export function StudioPlacementPanel({
   placementSlot,
   selectedSlot,
   hoveredSlot,
+  scrollOnHover,
   onSelectSlot,
   onHoverSlot,
+  onClearHover,
 }: {
   placementSlot: HomepageStudioSlot;
   selectedSlot: HomepageStudioSlot | null;
   hoveredSlot: HomepageStudioSlot | null;
+  /** When true, scroll the list to keep the hovered slot visible (preview → panel sync only). */
+  scrollOnHover?: boolean;
   onSelectSlot: (slot: HomepageStudioSlot) => void;
-  onHoverSlot: (slot: HomepageStudioSlot | null) => void;
+  onHoverSlot: (slot: HomepageStudioSlot) => void;
+  onClearHover: () => void;
 }) {
   const listRef = useRef<HTMLDivElement>(null);
   const slotRefs = useRef<Map<HomepageStudioSlot, HTMLButtonElement>>(new Map());
 
   useEffect(() => {
-    if (!hoveredSlot) return;
+    if (!scrollOnHover || !hoveredSlot) return;
     const container = listRef.current;
     const button = slotRefs.current.get(hoveredSlot);
     if (!container || !button) return;
 
     scrollSlotIntoPanel(container, button);
-  }, [hoveredSlot]);
+  }, [scrollOnHover, hoveredSlot]);
 
   return (
-    <section className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)} data-studio-placement-panel>
+    <section
+      className={clsx("rounded-md border p-4", deskPaper.card, deskPaper.border)}
+      data-studio-placement-panel
+      onMouseLeave={(e) => {
+        const next = e.relatedTarget;
+        if (next instanceof Node && e.currentTarget.contains(next)) return;
+        onClearHover();
+      }}
+    >
       <div className={clsx("font-robinhood text-[10px] uppercase tracking-[0.2em]", deskPaper.inkLabel)}>Placement</div>
       <p className={clsx("mt-1 font-robinhood text-[11px] leading-relaxed", deskPaper.inkMeta)}>
         Hover a slot to illuminate it on the preview — and vice versa.
@@ -85,11 +98,10 @@ export function StudioPlacementPanel({
                       type="button"
                       onClick={() => onSelectSlot(slot)}
                       onMouseEnter={() => onHoverSlot(slot)}
-                      onMouseLeave={() => onHoverSlot(null)}
                       className={clsx(
-                        "rounded-md border px-2 py-1 font-robinhood text-[10px] transition-all duration-200",
+                        "rounded-md border px-2 py-1 font-robinhood text-[10px] ring-2 ring-transparent transition-[color,background-color,border-color,box-shadow] duration-200",
                         illuminated
-                          ? "border-[#c9a962] bg-[#eadbc1] text-[#20160d] shadow-[0_0_16px_rgba(201,169,98,0.35)] ring-2 ring-[#c9a962]/60"
+                          ? "border-[#c9a962] bg-[#eadbc1] text-[#20160d] shadow-[0_0_16px_rgba(201,169,98,0.35)] ring-[#c9a962]/60"
                           : active || selected
                             ? clsx(deskPaper.activeNav, deskPaper.inkHeading, "border-[#8d6f4d]")
                             : clsx(deskPaper.border, deskPaper.inkMeta, deskPaper.hover),
